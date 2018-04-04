@@ -11,12 +11,13 @@ class Prestamo(models.Model):
     class Meta:
         verbose_name_plural = "Prestamos"
 
+    id_prestamo = models.CharField(max_length=10, primary_key=True)
     ID_Persona = models.ForeignKey(Estudiantes, null=True)
     Fecha_prestamo = models.DateField(default=now)
     Fecha_devolucion = models.DateField(null=True)
 
     def __unicode__(self):
-        return unicode(str(self.id) + str(self.ID_Persona))
+        return unicode(str(self.id_prestamo) + " " + str(self.ID_Persona))
 
 class Incidencia(models.Model):
 
@@ -24,7 +25,8 @@ class Incidencia(models.Model):
         verbose_name_plural = "Incidencias"
 
     Fecha_Incidencia = models.DateField(default=now)
-
+    def __unicode__(self):
+        return unicode(str(self.Fecha_Incidencia))
 
 class Detalle_Prestamo(models.Model):
 

@@ -11,6 +11,5 @@ from configuracion.models import *
 # Register your models here.
 
 
-admin.site.register(Estudiantes)
-
-
+admin.site.register(Estudiantes),
+admin.site.register(Profesores_Administrativos),
