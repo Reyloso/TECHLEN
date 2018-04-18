@@ -18,9 +18,9 @@ class  PersonaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
        model = Personas
        fields = ('Nro_Tarjeta', 'Id_Persona', 'Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido',
-            'Tipo_Documento','Nro_Documento','Sede','Codigo_ops','genero','Correo_Institucional','Formato_credencial','Grupo_acceso','Estado_tarjeta','foto_url')
+            'Tipo_Documento','Nro_Documento','Sede','genero','Correo_Institucional','Estado_tarjeta','foto_url')
        read_only_fields = ('Nro_Tarjeta', 'Id_Persona', 'Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido',
-            'Tipo_Documento','Nro_Documento','Sede','Codigo_ops','genero','Correo_Institucional','Formato_credencial','Grupo_acceso','Estado_tarjeta','foto_url')
+            'Tipo_Documento','Nro_Documento','Sede','genero','Correo_Institucional','Estado_tarjeta','foto_url')
 
 class ProgramaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -33,43 +33,44 @@ class EstudiantesSerializer(serializers.Serializer):
     programa = ProgramaSerializer(read_only=True)
     class Meta:
         model = Estudiantes
-        fields = ('estudiante','programa','Ciclo_Lectivo','Programa_Academico')
-        read_only_fields = ('estudiante','programa','Ciclo_Lectivo','Programa_Academico')
+        fields = ('estudiante','Ciclo_Lectivo','Programa_Academico')
+        read_only_fields = ('estudiante','Ciclo_Lectivo','Programa_Academico')
 
-class Profesores_AdministrativosSerializer(serializers.HyperlinkedModelSerializer):
+class Profesores_AdministrativosSerializer(serializers.Serializer):
     empleado =  PersonaSerializer(read_only=True)
 class Meta:
     model = Profesores_Administrativos
     fields = ('empleado','Cargo','Dependencia')
     read_only_fields = ('empleado','Cargo','Dependencia')
 
-class IncidenciaSerializer(serializers.HyperlinkedModelSerializer):
+class IncidenciaSerializer(serializers.Serializer):
     class Meta:
         model = Incidencia
         fields = ('Fecha_Incidencia')
         read_only_fields = ('Fecha_Incidencia')
 
-class RecursoSerializer(serializers.HyperlinkedModelSerializer):
+class RecursoSerializer(serializers.Serializer):
     class Meta:
         model = Recurso
         fields = ('tipo_de_recurso', 'Id_recurso', 'nombre_recurso','referencia','fecha_registro','fecha_de_baja')
         read_only_fields = ('tipo_de_recurso', 'Id_recurso', 'nombre_recurso','referencia','fecha_registro','fecha_de_baja')
 
-class Registro_IncidenteSerializer(serializers.HyperlinkedModelSerializer):
+class Registro_IncidenteSerializer(serializers.Serializer):
     recurso =  RecursoSerializer(read_only=True)
     class Meta:
         model = Registro_Incidente
         fields = ('recurso','Fecha_Incidente','descripcion','Estado')
         read_only_fields = ('recurso','Fecha_Incidente','descripcion','Estado')
 
-class PrestamoSerializer(serializers.HyperlinkedModelSerializer):
+class PrestamoSerializer(serializers.Serializer):
     persona = PersonaSerializer(read_only=True)
+    recurso = RecursoSerializer(read_only=True)
     class Meta:
         model = Prestamo
-        fields = ('id_prestamo', 'persona', 'Fecha_prestamo','Fecha_devolucion')
-        read_only_fields = ('id_prestamo', 'persona', 'Fecha_prestamo','Fecha_devolucion')
+        fields = ('id_prestamo', 'persona', 'recurso','Fecha_prestamo','Fecha_devolucion')
+        read_only_fields = ('id_prestamo','persona', 'recurso','Fecha_prestamo','Fecha_devolucion')
 
-class Detalle_PrestamoSerializer(serializers.HyperlinkedModelSerializer):
+class Detalle_PrestamoSerializer(serializers.Serializer):
     incidente = IncidenciaSerializer(read_only=True)
     prestamo = PrestamoSerializer(read_only=True)
     recurso = RecursoSerializer(read_only=True)
