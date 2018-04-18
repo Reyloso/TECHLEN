@@ -25,12 +25,14 @@ SECRET_KEY = 'l^s+*e*ne9ic+qb3==7k-n4qz)7x1ww#mrlcva^55s$3oy7y_n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'core',
+    'core.apps.SuitConfig',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
     'personas',
     'prestamos',
     'recursos',
@@ -63,7 +64,6 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
-
     )
 }
 
@@ -84,6 +84,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'gestic.wsgi.application'
+
+LOGIN_URL = '/admin'
 
 
 # Database
@@ -132,5 +134,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
+SUIT_CONFIG = {
+    # header
+    'ADMIN_NAME': 'TECHLEN',
+}
+
+STATICFILES_DIRS = (
+    os.path.join('gestic/static'),
+)
 
 STATIC_URL = '/static/'

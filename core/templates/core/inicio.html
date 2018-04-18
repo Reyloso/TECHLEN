@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>TECHLEN</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="{% static '/assets/css/main.min.css' %}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+
+		<style media="screen">
+			.name{
+				font-size: 25px;
+				position: relative;
+				right: 20px;
+				top: -14px;
+			}
+
+			#nav {
+				top: 25px;
+    		position: relative;
+			}
+
+			.pic {
+				width: 300px;
+			}
+
+			.copyright{
+				color: gray !important;
+			}
+
+			#footer{
+				background: #eee;
+			}
+		</style>
+	</head>
+	<body>
+
+		<!-- Header -->
+			<header id="header">
+				<div class="inner">
+					<a href="index.html" class="logo"><img style='width:70px' src="{% static 'assets/images/logo.svg' %}" alt=""> <strong class='name'>TECHLEN</strong></a>
+					<nav id="nav">
+						<a href="index.html">Inicio</a>
+					</nav>
+					<a href="#navPanel" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+				</div>
+			</header>
+
+		<!-- Banner -->
+			<section id="banner">
+				<div class="inner">
+					<header>
+						<h1>Gestion de Prestamos</h1>
+					</header>
+
+					<div class="flex ">
+
+						<div>
+							<span class="icon fa-list-ul"></span>
+							<h3>Prestamos</h3>
+							<p>Toma de asistencia eficiente</p>
+						</div>
+
+						<div>
+							<span class="icon fa-file"></span>
+							<h3>Reportes</h3>
+							<p>Seguimiento de actividades</p>
+						</div>
+
+						<div>
+							<span class="icon fa-calendar-check-o"></span>
+							<h3>Programacion</h3>
+							<p>Pogramacion de actividades</p>
+						</div>
+
+					</div>
+
+					<footer>
+						<a href="/admin" class="button">Empezar</a>
+					</footer>
+				</div>
+			</section>
+
+
+		<!-- Three -->
+			<section id="three" class="wrapper align-center">
+				<div class="inner">
+					<div class="flex flex-2">
+						<article>
+							<div class="image round">
+
+							</div>
+							<header>
+								<h3>Plataforma<br /> Administrativa</h3>
+							</header>
+							<p>Programacion de activiades<br />registro de estudiantes y profesores.</p>
+							<footer>
+								<a href="#" class="button">Ingresar</a>
+							</footer>
+						</article>
+						<article>
+							<div class="image round">
+
+							</div>
+							<header>
+								<h3>Aplicacion<br /> Movil</h3>
+							</header>
+							<p>Seguimiento de asistencia a activiades<br />para profesores.<br /></p>
+							<footer>
+								<a href="#" class="button">Descargar</a>
+							</footer>
+						</article>
+					</div>
+				</div>
+			</section>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="inner">
+
+					<img src="{% static '/assets/images/logo.svg' %}" alt="" style="width:150px;">
+
+					<div class="copyright">
+						&copy; TECHLEN. Desarrollado por <strong>Secbi</strong> 2018.
+					</div>
+
+				</div>
+			</footer>
+
+	</body>
+</html>

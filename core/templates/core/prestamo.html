@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{% static '/assets/css/usuario.css' %}" media="screen" title="no title" charset="utf-8">
+    <meta charset="utf-8">
+    <title>Prestamo TECHLEN</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js">
+
+    </script>
+    <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+
+  </head>
+  <body>
+
+
+    <h1 style="text-align:center;"> <img style="width:15%;" src="images/globinn_blanco.png" alt="" /> <span style="color: #fff">TECHLEN</span></h1>
+<div style="color:white; text-align:center;" class="lable">Registre el prestamo. </div>
+    <br>
+    <br>
+    <div class="user-profile">
+      <img class="avatar" src="images/avatar.png" alt="Ash" />
+      <div class="username"><span id="n"></span> <br> <span id="a"></span></div>
+
+      <div id="cc" class="bio">
+        1.439.527.251
+      </div>
+      <div class="description">
+        Estudiante
+      </div>
+      <ul class="data">
+        <li>
+          <span class="entypo-back-in-time"> Uso: <span id="n_pasajes_usados" ></span>    </span>
+        </li>
+        <li>
+          <span class="entypo-credit-card"> </span>
+        </li>
+        <li>
+          <span class="entypo-plus-circled "> </span>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="loader-box">
+	<div class="lable">Acerque la tarjeta al lector para leer .. </div>
+  <br>
+  <br>
+	<div class="loader">
+        <div class="element-animation">
+        <img src="{% static '/assets/images/id.png' %}" width="100" height="70";>
+        </div>
+
+	</div>
+</div>
+    <div class="container">
+         <input  id="idestu" autofocus type="text" placeholder="IdEstudiante" onkeydown="buscar(this)"/>
+
+    </div>
+
+
+  </body>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script type="text/javascript">
+  $(".user-profile").hide();
+   function buscar(ele) {
+      if(event.key === 'Enter') {
+          console.log(ele.value);
+          var tarjeta = ele.value;
+          axios.get('http://127.0.0.1:8000/api/Prestamo/prestar/',{
+              params: {
+                  Nro_Tarjeta: tarjeta
+              }
+          })
+            .then(function (response) {
+             console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                console.log(error);
+            });
+          ele.value = "";
+      }
+  }
+
+
+  var myFirebaseRef = new Firebase("https://globinn-bus.firebaseio.com/users/");
+
+
+  myFirebaseRef.on("child_changed", function(snapshot) {
+    $(".user-profile").fadeIn();
+    var user = snapshot.val();
+    $("#n_pasajes_usados").css('color', 'red');
+    $("#n").text(user.nombre);
+    $("#a").text(user.apellidos);
+    $("#cc").text(user.cedula);
+    $("#n_pasajes_usados").text(user.n_pasajes_usados);
+  });
+
+  $("#n_pasajes_usados").css('color', 'white');
+  </script>
+  <footer>
+
+  </footer>
+
+</html>
