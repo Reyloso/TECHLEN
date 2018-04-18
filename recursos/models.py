@@ -48,4 +48,4 @@ class Registro_Incidente(models.Model):
     Estado= models.CharField(max_length=30, choices=ESTADO)
 
     def __unicode__(self):
-        return unicode(str(self.recurso.nombre_recurso)+ str(self.ESTADO))
+        return unicode(str(self.recurso.nombre_recurso))

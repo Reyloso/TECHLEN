@@ -25,7 +25,7 @@ SECRET_KEY = 'l^s+*e*ne9ic+qb3==7k-n4qz)7x1ww#mrlcva^55s$3oy7y_n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -60,8 +60,10 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'gestic.urls'
 
 REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
+
     )
 }
 

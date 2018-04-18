@@ -12,7 +12,8 @@ class Prestamo(models.Model):
         verbose_name_plural = "Prestamos"
 
     id_prestamo = models.CharField(max_length=10, primary_key=True)
-    ID_Persona = models.ForeignKey(Estudiantes, null=True)
+    ID_Persona = models.ForeignKey(Personas, null=True)
+    ID_Recurso = models.ForeignKey(Recurso, null=True)
     Fecha_prestamo = models.DateField(default=now)
     Fecha_devolucion = models.DateField(null=True)
 
