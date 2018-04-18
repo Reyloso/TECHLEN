@@ -31,8 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'core',
-    'core.apps.SuitConfig',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core',
     'personas',
     'prestamos',
     'recursos',
@@ -131,13 +130,5 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-SUIT_CONFIG = {
-    # header
-    'ADMIN_NAME': 'TECHLEN',
-}
-
-STATICFILES_DIRS = (
-    os.path.join('gestic/static'),
-)
 
 STATIC_URL = '/static/'

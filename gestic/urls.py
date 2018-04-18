@@ -16,12 +16,8 @@ Including another URLconf
 from django.conf.urls import include,url
 from django.contrib import admin
 from api import views
-from core import views
 
 urlpatterns = [
-    #url(r'^$', include('core.urls')),
-    url(r'^$',  views.inicio, name='inicio'),
-    url(r'^prestamos/rfid/',  views.prestamsrfid, name='prestamorfid'),
     url(r'^admin/', admin.site.urls),
     url(r'', include('api.urls')),
 ]
