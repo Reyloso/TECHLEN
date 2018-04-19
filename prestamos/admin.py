@@ -10,5 +10,3 @@ from django.contrib import admin
 # Register your models here.
 
 admin.site.register(Prestamo)
-admin.site.register(Incidencia)
-admin.site.register(Detalle_Prestamo)

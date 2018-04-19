@@ -26,13 +26,11 @@ class SuitConfig(DjangoSuitConfig):
             ChildItem(model='personas.profesores_administrativos'),
         ]),
         ParentItem('Prestamos', children=[
-            ChildItem(model='prestamos.detalle_prestamo'),
-            ChildItem(model='prestamos.incidencia'),
             ChildItem(model='prestamos.prestamo'),
         ]),
         ParentItem('Recursos', children=[
             ChildItem(model='recursos.recurso'),
-            ChildItem(model='recursos.registro_incidente'),
+            ChildItem(model='recursos.incidente'),
             ChildItem(model='recursos.tipo_recurso'),
         ]),
         ParentItem('Gestion de usuario', children=[

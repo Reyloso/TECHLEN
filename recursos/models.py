@@ -25,13 +25,13 @@ class Recurso(models.Model):
     nombre_recurso = models.CharField(max_length=30, null=True)
     referencia = models.CharField(max_length=40)
     fecha_registro = models.DateField(default=now)
-    fecha_de_baja = models.DateField(null=True)
+    fecha_de_baja = models.DateField(blank=True)
 
     def __unicode__(self):
         return unicode(str(self.nombre_recurso))
 
 
-class Registro_Incidente(models.Model):
+class Incidente(models.Model):
     ESTADO = (
         ('EN REVISION', 'EN REVISION'),
         ('ACEPTADO', 'ACEPTADO'),
@@ -48,4 +48,4 @@ class Registro_Incidente(models.Model):
     Estado= models.CharField(max_length=30, choices=ESTADO)
 
     def __unicode__(self):
-        return unicode(str(self.recurso.nombre_recurso)+ str(self.ESTADO))
+        return unicode(str(self.recurso))

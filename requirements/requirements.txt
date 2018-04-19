@@ -4,7 +4,6 @@ diff-match-patch==20110725.1
 django-filter==1.1.0
 django-import-export==1.0.0
 django-rest-auth==0.9.3
-django-suit==2.0a1
 djangorestframework==3.8.2
 et-xmlfile==1.0.1
 jdcal==1.4

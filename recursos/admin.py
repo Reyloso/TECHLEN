@@ -4,4 +4,4 @@ from .models import *
 
 admin.site.register(Tipo_Recurso)
 admin.site.register(Recurso)
-admin.site.register(Registro_Incidente)
+admin.site.register(Incidente)

@@ -54,7 +54,7 @@ h1 {
 
 .item > img {
   margin: 0 auto;
-  
+
   width: 100px;
 }
 
@@ -111,7 +111,7 @@ h2, p{
 
 .rfid{
   float: right;
-  
+
 }
 
 .user-profile ul.data {
@@ -256,7 +256,6 @@ footer > h1 a {
 .container {
   display: flex;
   justify-content: center;
-
   width: 100%;
   height: 100vh;
 }

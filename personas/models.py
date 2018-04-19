@@ -13,6 +13,10 @@ class Personas(models.Model):
         ('F', 'Femenino'),
         ('M', 'Masculino'),
     )
+    ESTADO_TARJETA = (
+        ('ACTIVA', 'ACTIVA'),
+        ('INACTIVA', 'INACTIVA'),
+    )
     SEDE = (
         ('Apartado', 'Apartado'),
         ('Arauca', 'Arauca'),
@@ -23,7 +27,7 @@ class Personas(models.Model):
         ('Monteria', 'Monteria'),
         ('Medellin', 'Medellin'),
     )
-    Nro_Tarjeta = models.CharField(max_length=10, null=True)
+    Nro_Tarjeta = models.CharField(max_length=10, null=False, unique=True)
     Id_Persona = models.CharField(max_length=10, primary_key=True)
     Primer_Nombre = models.CharField(max_length=30, null=True)
     Segundo_Nombre = models.CharField(max_length=30, null=True)
@@ -32,26 +36,12 @@ class Personas(models.Model):
     Tipo_Documento = models.CharField(max_length=30, choices=TIPO_NID)
     Nro_Documento = models.CharField(max_length=30)
     Sede = models.CharField(max_length=30, choices=SEDE, null=True)
-    Codigo_ops = models.CharField(max_length=20, null=True)
     genero = models.CharField(max_length=30, choices=GENERO_ESTUDIANTE, null=True)
     Correo_Institucional = models.EmailField(max_length=50, unique=True)
-    Formato_credencial = models.CharField(max_length=20, null=True)
-    Grupo_acceso = models.CharField(max_length=20, null=True)
-    Estado_tarjeta = models.CharField(max_length=20, null=True)
-    foto_url = models.URLField(null=True)
-
-
-class Tipo_persona(models.Model):
-    TIPO_PERSONA = (
-        ('ESTUDIANTE', 'ESTUDIANTE'),
-        ('PROFESOR O ADMINISTRATIVO', 'PROFESOR O ADMINISTRATIVO'),
-    )
-
-    tipo_persona = models.CharField(max_length=30,choices=TIPO_PERSONA)
-    Id_Persona = models.CharField(max_length=30)
+    Estado_tarjeta = models.CharField(max_length=30, choices=ESTADO_TARJETA, null=True)
 
     def __unicode__(self):
-        return unicode(self.tipo_persona)
+        return unicode(self.Primer_Nombre + " " + self.Segundo_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido)
 
 class Estudiantes(Personas):
 

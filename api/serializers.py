@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from prestamos.models import Prestamo, Incidencia, Detalle_Prestamo
-from personas.models import Personas, Tipo_persona, Estudiantes, Profesores_Administrativos
-from recursos.models import Tipo_Recurso, Recurso, Registro_Incidente
+from prestamos.models import Prestamo
+from personas.models import Personas, Estudiantes, Profesores_Administrativos
+from recursos.models import Tipo_Recurso, Recurso, Incidente
 from configuracion.models import Programa
 from rest_framework import serializers
 from django.contrib.auth.models import User
@@ -14,67 +13,52 @@ class UsuarioSerializer(serializers.ModelSerializer):
         fields = ('get_full_name', 'email', 'username')
         read_only_fields = ('get_full_name', 'email', 'username')
 
-class  PersonaSerializer(serializers.HyperlinkedModelSerializer):
+class  PersonaSerializer(serializers.ModelSerializer):
     class Meta:
        model = Personas
        fields = ('Nro_Tarjeta', 'Id_Persona', 'Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido',
-            'Tipo_Documento','Nro_Documento','Sede','genero','Correo_Institucional','Estado_tarjeta','foto_url')
+            'Tipo_Documento','Nro_Documento','Sede','genero','Correo_Institucional','Estado_tarjeta')
        read_only_fields = ('Nro_Tarjeta', 'Id_Persona', 'Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido',
-            'Tipo_Documento','Nro_Documento','Sede','genero','Correo_Institucional','Estado_tarjeta','foto_url')
+            'Tipo_Documento','Nro_Documento','Sede','genero','Correo_Institucional','Estado_tarjeta')
 
-class ProgramaSerializer(serializers.HyperlinkedModelSerializer):
+class ProgramaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Programa
         fields = ('cod','nombre')
         read_only_fields = ('cod','nombre')
 
-class EstudiantesSerializer(serializers.Serializer):
-    estudiante = PersonaSerializer(read_only=True)
-    programa = ProgramaSerializer(read_only=True)
+class EstudiantesSerializer(serializers.ModelSerializer):
+    estudiante = PersonaSerializer(many=True, read_only=True)
+    programa = ProgramaSerializer(many=True, read_only=True)
     class Meta:
         model = Estudiantes
-        fields = ('estudiante','Ciclo_Lectivo','Programa_Academico')
-        read_only_fields = ('estudiante','Ciclo_Lectivo','Programa_Academico')
+        fields = ('estudiante','Ciclo_Lectivo','programa')
+        read_only_fields = ('estudiante','Ciclo_Lectivo','programa')
 
-class Profesores_AdministrativosSerializer(serializers.Serializer):
-    empleado =  PersonaSerializer(read_only=True)
-class Meta:
-    model = Profesores_Administrativos
-    fields = ('empleado','Cargo','Dependencia')
-    read_only_fields = ('empleado','Cargo','Dependencia')
-
-class IncidenciaSerializer(serializers.Serializer):
+class Profesores_AdministrativosSerializer(serializers.ModelSerializer):
+    empleado =  PersonaSerializer(many=True, read_only=True)
     class Meta:
-        model = Incidencia
-        fields = ('Fecha_Incidencia')
-        read_only_fields = ('Fecha_Incidencia')
+        model = Profesores_Administrativos
+        fields = ('empleado','Cargo','Dependencia')
+        read_only_fields = ('empleado','Cargo','Dependencia')
 
-class RecursoSerializer(serializers.Serializer):
+class RecursoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recurso
         fields = ('tipo_de_recurso', 'Id_recurso', 'nombre_recurso','referencia','fecha_registro','fecha_de_baja')
         read_only_fields = ('tipo_de_recurso', 'Id_recurso', 'nombre_recurso','referencia','fecha_registro','fecha_de_baja')
 
-class Registro_IncidenteSerializer(serializers.Serializer):
-    recurso =  RecursoSerializer(read_only=True)
+class IncidenteSerializer(serializers.ModelSerializer):
+    recurso =  RecursoSerializer(many=True, read_only=True)
     class Meta:
-        model = Registro_Incidente
+        model = Incidente
         fields = ('recurso','Fecha_Incidente','descripcion','Estado')
         read_only_fields = ('recurso','Fecha_Incidente','descripcion','Estado')
 
-class PrestamoSerializer(serializers.Serializer):
-    persona = PersonaSerializer(read_only=True)
-    recurso = RecursoSerializer(read_only=True)
+class PrestamoSerializer(serializers.ModelSerializer):
+    persona = PersonaSerializer(many=True, read_only=True)
+    recurso = RecursoSerializer(many=True, read_only=True)
     class Meta:
         model = Prestamo
-        fields = ('id_prestamo', 'persona', 'recurso','Fecha_prestamo','Fecha_devolucion')
-        read_only_fields = ('id_prestamo','persona', 'recurso','Fecha_prestamo','Fecha_devolucion')
-
-class Detalle_PrestamoSerializer(serializers.Serializer):
-    incidente = IncidenciaSerializer(read_only=True)
-    prestamo = PrestamoSerializer(read_only=True)
-    recurso = RecursoSerializer(read_only=True)
-    class Meta:
-        model = Detalle_Prestamo
-        fields = ('incidente', 'prestamo', 'recurso')
-        read_only_fields = ('incidente', 'prestamo', 'recurso')
+        fields = ('Id_prestamo', 'persona', 'recurso','Fecha_prestamo','Fecha_devolucion')
+        read_only_fields = ('Id_prestamo','persona', 'recurso','Fecha_prestamo','Fecha_devolucion')

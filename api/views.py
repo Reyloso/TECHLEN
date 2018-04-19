@@ -10,6 +10,7 @@ from rest_framework.permissions import AllowAny
 from .serializers import *
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework import generics
@@ -58,6 +59,14 @@ class Profesores_AdministrativosView(mixins.ListModelMixin,
 
     queryset = Profesores_Administrativos.objects.all()
     serializer_class = Profesores_AdministrativosSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = Profesores_Administrativos.objects.all()
+        serializer = self.get_serializer(queryset, many=True)
+        serializer_data = serializer.data
+        custom_data = {'pograma_results': {'pograma_array': serializer_data}}
+        return Response(custom_data)
+
     def get(self, request, *args, **kwargs):
 
         return self.list(request, *args, **kwargs)
@@ -65,6 +74,8 @@ class Profesores_AdministrativosView(mixins.ListModelMixin,
     def post(self, request, *args, **kwargs):
 
         return self.create(request, *args, **kwargs)
+
+
 
 class PrestamoView(mixins.ListModelMixin,
                 mixins.CreateModelMixin,
@@ -73,36 +84,34 @@ class PrestamoView(mixins.ListModelMixin,
     queryset = Prestamo.objects.all()
     serializer_class = PrestamoSerializer
     filter_backends = (filters.SearchFilter,)
-    filter_fields = ('id_prestamo',)
+    filter_fields = ('Id_prestamo',)
     http_method_names = ('post', 'get')
 
-    def get(self, request):
+    @api_view(['GET', 'POST'])
+    def get_prestamo(request, Nro_Tarjeta ):
         id_e = request.GET.get("id")
         id_r = request.GET.get("id")
         print(id_e)
+        serializer_p = PersonaSerializer(Personas.objects.get(Nro_Tarjeta=id_e))
+        serializer_r = RecursoSerializer(Recurso.objects.get(Id_recurso=id_r))
+        r = {
+            "persona": serialized_p.data.pop('Personas'),
+            "recursos": serializer_r.data.pop('Recurso'),
+        }
 
-        serializer_p = Personas.objects.get(Nro_Tarjeta=id_e)
-        serializer_r = Personas.objects.get(Id_recurso=id_r)
-        custom_data_p = {'prestamo_results': {'prestamo_array': "hola"}}
-        custom_data_r = {'recurso_results': {'recurso_array': serializer_r.data}}
+        rp = self.list(r)
+        return rp
 
-
-        return render_to_response(Request, 'add_prestamo.html', custom_data_p )
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-class IncidenciaView(mixins.ListModelMixin,
-                mixins.CreateModelMixin,
-               generics.GenericAPIView):
-
-    queryset = Incidencia.objects.all()
-    serializer_class = IncidenciaSerializer
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        serializer_data = serializer.data
+        custom_data = {'pograma_results': {'pograma_array': serializer_data}}
+        return Response(custom_data)
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
 
 class ProgramaView(mixins.ListModelMixin,
                 mixins.CreateModelMixin,
@@ -139,25 +148,12 @@ class RecursoView(mixins.ListModelMixin,
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
-class Registro_IncidenteView(mixins.ListModelMixin,
+class IncidenteView(mixins.ListModelMixin,
                 mixins.CreateModelMixin,
                generics.GenericAPIView):
 
-    queryset = Registro_Incidente.objects.all()
-    serializer_class = Registro_IncidenteSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-class Detalle_PrestamoView(mixins.ListModelMixin,
-                mixins.CreateModelMixin,
-               generics.GenericAPIView):
-
-    queryset = Detalle_Prestamo.objects.all()
-    serializer_class = Detalle_PrestamoSerializer
+    queryset = Incidente.objects.all()
+    serializer_class = IncidenteSerializer
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
