@@ -4,7 +4,7 @@ from django.db import models
 
 # Create your models here.
 class Programa(models.Model):
-    cod = models.CharField(max_length=60)
+    cod = models.CharField(max_length=10)
     nombre = models.CharField(max_length=60)
 
     class Meta:

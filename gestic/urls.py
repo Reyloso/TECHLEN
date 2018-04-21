@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^prestamo/rfid/',  views.prestamsrfid, name='prestamorfid'),
     url(r'', include('api.urls')),
+
 ]

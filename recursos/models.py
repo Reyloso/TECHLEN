@@ -42,6 +42,7 @@ class Incidente(models.Model):
     class Meta:
         verbose_name_plural = "Registo De Incidentes"
 
+    Id_Incidente = models.AutoField(primary_key=True)    
     recurso = models.ForeignKey(Recurso, null=True)
     Fecha_Incidente = models.DateField(default=now)
     descripcion = models.TextField(null=True)
