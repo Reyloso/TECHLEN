@@ -25,7 +25,7 @@ class Recurso(models.Model):
     nombre_recurso = models.CharField(max_length=30, null=True)
     referencia = models.CharField(max_length=40)
     fecha_registro = models.DateField(default=now)
-    fecha_de_baja = models.DateField(blank=True)
+    fecha_de_baja = models.DateField(blank=True, null=True)
 
     def __unicode__(self):
         return unicode(str(self.nombre_recurso))

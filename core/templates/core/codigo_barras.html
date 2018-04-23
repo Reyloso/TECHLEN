@@ -1,0 +1,52 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrastyle %}
+<script src="https://use.fontawesome.com/b7fd754cf7.js"></script>
+   <link  rel="stylesheet" href="{% static '/assets/css/header.css' %}"/>
+  <style>
+      #suit-nav{
+      display: none
+      }
+  .breadcrumbs{
+      display: none;
+  }
+  #suit-sub-nav {
+      display: none !important;
+  }
+  #user-tools{
+      display: none;
+  }
+  #header{
+    display: none !important;
+  }
+  </style>
+
+
+{%endblock%}
+{% block content %}
+<div class="container" style="display: flex; justify-content: center; margin-bottom: 40px;">
+  <div class="row" align-items-center>
+
+       <svg id="barcode" jsbarcode-format="upc"></svg>
+
+  </div>
+
+</div>
+<div class="container" style="display: flex; justify-content: center">
+  <a href="#" onclick="window.print();" class="btn btn-success" class="fa fa-file-pdf-o">IMPRIMIR </a>
+
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
+<script>
+
+  JsBarcode("#barcode", {{r.Id_recurso}});
+
+</script>
+
+{% endblock %}
