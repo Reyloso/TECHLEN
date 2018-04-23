@@ -25,7 +25,7 @@ class Recurso(models.Model):
     nombre_recurso = models.CharField(max_length=30, null=True)
     referencia = models.CharField(max_length=40)
     fecha_registro = models.DateField(default=now)
-    fecha_de_baja = models.DateField(blank=True)
+    fecha_de_baja = models.DateField(blank=True, null=True)
 
     def __unicode__(self):
         return unicode(str(self.nombre_recurso))
@@ -42,7 +42,7 @@ class Incidente(models.Model):
     class Meta:
         verbose_name_plural = "Registo De Incidentes"
 
-    Id_Incidente = models.AutoField(primary_key=True)    
+    Id_Incidente = models.AutoField(primary_key=True)
     recurso = models.ForeignKey(Recurso, null=True)
     Fecha_Incidente = models.DateField(default=now)
     descripcion = models.TextField(null=True)

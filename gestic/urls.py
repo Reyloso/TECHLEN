@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^$',  views.inicio, name='inicio'),
     url(r'^admin/', admin.site.urls),
     url(r'^prestamo/rfid/',  views.prestamsrfid, name='prestamorfid'),
+    url(r'^admin/recursos/codigo_barras/(?P<Id_recurso>[\w\-]+)$', views.codigo_barras, name='codigo-barras'),
     url(r'', include('api.urls')),
 
 ]
