@@ -88,3 +88,12 @@
   background-color: #12C454;
   border-color: #12C454;
 }
+#result_list thead > tr th div.text span{
+  background-color: #035A7B;
+}
+#result_list thead > tr th{
+  background-color: #035A7B;
+}
+#changelist #changelist-filter h3{
+  background-color: #035A7B;
+}

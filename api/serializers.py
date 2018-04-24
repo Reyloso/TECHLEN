@@ -51,13 +51,13 @@ class EstudiantesSerializer(PersonaSerializer):
 
     class Meta:
         model = Estudiantes
-        fields = ('programa', 'Ciclo_Lectivo')
+        fields =  "__all__"
 
 class Profesores_AdministrativosSerializer(PersonaSerializer):
 
     class Meta:
         model = Profesores_Administrativos
-        fields = ('Cargo', 'Dependencia')
+        fields = "__all__"
 
 class PrestamoSerializer(serializers.ModelSerializer):
     persona = EstudiantesSerializer(many=True, read_only=True)
@@ -65,5 +65,4 @@ class PrestamoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Prestamo
-        fields = ('Id_prestamo', 'Fecha_prestamo', 'Fecha_devolucion','persona',
-        'recurso')
+        fields = "__all__"

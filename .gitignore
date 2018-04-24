@@ -1,52 +1,119 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
+# Byte-compiled / optimized / DLL files
 
-# Folder config file
-Desktop.ini
+__pycache__/
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+*.py[cod]
 
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
 
-# Windows shortcuts
-*.lnk
 
-# =========================
-# Operating System Files
-# =========================
+# C extensions
 
-# OSX
-# =========================
+*.so
 
-.DS_Store
-.AppleDouble
-.LSOverride
+*.sqlite3
 
-# Thumbnails
-._*
+local_settings.py
 
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
 
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+
+# Distribution / packaging
+
+.Python
+
+env/
+
+bin/
+
+build/
+
+develop-eggs/
+
+dist/
+
+eggs/
+
+lib/
+
+lib64/
+
+parts/
+
+sdist/
+
+var/
+
+*.egg-info/
+
+.installed.cfg
+
+*.egg
+
+
+
+# Installer logs
+
+pip-log.txt
+
+pip-delete-this-directory.txt
+
+
+
+# Unit test / coverage reports
+
+htmlcov/
+
+.tox/
+
+.coverage
+
+.cache
+
+nosetests.xml
+
+coverage.xml
+
+
+
+# Mr Developer
+
+.mr.developer.cfg
+
+.project
+
+.pydevproject
+
+
+
+# Rope
+
+.ropeproject
+
+
+
+# Django stuff:
+
+*.log
+
+*.pot
+
+
+
+# Sphinx documentation
+
+docs/_build/
+
+
+
+# Pycharm
+
 .idea
-.sqlite3
-.gitattributes
-.git
 
+
+
+# Vim
+
+*~
+
+*.swp
+
+*.swo

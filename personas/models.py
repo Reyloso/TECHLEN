@@ -27,14 +27,14 @@ class Personas(models.Model):
         ('Monteria', 'Monteria'),
         ('Medellin', 'Medellin'),
     )
-    Nro_Tarjeta = models.CharField(max_length=10, null=False, unique=True)
-    Id_Persona = models.CharField(max_length=10, primary_key=True)
+    Nro_Tarjeta = models.CharField(max_length=10, null=False, unique=True, primary_key=True)
+    Id_Persona = models.CharField(max_length=10, unique=True)
     Primer_Nombre = models.CharField(max_length=30, null=True)
     Segundo_Nombre = models.CharField(max_length=30, null=True)
     Primer_Apellido = models.CharField(max_length=30, null=True)
     Segundo_Apellido = models.CharField(max_length=30, null=True)
     Tipo_Documento = models.CharField(max_length=30, choices=TIPO_NID)
-    Nro_Documento = models.CharField(max_length=30)
+    Nro_Documento = models.CharField(max_length=30, unique=True)
     Sede = models.CharField(max_length=30, choices=SEDE, null=True)
     genero = models.CharField(max_length=30, choices=GENERO_ESTUDIANTE, null=True)
     Correo_Institucional = models.EmailField(max_length=50, unique=True)

@@ -42,6 +42,7 @@ class EstudiantesDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Estudiantes.objects.all()
     serializer_class = EstudiantesSerializer
 
+
 #vistas de los empleados
 class Profesores_AdministrativosList(generics.ListCreateAPIView):
     queryset = Profesores_Administrativos.objects.all()
@@ -60,7 +61,6 @@ class PrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Prestamo.objects.all()
     serializer_class = PrestamoSerializer
 
-
 #vistas de los Incidentes
 class IncidenteList(generics.ListCreateAPIView):
     queryset = Incidente.objects.all()
@@ -78,6 +78,7 @@ class ProgramaList(generics.ListCreateAPIView):
 class ProgramaDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Programa.objects.all()
     serializer_class = ProgramaSerializer
+
 
 #vistas de los recursos
 class RecursoList(generics.ListCreateAPIView):
