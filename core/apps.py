@@ -27,6 +27,7 @@ class SuitConfig(DjangoSuitConfig):
         ]),
         ParentItem('Prestamos', children=[
             ChildItem(model='prestamos.prestamo'),
+            ChildItem('Prestar ', url='/admin/Prestamo/Prestar/'),
         ]),
         ParentItem('Recursos', children=[
             ChildItem(model='recursos.recurso'),

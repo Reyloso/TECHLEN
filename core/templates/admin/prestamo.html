@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="usuario.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <title>Prestamo TECHLEN</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js">
+
+    </script>
+    <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+
+  </head>
+  <body>
+    <div class="loader-box">
+	   <div class="lable" id="mensaje">Acerque la tarjeta al lector para leer .. </div>
+      <br>
+      <br>
+      <div class="loader">
+        <div class="element-animation">
+          <img src="{% static '/assets/images/id.png' %}" width="100" height="70";>
+        </div>
+      </div>
+    </div>
+    <div class="container inputidestu" style="height: 33px;" id="#inputidestu">
+      <input  id="idestu" autofocus type="text" placeholder="IdEstudiante" onkeydown="buscar(this)"/>
+    </div>
+
+    <div class="container-fluid perfil" >
+      <div class="row">
+        <div class="col-8">
+        <div class="card text-center">
+          <div class="card-header">
+            <h4>Productos a prestar</h4>
+          </div>
+          <div class="card-body ">
+          <div class="row productoslist" id="prod">
+
+
+          </div>
+          </div>
+          <div class="card-footer text-muted">
+            <input  id="idproduc" autofocus type="text" placeholder="idProducto" onkeydown="buscarp(this)"/>
+            <h4>Cantidad: <p id="cantidad">0</p> </h4>
+          </div>
+        </div>
+        </div>
+        <div class="col-3">
+          <div class="card">
+            <div class="card-header"><h4 id="id"></h4></div>
+            <img class="card-img-top" src="foto.jpg" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title" id="nomb"></h5>
+              <h6 class="card-title" id="depe"></h6>
+              <h6 class="card-title" id="sede"></h6>
+            </div>
+          </div>
+        </div>
+    </div>
+  </body>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="prestamo.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script type="text/javascript">
+  //$(".loader-box").hide();
+  //$(".inputidestu").hide();
+
+
+  </script>
+  <footer>
+
+  </footer>
+
+</html>

@@ -10,10 +10,10 @@ def inicio(request):
 
 
 @login_required(redirect_field_name='core/prestamo.html')
-def prestamsrfid(request):
+def prestamo_prestar(request):
+    context = admin.site.each_context(request)
 
-
-    return render(request, 'core/prestamo.html', {})
+    return render(request, 'core/prestamo.html', context)
 
 @login_required
 def codigo_barras(request,Id_recurso):
