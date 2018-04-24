@@ -40,6 +40,9 @@ class Personas(models.Model):
     Correo_Institucional = models.EmailField(max_length=50, unique=True)
     Estado_tarjeta = models.CharField(max_length=30, choices=ESTADO_TARJETA, null=True)
 
+    def nombre_completo(self):
+        return unicode(self.Primer_Nombre + " " + self.Segundo_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido)
+
     def __unicode__(self):
         return unicode(self.Primer_Nombre + " " + self.Segundo_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido)
 
