@@ -19,24 +19,21 @@ class ProgramaSerializer(serializers.ModelSerializer):
         model = Programa
         fields = ('cod', 'nombre')
 
+class IncidenteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Incidente
+        fields = ('Id_Incidente', 'Fecha_Incidente', 'descripcion','Estado')
+
 class Tipo_RecursoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tipo_Recurso
         fields = ('id_recurso', 'tipo_recurso')
 
 class RecursoSerializer(serializers.ModelSerializer):
+    Incidentes = IncidenteSerializer(many=True, read_only=True)
     class Meta:
         model = Recurso
-        fields = ('Id_recurso', 'tipo_de_recurso', 'nombre_recurso','referencia',
-        'fecha_registro','fecha_de_baja')
-
-class IncidenteSerializer(serializers.ModelSerializer):
-    recurso = RecursoSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Incidente
-        fields = ('Id_Incidente', 'Fecha_Incidente', 'descripcion','Estado',
-        'recurso')
+        fields = "__all__"
 
 class PersonaSerializer(serializers.ModelSerializer):
 
@@ -62,7 +59,7 @@ class Profesores_AdministrativosSerializer(PersonaSerializer):
 class PrestamoSerializer(serializers.ModelSerializer):
     persona = EstudiantesSerializer(many=True, read_only=True)
     recurso = RecursoSerializer(many=True, read_only=True)
-
+    Incidentes = IncidenteSerializer(many=True, read_only=True)
     class Meta:
         model = Prestamo
         fields = "__all__"

@@ -13,6 +13,7 @@ class Prestamo(models.Model):
 
     Id_prestamo = models.CharField(max_length=5, primary_key=True)
     Persona = models.ForeignKey(Estudiantes, null=True)
+    Incidentes = models.ForeignKey(Incidente, blank=True, null=True)
     recurso = models.ManyToManyField(Recurso, null=True)
     Fecha_prestamo = models.DateField(default=now)
     Fecha_devolucion = models.DateField(null=True)
