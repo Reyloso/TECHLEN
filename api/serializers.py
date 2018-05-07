@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from rest_framework import serializers
 from configuracion.models import Programa
 from recursos.models import Tipo_Recurso, Recurso, Incidente
-from personas.models import Personas, Estudiantes, Profesores_Administrativos
+from personas.models import Personas
 from prestamos.models import Prestamo
 from django.contrib.auth.models import User
 
@@ -39,27 +39,12 @@ class PersonaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Personas
-        fields = ('Nro_Tarjeta', 'Id_Persona', 'Primer_Nombre','Segundo_Nombre',
-        'Primer_Apellido', 'Segundo_Apellido', 'Tipo_Documento', 'Nro_Documento',
-        'Sede', 'genero', 'Correo_Institucional', 'Estado_tarjeta')
-
-class EstudiantesSerializer(PersonaSerializer):
-    programa = ProgramaSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Estudiantes
-        fields =  "__all__"
-
-class Profesores_AdministrativosSerializer(PersonaSerializer):
-
-    class Meta:
-        model = Profesores_Administrativos
         fields = "__all__"
 
+
 class PrestamoSerializer(serializers.ModelSerializer):
-    persona = EstudiantesSerializer(many=True, read_only=True)
+    persona = PersonaSerializer(many=True, read_only=True)
     recurso = RecursoSerializer(many=True, read_only=True)
-    Incidentes = IncidenteSerializer(many=True, read_only=True)
     class Meta:
         model = Prestamo
         fields = "__all__"

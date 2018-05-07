@@ -20,10 +20,11 @@ class SuitConfig(DjangoSuitConfig):
 
         ParentItem('Configuracion', children=[
             ChildItem(model='configuracion.programa'),
+            ChildItem(model='configuracion.cargo'),
+            ChildItem(model='configuracion.dependencia'),
         ]),
         ParentItem('Personas', children=[
-            ChildItem(model='personas.estudiantes'),
-            ChildItem(model='personas.profesores_administrativos'),
+            ChildItem(model='personas.personas'),
         ]),
         ParentItem('Prestamos', children=[
             ChildItem(model='prestamos.prestamo'),

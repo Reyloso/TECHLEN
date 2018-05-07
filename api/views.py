@@ -33,24 +33,14 @@ class UserViewSet(APIView):
         print serializer
         return Response(serializer.data)
 
-#vistas de estudiantes
-class EstudiantesList(generics.ListCreateAPIView):
-    queryset = Estudiantes.objects.all()
-    serializer_class = EstudiantesSerializer
+#vistas de estudiantes o adminstrativos
+class PersonasList(generics.ListCreateAPIView):
+    queryset = Personas.objects.all()
+    serializer_class = PersonaSerializer
 
-class EstudiantesDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Estudiantes.objects.all()
-    serializer_class = EstudiantesSerializer
-
-
-#vistas de los empleados
-class Profesores_AdministrativosList(generics.ListCreateAPIView):
-    queryset = Profesores_Administrativos.objects.all()
-    serializer_class = EstudiantesSerializer
-
-class Profesores_AdministrativosDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Profesores_Administrativos.objects.all()
-    serializer_class = EstudiantesSerializer
+class PersonasDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Personas.objects.all()
+    serializer_class = PersonaSerializer
 
 #vistas del prestamo
 class PrestamoList(generics.ListCreateAPIView):

@@ -12,3 +12,23 @@ class Programa(models.Model):
 
     def __unicode__(self):
         return unicode(self.nombre)
+
+class Cargo(models.Model):
+    cod = models.AutoField(primary_key=True)
+    Cargo = models.CharField(max_length=60)
+
+    class Meta:
+        verbose_name_plural = "Cargos"
+
+    def __unicode__(self):
+        return unicode(self.Cargo)
+
+class Dependencia(models.Model):
+    cod = models.AutoField(primary_key=True)
+    Dependencia = models.CharField(max_length=60)
+
+    class Meta:
+        verbose_name_plural = "Dependencias"
+
+    def __unicode__(self):
+        return unicode(self.Dependencia)

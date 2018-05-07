@@ -9,7 +9,7 @@ class Recursos (admin.ModelAdmin):
         codigo_barras.short_description = "Codigo De Barras"
         codigo_barras.allow_tags = True
         codigo_barras.is_column = True
-        list_display = ['Id_recurso','tipo_de_recurso','nombre_recurso','referencia','fecha_registro','codigo_barras']
+        list_display = ['Id_recurso','tipo_de_recurso','nombre_recurso','referencia','Estado_Recurso','fecha_registro','codigo_barras']
         class Meta:
 		          model = Recurso
 

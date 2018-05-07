@@ -6,8 +6,8 @@ from api import views
 
 
 urlpatterns = [
-    url(r'^api/Estudiante/$', views.EstudiantesList.as_view()),
-    url(r'^api/Estudiante/Detail/(?P<pk>\d+)/$', views.EstudiantesDetail.as_view()),
+    url(r'^api/Persona/$', views.PersonasList.as_view()),
+    url(r'^api/Persona/Detail/(?P<pk>\d+)/$', views.PersonasDetail.as_view()),
     url(r'^api/Prestamo/prestar/$', views.PrestamoList.as_view(), name='prestamo'),
     url(r'^api/Prestamo/prestamo/(?P<pk>\d+)/$', views.PrestamoDetail.as_view(), name='prestamo'),
     url(r'^api/Recurso/Registro_Incidente$', views.IncidenteList),

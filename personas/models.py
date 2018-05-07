@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
-from configuracion.models import *
+from configuracion.models import Programa, Cargo, Dependencia
 
 # Create your models here.
 class Personas(models.Model):
@@ -17,6 +17,10 @@ class Personas(models.Model):
         ('ACTIVA', 'ACTIVA'),
         ('INACTIVA', 'INACTIVA'),
     )
+    TIPO_PERSONA = (
+        ('ESTUDIANTE', 'ESTUDIANTE'),
+        ('ADM O PROFESOR', 'ADM O PROFESOR'),
+    )
     SEDE = (
         ('Apartado', 'Apartado'),
         ('Arauca', 'Arauca'),
@@ -30,38 +34,20 @@ class Personas(models.Model):
     Nro_Tarjeta = models.CharField(max_length=10, null=False, unique=True, primary_key=True)
     Id_Persona = models.CharField(max_length=10, unique=True)
     Primer_Nombre = models.CharField(max_length=30, null=True)
-    Segundo_Nombre = models.CharField(max_length=30, null=True)
+    Segundo_Nombre = models.CharField(max_length=30,blank=True, null=True)
     Primer_Apellido = models.CharField(max_length=30, null=True)
-    Segundo_Apellido = models.CharField(max_length=30, null=True)
+    Segundo_Apellido = models.CharField(max_length=30,blank=True, null=True)
     Tipo_Documento = models.CharField(max_length=30, choices=TIPO_NID)
     Nro_Documento = models.CharField(max_length=30, unique=True)
     Sede = models.CharField(max_length=30, choices=SEDE, null=True)
     genero = models.CharField(max_length=30, choices=GENERO_ESTUDIANTE, null=True)
     Correo_Institucional = models.EmailField(max_length=50, unique=True)
     Estado_tarjeta = models.CharField(max_length=30, choices=ESTADO_TARJETA, null=True)
-
-    def nombre_completo(self):
-        return unicode(self.Primer_Nombre + " " + self.Segundo_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido)
-
-    def __unicode__(self):
-        return unicode(self.Primer_Nombre + " " + self.Segundo_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido)
-
-class Estudiantes(Personas):
-
+    Tipo_Persona = models.CharField(max_length=30, choices=TIPO_PERSONA, null=True)
     Programa_Academico = models.ForeignKey(Programa, null=True)
     Ciclo_Lectivo = models.CharField(max_length=30, null=True)
-    class Meta:
-        verbose_name_plural = "Estudiantes"
+    Cargo = models.ManyToManyField(Cargo, blank=True, null=True)
+    Dependencias = models.ForeignKey(Dependencia,blank=True, null=True)
 
     def __unicode__(self):
-        return unicode(self.Primer_Nombre + " " + self.Segundo_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido)
-
-class Profesores_Administrativos(Personas):
-
-    Cargo = models.CharField(max_length=30, null=True)
-    Dependencia = models.CharField(max_length=30, null=True)
-    class Meta:
-        verbose_name_plural = "Profesores o Administrativos"
-
-    def __unicode__(self):
-        return unicode(self.Primer_Nombre + " " + self.Segundo_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido)
+        return self.Primer_Nombre + " " + self.Segundo_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido

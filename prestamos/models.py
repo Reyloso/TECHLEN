@@ -7,16 +7,27 @@ from recursos.models import *
 
 # Create your models here.
 class Prestamo(models.Model):
+    ESTADO = (
+        ('EN CURSO', 'EN CURSO'),
+        ('DEVUELTO', 'DEVUELTO'),
+    )
 
     class Meta:
         verbose_name_plural = "Prestamos"
 
-    Id_prestamo = models.CharField(max_length=5, primary_key=True)
-    Persona = models.ForeignKey(Estudiantes, null=True)
-    Incidentes = models.ForeignKey(Incidente, blank=True, null=True)
+    Id_prestamo = models.AutoField(primary_key=True)
+    Persona = models.ForeignKey(Personas, null=True)
     recurso = models.ManyToManyField(Recurso, null=True)
+    Estado_prestamo = models.CharField(max_length=20, choices=ESTADO)
     Fecha_prestamo = models.DateField(default=now)
-    Fecha_devolucion = models.DateField(null=True)
+    Hora_prestamo = models.TimeField(null=True)
+    Fecha_devolucion = models.DateField(blank=True, null=True)
+    Hora_devolucion = models.TimeField(blank=True, null=True)
+
+    def get_recurso(self):
+       return ",".join([r.nombre_recurso for r in self.recurso.all()])
+    get_recurso.short_description = 'recurso'
+    get_recurso.allow_tags = True
 
     def __unicode__(self):
         return unicode(str(self.Id_prestamo) + " " + str(self.Persona))
