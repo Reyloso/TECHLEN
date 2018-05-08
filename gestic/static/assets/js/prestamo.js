@@ -6,7 +6,7 @@
       if(event.key === 'Enter') {
           console.log(ele.value);
           var tarjeta = ele.value;
-          axios.get('/api/Estudiante/Detail/'+tarjeta)
+          axios.get('/api/Persona/Detail/'+tarjeta)
             .then(function (response) {
                   var user = response.data;
                   //console.log(user);

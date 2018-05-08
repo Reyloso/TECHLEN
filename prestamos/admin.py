@@ -20,10 +20,11 @@ class Prestamos (admin.ModelAdmin):
     Incidentes.short_description = "Incidentes"
     Incidentes.allow_tags = True
     Incidentes.is_column = True
-    list_display = ['Id_prestamo','Persona','get_recurso','Estado_prestamo','Fecha_prestamo','Hora_prestamo', 'Incidentes','Devolucion' ]
-    search_fields = ('Id_prestamo','Persona','get_recurso','Estado_prestamo','Fecha_prestamo','Hora_prestamo')
+
+    list_display = ['Id_prestamo','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo', 'Incidentes','Devolucion' ]
+    search_fields = ('Id_prestamo','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo')
 
     class Meta:
 		model = Prestamo
 
-admin.site.register(Prestamo,Prestamos)
+admin.site.register(Prestamo, Prestamos)

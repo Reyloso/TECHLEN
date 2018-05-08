@@ -17,20 +17,19 @@ class UserSerializer(serializers.ModelSerializer):
 class ProgramaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Programa
-        fields = ('cod', 'nombre')
+        fields = "__all__"
 
 class IncidenteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Incidente
-        fields = ('Id_Incidente', 'Fecha_Incidente', 'descripcion','Estado')
+        fields = "__all__"
 
 class Tipo_RecursoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tipo_Recurso
-        fields = ('id_recurso', 'tipo_recurso')
+        fields = "__all__"
 
 class RecursoSerializer(serializers.ModelSerializer):
-    Incidentes = IncidenteSerializer(many=True, read_only=True)
     class Meta:
         model = Recurso
         fields = "__all__"
@@ -43,8 +42,6 @@ class PersonaSerializer(serializers.ModelSerializer):
 
 
 class PrestamoSerializer(serializers.ModelSerializer):
-    persona = PersonaSerializer(many=True, read_only=True)
-    recurso = RecursoSerializer(many=True, read_only=True)
     class Meta:
         model = Prestamo
         fields = "__all__"

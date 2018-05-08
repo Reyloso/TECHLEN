@@ -46,8 +46,13 @@ class Personas(models.Model):
     Tipo_Persona = models.CharField(max_length=30, choices=TIPO_PERSONA, null=True)
     Programa_Academico = models.ForeignKey(Programa, null=True)
     Ciclo_Lectivo = models.CharField(max_length=30, null=True)
-    Cargo = models.ManyToManyField(Cargo, blank=True, null=True)
+    Cargo = models.ManyToManyField(Cargo, blank=True, null=False)
     Dependencias = models.ForeignKey(Dependencia,blank=True, null=True)
 
-    def __unicode__(self):
+    def nombre_completo(self):
         return self.Primer_Nombre + " " + self.Segundo_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido
+
+
+
+    def __unicode__(self):
+        return unicode(self.Primer_Nombre)

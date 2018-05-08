@@ -45,7 +45,7 @@ class Recurso(models.Model):
 
     Id_recurso = models.AutoField(primary_key=True)
     tipo_de_recurso = models.ForeignKey(Tipo_Recurso, null=True)
-    nombre_recurso = models.CharField(max_length=30, null=True)
+    nombre_recurso = models.CharField(max_length=20, null=True)
     referencia = models.CharField(max_length=10)
     Estado_Recurso = models.CharField(max_length=20, choices=ESTADO)
     fecha_registro = models.DateField(default=now)
