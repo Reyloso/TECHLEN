@@ -29,6 +29,53 @@
       }
   }
 
+  var dbRecursos = [];
+
+
+function guardarRecursoLocal(idRecurso){
+  dbRecursos.push(idRecurso); // Guardar datos en el array definido globalmente
+}
+
+//[1,2,3,4,5]
+
+//for x in arra:
+
+//  r = recurso.get(1)
+//  prestamo.recursos.add(r)
+//  r.estado = false
+
+function generarJSON(){
+  // Seleccionamos los datos de los inputs de formulario
+
+  var datos = {
+      "Persona" : $("#id").text(),
+      //"Persona" :"123",
+      "Recurso": dbRecursos,
+      //"Recurso":[1],
+      "Fecha_devolucion": $("#FD").val(),
+      "Fecha_prestamo": "2018-05-08",//generar
+      "Hora_prestamo": "22:07:00",//generar
+      "Hora_devolucion": $("#HD").val(),
+      "Estado_prestamo": "EN CURSO"//generar
+  };
+  return datos;
+}
+function Mensaje(t){
+        switch (t) {
+            case 1: //
+                $(".mensaje-alerta").append(
+                    "<div class='alert alert-success' role='alert'>Se agrego con exito el Prestamo</div>"
+                );
+                break;
+            case 2: //
+                $(".mensaje-alerta").append(
+                    "<div class='alert alert-danger' role='alert'>No se agrego el Prestamo ERROR</div>"
+                );
+                break;
+            default:
+
+        }
+    }
   function buscarp(ele) {
     if(event.key === 'Enter') {
           console.log(ele.value);

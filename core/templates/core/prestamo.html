@@ -30,18 +30,23 @@
 </div>
 
 <div class="container-fluid perfil" >
+  <div class="mensaje-alerta">
+        </div>
   <div class="row">
     <div class="col-8">
     <div class="card text-center cardrecursos">
       <div class="card-header">
-        <input  id="idproduc" autofocus type="text" placeholder="idProducto" onkeydown="buscarp(this)"/>
+        <input  id="idproduc" autofocus type="text" placeholder="id Producto" onkeydown="buscarp(this)"/>
       </div>
       <div class="card-body cardrecursosb">
       <div class="row productoslist" id="prod">
       </div>
       </div>
-
     </div>
+    <form id="prestamo-form">
+                    Fecha aproximada de devolucion:<input  class="form-control" type="text" id="FD" placeholder="yyyy-mm-dd">
+                    Hora aproximada de devolucion:<input  class="form-control" type="text" id="HD" placeholder="hh:mm:ss">
+                </form>
     </div>
     <div class="col-3">
       <div class="card cardestudiante">
@@ -53,7 +58,7 @@
           <h6 class="card-title" id="sede"></h6>
         </div>
       </div>
-      <button type="button" class="btn btn-primary">Guardar Prestamo</button>
+      <button onclick="guardarPrestamo()" type="button" class="btn btn-primary">Guardar Prestamo</button>
     </div>
 </div>
 </div>
@@ -61,4 +66,26 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script type="text/javascript" src="{% static '/assets/js/prestamo.js' %}"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+function guardarPrestamo(){
+
+  var datos = generarJSON();
+
+  var token = "{{ csrf_token }}"
+
+  axios.post("/api/Prestamo/prestar/", datos, {
+      headers: {"X-CSRFToken": token}
+  })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+  console.log(token);
+return Mensaje(1);
+}
+
+</script>
 {% endblock %}
