@@ -22,6 +22,7 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 import django_filters.rest_framework
 from django.contrib.auth.models import User
+from rest_framework.decorators import action
 
 class UserViewSet(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
@@ -43,9 +44,12 @@ class PersonasDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PersonaSerializer
 
 #vistas del prestamo
+@action(methods=['post'], detail=True)
 class PrestamoList(generics.ListCreateAPIView):
+    permission_classes = (AllowAny,)
     queryset = Prestamo.objects.all()
     serializer_class = PrestamoSerializer
+
 
 class PrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Prestamo.objects.all()
