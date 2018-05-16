@@ -5,25 +5,6 @@ from django.db import models
 # Create your models here.
 from django.utils.timezone import now
 
-class Incidente(models.Model):
-    ESTADO = (
-        ('EN REVISION', 'EN REVISION'),
-        ('ACEPTADO', 'ACEPTADO'),
-        ('DADO DE BAJA', 'DADO DE BAJA'),
-    )
-
-
-    class Meta:
-        verbose_name_plural = "Registo De Incidentes"
-
-    Id_Incidente = models.AutoField(primary_key=True)
-    Fecha_Incidente = models.DateField(default=now)
-    descripcion = models.TextField(null=True)
-    Estado= models.CharField(max_length=30, choices=ESTADO)
-
-    def __unicode__(self):
-        return unicode(str(self.descripcion))
-
 class Tipo_Recurso(models.Model):
 
     class Meta:
@@ -37,6 +18,7 @@ class Tipo_Recurso(models.Model):
 class Recurso(models.Model):
     ESTADO = (
         ('ACTIVO', 'ACTIVO'),
+        ('PRESTADO', 'PRESTADO'),
         ('EN MANTENIMIENTO', 'EN MANTENIMIENTO'),
         ('DADO DE BAJA', 'DADO DE BAJA'),
     )
@@ -53,3 +35,23 @@ class Recurso(models.Model):
 
     def __unicode__(self):
         return unicode(str(self.nombre_recurso))
+
+class Incidente(models.Model):
+    ESTADO = (
+        ('EN REVISION', 'EN REVISION'),
+        ('ACEPTADO', 'ACEPTADO'),
+        ('DADO DE BAJA', 'DADO DE BAJA'),
+    )
+
+
+    class Meta:
+        verbose_name_plural = "Registo De Incidentes"
+
+    Id_Incidente = models.AutoField(primary_key=True)
+    Fecha_Incidente = models.DateField(default=now)
+    Recurso= models.ForeignKey(Recurso, null=True)
+    descripcion = models.TextField(null=True)
+    Estado= models.CharField(max_length=30, choices=ESTADO)
+
+    def __unicode__(self):
+        return unicode(str(self.descripcion))

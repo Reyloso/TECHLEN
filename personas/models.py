@@ -38,7 +38,7 @@ class Personas(models.Model):
     Primer_Apellido = models.CharField(max_length=30, null=True)
     Segundo_Apellido = models.CharField(max_length=30,blank=True, null=True)
     Tipo_Documento = models.CharField(max_length=30, choices=TIPO_NID)
-    Nro_Documento = models.CharField(max_length=30, unique=True)
+    Nro_Documento = models.CharField(max_length=30)
     Sede = models.CharField(max_length=30, choices=SEDE, null=True)
     genero = models.CharField(max_length=30, choices=GENERO_ESTUDIANTE, null=True)
     Correo_Institucional = models.EmailField(max_length=50, unique=True)
@@ -46,13 +46,12 @@ class Personas(models.Model):
     Tipo_Persona = models.CharField(max_length=30, choices=TIPO_PERSONA, null=True)
     Programa_Academico = models.ForeignKey(Programa, null=True)
     Ciclo_Lectivo = models.CharField(max_length=30, null=True)
-    Cargo = models.ManyToManyField(Cargo, blank=True, null=False)
-    Dependencias = models.ForeignKey(Dependencia,blank=True, null=True)
+    #Cargo = models.ManyToManyField(Cargo, blank=True, null=False)
+    #Dependencias = models.ForeignKey(Dependencia,blank=True, null=True)
 
     def nombre_completo(self):
         return self.Primer_Nombre + " " + self.Segundo_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido
 
 
-
     def __unicode__(self):
-        return unicode(self.Primer_Nombre)
+        return unicode(self.Nro_Tarjeta)

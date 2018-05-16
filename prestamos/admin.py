@@ -11,17 +11,13 @@ from django.contrib import admin
 class Prestamos (admin.ModelAdmin):
 
     def Devolucion(self, instance):
-        return "<a href='/admin/prestamos/prestamo/%s/change/'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-plus-square' aria-hidden='true'></i>  </a>"% instance.Id_prestamo
+
+        return "<a href='/admin/recursos/recurso/'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-plus-square' aria-hidden='true'></i>  </a>"
     Devolucion.short_description = "Devolucion"
     Devolucion.allow_tags = True
     Devolucion.is_column = True
-    def Incidentes(self, instance):
-        return "<a href='/admin/recursos/incidente/add/'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-plus-square' aria-hidden='true'></i>  </a>"
-    Incidentes.short_description = "Incidentes"
-    Incidentes.allow_tags = True
-    Incidentes.is_column = True
 
-    list_display = ['Id_prestamo','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo', 'Incidentes','Devolucion' ]
+    list_display = ['Id_prestamo','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo', 'Devolucion' ]
     search_fields = ('Id_prestamo','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo')
 
     class Meta:

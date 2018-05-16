@@ -9,6 +9,7 @@ from recursos.models import *
 class Prestamo(models.Model):
     ESTADO = (
         ('EN CURSO', 'EN CURSO'),
+        ('EN REVISION', 'EN REVISION'),
         ('DEVUELTO', 'DEVUELTO'),
     )
 

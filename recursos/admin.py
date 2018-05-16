@@ -9,10 +9,27 @@ class Recursos (admin.ModelAdmin):
         codigo_barras.short_description = "Codigo De Barras"
         codigo_barras.allow_tags = True
         codigo_barras.is_column = True
-        list_display = ['Id_recurso','tipo_de_recurso','nombre_recurso','referencia','Estado_Recurso','fecha_registro','codigo_barras']
+        def Incidente(self, instance):
+            return "<a href='/admin/recursos/incidente/add/'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-check-square' aria-hidden='true'></i>  </a>"
+        Incidente.short_description = "Incidente"
+        Incidente.allow_tags = True
+        Incidente.is_column = True
+
+        def Devolver(self, instance):
+            return "<a href='#'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-check-square' aria-hidden='true'></i>  </a>"
+        Devolver.short_description = "Devolver"
+        Devolver.allow_tags = True
+        Devolver.is_column = True
+
+        list_display = ['Id_recurso','tipo_de_recurso','nombre_recurso','referencia','Estado_Recurso','fecha_registro','codigo_barras','Incidente','Devolver']
         class Meta:
 		          model = Recurso
+class Incidentes (admin.ModelAdmin):
+
+        list_display = ['Id_Incidente','Fecha_Incidente','Recurso','descripcion','Estado']
+        class Meta:
+		          model = Incidente
 
 admin.site.register(Tipo_Recurso)
 admin.site.register(Recurso,Recursos)
-admin.site.register(Incidente)
+admin.site.register(Incidente, Incidentes)

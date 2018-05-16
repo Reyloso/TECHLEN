@@ -29,11 +29,12 @@
       }
   }
 
-  var dbRecursos = [];
-
+var dbRecursos = [];
 
 function guardarRecursoLocal(idRecurso){
+
   dbRecursos.push(idRecurso); // Guardar datos en el array definido globalmente
+  // console.log(dbRecursos);
 }
 
 //[1,2,3,4,5]
@@ -46,18 +47,49 @@ function guardarRecursoLocal(idRecurso){
 
 function generarJSON(){
   // Seleccionamos los datos de los inputs de formulario
-
+  var date =  new Date();
+  var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
+  //console.log(fecha);
+  var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
+  //console.log(hora);
+  //console.log(this.dbRecursos);
+  console.log(dbRecursos);
   var datos = {
       "Persona" : $("#id").text(),
       //"Persona" :"123",
-      "Recurso": dbRecursos,
+      "recurso": dbRecursos,
       //"Recurso":[1],
-      "Fecha_devolucion": $("#FD").val(),
-      "Fecha_prestamo": "2018-05-08",//generar
-      "Hora_prestamo": "22:07:00",//generar
-      "Hora_devolucion": $("#HD").val(),
+      "Fecha_devolucion": fecha,//$("#FD").val(),
+      "Fecha_prestamo": fecha,//generar
+      "Hora_prestamo": hora,//generar
+      "Hora_devolucion": hora,//$("#HD").val(),
       "Estado_prestamo": "EN CURSO"//generar
   };
+  for (i in dbRecursos) {
+    var codigo = dbRecursos[i]
+    var recurso = null
+    axios.get('/api/recurso/'+ codigo)
+    .then(function (response) {
+          recurso = response.data;
+          recurso.Estado_Recurso = "PRESTADO";
+          recurso.save()
+          console.log(recurso);
+    }).catch(function (error) {
+          $("#mensaje").text("Recurso no encontrado");
+          console.log(error);
+    });
+    var token = "{{ csrf_token }}"
+
+    axios.put('/api/recurso/'+ codigo, recurso, {
+        headers: {"X-CSRFToken": token}
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
   return datos;
 }
 function Mensaje(t){
@@ -85,13 +117,14 @@ function Mensaje(t){
                   var recurso = response.data;
                   console.log(recurso);
                   if(recurso.Id_recurso !== undefined){
+                    guardarRecursoLocal(recurso.Id_recurso);
                     var divp = document.getElementById("prod");
                     var divcard = document.createElement("div");
                     var html = "<div class='card border-primary mb-3 ' style='max-width: 18rem;margin-right: 10px;margin-left: 10px;'>"+
                         "<div class='card-header cardprod'>"+ recurso.Id_recurso+"</div>"+
                         "<div class='card-body text-primary'> "+
                         "<h5 class='card-title'>"+recurso.nombre_recurso +"</h5>"+
-                        "<p class='card-text'>"+ recurso.tipo_de_recurso+"</br>"+ recurso.fecha_registro+ "</p>"+
+                        "<p class='card-text'>"+ recurso.tipo_de_recurso+"</br>"+ recurso.Estado_Recurso+ "</p>"+
                         "</div>";
                     divcard.innerHTML=html;
                     divp.appendChild(divcard);
