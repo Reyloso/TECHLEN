@@ -12,7 +12,7 @@ class Prestamos (admin.ModelAdmin):
 
     def Devolucion(self, instance):
 
-        return "<a href='/admin/recursos/recurso/'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-plus-square' aria-hidden='true'></i>  </a>"
+        return "<a href='/admin/Prestamo/Detalle/%s'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-chevron-circle-left' aria-hidden='true'></i>  </a>" % instance.Id_prestamo
     Devolucion.short_description = "Devolucion"
     Devolucion.allow_tags = True
     Devolucion.is_column = True
@@ -23,4 +23,11 @@ class Prestamos (admin.ModelAdmin):
     class Meta:
 		model = Prestamo
 
+class Incidentes (admin.ModelAdmin):
+
+        list_display = ['Id_Incidente','Fecha_Incidente','Recurso','descripcion','Estado']
+        class Meta:
+		          model = Incidente
+
 admin.site.register(Prestamo, Prestamos)
+admin.site.register(Incidente, Incidentes)

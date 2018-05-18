@@ -2,8 +2,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.utils.timezone import now
-from personas.models import *
-from recursos.models import *
+from personas.models import Personas
+from recursos.models import Recurso
 
 # Create your models here.
 class Prestamo(models.Model):
@@ -31,4 +31,25 @@ class Prestamo(models.Model):
     get_recurso.allow_tags = True
 
     def __unicode__(self):
-        return unicode(str(self.Id_prestamo) + " " + str(self.Persona))
+        return unicode(str(self.Id_prestamo))
+
+
+class Incidente(models.Model):
+    ESTADO = (
+        ('EN REVISION', 'EN REVISION'),
+        ('ACEPTADO', 'ACEPTADO'),
+        ('DADO DE BAJA', 'DADO DE BAJA'),
+    )
+
+    class Meta:
+        verbose_name_plural = "Registo De Incidentes"
+
+    Id_Incidente = models.AutoField(primary_key=True)
+    Fecha_Incidente = models.DateField(default=now)
+    Recurso = models.ForeignKey(Recurso, null=True)
+    Prestamo = models.ForeignKey(Prestamo, null=True)
+    descripcion = models.TextField(null=True)
+    Estado= models.CharField(max_length=30, choices=ESTADO)
+
+    def __unicode__(self):
+        return unicode(str(self.descripcion))

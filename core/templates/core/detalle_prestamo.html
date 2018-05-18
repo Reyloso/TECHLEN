@@ -1,0 +1,277 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrastyle %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+     <link  rel="stylesheet" href="{% static '/assets/css/header.css' %}"/>
+     <link rel="stylesheet" href="{% static '/assets/css/usuario.css' %}" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{%endblock%}
+
+{% block content %}
+<div class="card">
+	<div class="card-header detalle">
+    <h5>Detalle Prestamo : {{r.Id_prestamo}}</h5>
+  </div>
+
+<div class="results ">
+<table id="result_list">
+<thead>
+<tr>
+
+
+<th scope="col"  class="sortable column-Id_prestamo">
+
+   <div class="text"><a href="#">Id prestamo</a></div>
+   <div class="clear"></div>
+</th>
+
+<th scope="col"  class="sortable column-Persona">
+
+   <div class="text"><a href="#">Persona</a></div>
+   <div class="clear"></div>
+</th>
+<th scope="col"  class="sortable column-Persona">
+
+   <div class="text"><a href="#">Nro_Tarjeta</a></div>
+   <div class="clear"></div>
+</th>
+
+
+<th scope="col"  class="sortable column-Estado_prestamo">
+   <div class="text"><a href="#">Estado prestamo</a></div>
+   <div class="clear"></div>
+</th>
+<th scope="col"  class="sortable column-Fecha_prestamo">
+
+
+
+   <div class="text"><a href="#">Fecha prestamo</a></div>
+   <div class="clear"></div>
+</th>
+<th scope="col"  class="sortable column-Hora_prestamo">
+
+
+
+   <div class="text"><a href="#">Hora prestamo</a></div>
+   <div class="clear"></div>
+</th>
+
+
+</tr>
+</thead>
+<tbody>
+<tr class="row1">
+		<th class="field-Id_prestamo">{{ r.Id_prestamo }}</a></th>
+	<td class="field-Persona nowrap">{{ r.Persona.nombre_completo }}</td>
+  <td class="field-Persona nowrap">{{ r.Persona.Nro_Tarjeta }}</td>
+	<td class="field-Estado_prestamo">{{r.Estado_prestamo}}</td>
+	<td class="field-Fecha_prestamo nowrap">{{r.Fecha_prestamo}}</td>
+	<td class="field-Hora_prestamo nowrap">{{r.Hora_prestamo}}</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+</div>
+
+<div class="card">
+  <div class="card-header detalle">
+    <h6>Recursos Prestados</h6>
+  </div>
+<div class="results">
+<table id="result_list">
+<thead>
+<tr>
+
+<th scope="col"  class="sortable column-Id_prestamo">
+
+   <div class="text"><a href="#">Id Recurso</a></div>
+   <div class="clear"></div>
+</th>
+<th scope="col"  class="sortable column-Persona">
+
+
+
+   <div class="text"><a href="#">Tipo Recurso</a></div>
+   <div class="clear"></div>
+</th>
+<th scope="col"  class="sortable column-Estado_prestamo">
+
+
+
+   <div class="text"><a href="#">Nombre Recurso</a></div>
+   <div class="clear"></div>
+</th>
+<th scope="col"  class="sortable column-Fecha_prestamo">
+
+
+
+   <div class="text"><a href="#">Estado Recurso</a></div>
+   <div class="clear"></div>
+</th>
+
+<th scope="col"  class="sortable column-Fecha_prestamo">
+
+
+
+   <div class="text"><a href="#">Devolver Recurso</a></div>
+   <div class="clear"></div>
+</th>
+
+</tr>
+</thead>
+<tbody>
+  {% for recursos in r.recurso.all %}
+    <tr class="row1">
+    		<th class="field-Id_prestamo">{{ recursos.Id_recurso }}</a></th>
+    	<td class="field-Persona nowrap">{{ recursos.tipo_de_recurso }}</td>
+      <td class="field-Persona nowrap">{{ recursos.nombre_recurso }}</td>
+    	<td class="field-Estado_prestamo">{{recursos.Estado_Recurso}}</td>
+      <td class="field-Hora_prestamo nowrap">  <i style='font-size:20px; display: flex;justify-content: center;'  onclick='devolucion({{ recursos.Id_recurso }})' class='fa fa-chevron-circle-left' aria-hidden='true'></i>  </td>
+    </tr>
+
+  {% endfor %}
+
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Regresar Recurso</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+            <label for="exampleFormControlFile1">¿El recurso registra alguna incidencia?</label>
+            <select class="form-control" id="selected"  onchange="select()">
+              <option value="0">--</option>
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+            <br/>
+              <label for="exampleFormControlFile1" id="label">Escriba toda la informacion posible y detallada sobre la incidencia ocurrida</label>
+              <div class="input-group" id="incidencia">
+              <div class="input-group-prepend">
+                <span class="input-group-text" >Detalle incidencia</span>
+              </div>
+              <textarea class="form-control" aria-label="With textarea" id="textarea"></textarea>
+            </div>
+      </div>
+
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="cerrar()">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="savebuton" onclick="devol()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.detalle {
+      background-color: #035a7b;
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+
+  var idRecurso = "";
+  var prestamo = {{ r.Id_prestamo }}
+  function cerrar(){
+    $('#exampleModalCenter').modal('hide');
+    var val = $("#selected").val("0")
+  }
+  function devolucion(id){
+    idRecurso = id
+    $('#exampleModalCenter').modal('show');
+    $('#incidencia').hide();
+    $('#label').hide();
+    $('#savebuton').attr("disabled", true);
+  }
+
+  function select(){
+    var val = $("#selected").val();
+    if(val == "Si"){
+        $('#savebuton').attr("disabled", false);
+        $('#incidencia').show();
+        $('#label').show();
+    }else if (val == "No"){
+      $('#savebuton').attr("disabled", false);
+      $('#incidencia').hide();
+      $('#label').hide();
+    }else {
+        $('#savebuton').attr("disabled", true);
+        $('#incidencia').hide();
+        $('#label').hide();
+    }
+  }
+var token = "{{ csrf_token }}"
+  function devol(){
+    var val = $("#selected").val();
+    if(val == "Si") {
+      var recurso=null;
+      axios.get('/api/recurso/'+ idRecurso)
+      .then(function (response) {
+            recurso = response.data;
+            recurso.Estado_Recurso = "EN MANTENIMIENTO";
+            //console.log(recurso);
+      }).catch(function (error) {
+            $("#mensaje").text("Recurso no encontrado");
+            console.log(error);
+      });
+
+      // Seleccionamos los datos de los inputs de formulario
+      var date =  new Date();
+      var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
+      console.log(fecha);
+      var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
+      //console.log(hora);
+      //console.log(this.dbRecursos);
+      console.log(idRecurso)
+      console.log(prestamo)
+      var texto = $("#textarea").val()
+      console.log(texto)
+      var datos = {
+          "Fecha_Incidente": fecha,
+          "descripcion": texto,
+          "Estado": "EN REVISION",
+          "Recurso": idRecurso,
+          "Prestamo": prestamo
+      };
+      console.log(datos)
+      axios.post("/api/Recurso/Incidente/", datos, {
+          headers: {"X-CSRFToken": token}
+      }).then(function (response) {
+          console.log(response);
+      }).catch(function (error) {
+          console.log(error);
+        });
+      $('#exampleModalCenter').modal('hide');
+      var val = $("#selected").val("0");
+      var texto = $("#textarea").val("");
+    }else{
+      // se le cambia el estado al recurso
+
+      $('#exampleModalCenter').modal('hide');
+      var val = $("#selected").val("0");
+      var texto = $("#textarea").val("");
+    }
+  }
+
+
+
+</script>
+{% endblock %}

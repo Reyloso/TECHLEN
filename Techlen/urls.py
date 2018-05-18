@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^admin/Prestamo/Prestar/',  views.prestamo_prestar, name='prestamo-prestar'),
     url(r'^admin/recursos/codigo_barras/(?P<Id_recurso>[\w\-]+)$', views.codigo_barras, name='codigo-barras'),
+    url(r'^admin/Prestamo/Detalle/(?P<Id_prestamo>[\w\-]+)$', views.detalle_prestamo, name='detalle-prestamo'),
     url(r'', include('api.urls')),
 
 ]

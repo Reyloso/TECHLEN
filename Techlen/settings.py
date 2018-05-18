@@ -140,7 +140,7 @@ SUIT_CONFIG = {
 }
 
 STATICFILES_DIRS = (
-    os.path.join('gestic/static'),
+    os.path.join('Techlen/static'),
 )
 
 STATIC_URL = '/static/'

@@ -56,7 +56,9 @@ class PrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PrestamoSerializer
 
 #vistas de los Incidentes
+@action(methods=['post'], detail=True)
 class IncidenteList(generics.ListCreateAPIView):
+    permission_classes = (AllowAny,)
     queryset = Incidente.objects.all()
     serializer_class = IncidenteSerializer
 
@@ -75,7 +77,10 @@ class ProgramaDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 #vistas de los recursos
+
+@action(methods=['post','GET', 'PUT'], detail=True)
 class RecursoList(generics.ListCreateAPIView):
+    permission_classes = (AllowAny,)
     queryset = Recurso.objects.all()
     serializer_class = RecursoSerializer
 

@@ -1,9 +1,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
-# Create your models here.
 from django.utils.timezone import now
+from prestamos.models import *
 
 class Tipo_Recurso(models.Model):
 
@@ -32,26 +31,5 @@ class Recurso(models.Model):
     Estado_Recurso = models.CharField(max_length=20, choices=ESTADO)
     fecha_registro = models.DateField(default=now)
 
-
     def __unicode__(self):
         return unicode(str(self.nombre_recurso))
-
-class Incidente(models.Model):
-    ESTADO = (
-        ('EN REVISION', 'EN REVISION'),
-        ('ACEPTADO', 'ACEPTADO'),
-        ('DADO DE BAJA', 'DADO DE BAJA'),
-    )
-
-
-    class Meta:
-        verbose_name_plural = "Registo De Incidentes"
-
-    Id_Incidente = models.AutoField(primary_key=True)
-    Fecha_Incidente = models.DateField(default=now)
-    Recurso= models.ForeignKey(Recurso, null=True)
-    descripcion = models.TextField(null=True)
-    Estado= models.CharField(max_length=30, choices=ESTADO)
-
-    def __unicode__(self):
-        return unicode(str(self.descripcion))

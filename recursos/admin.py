@@ -24,12 +24,7 @@ class Recursos (admin.ModelAdmin):
         list_display = ['Id_recurso','tipo_de_recurso','nombre_recurso','referencia','Estado_Recurso','fecha_registro','codigo_barras','Incidente','Devolver']
         class Meta:
 		          model = Recurso
-class Incidentes (admin.ModelAdmin):
 
-        list_display = ['Id_Incidente','Fecha_Incidente','Recurso','descripcion','Estado']
-        class Meta:
-		          model = Incidente
 
 admin.site.register(Tipo_Recurso)
 admin.site.register(Recurso,Recursos)
-admin.site.register(Incidente, Incidentes)

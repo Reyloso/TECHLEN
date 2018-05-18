@@ -2,9 +2,9 @@
 from __future__ import unicode_literals
 from rest_framework import serializers
 from configuracion.models import Programa
-from recursos.models import Tipo_Recurso, Recurso, Incidente
+from recursos.models import Tipo_Recurso, Recurso
 from personas.models import Personas
-from prestamos.models import Prestamo
+from prestamos.models import Prestamo, Incidente
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):

@@ -28,11 +28,11 @@ class SuitConfig(DjangoSuitConfig):
         ]),
         ParentItem('Prestamos', children=[
             ChildItem(model='prestamos.prestamo'),
+            ChildItem(model='prestamos.incidente'),
             ChildItem('Prestar ', url='/admin/Prestamo/Prestar/'),
         ]),
         ParentItem('Recursos', children=[
             ChildItem(model='recursos.recurso'),
-            ChildItem(model='recursos.incidente'),
             ChildItem(model='recursos.tipo_recurso'),
         ]),
         ParentItem('Gestion de usuario', children=[

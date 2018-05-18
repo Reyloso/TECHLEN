@@ -71,9 +71,7 @@ function generarJSON(){
     axios.get('/api/recurso/'+ codigo)
     .then(function (response) {
           recurso = response.data;
-          recurso.Estado_Recurso = "PRESTADO";
-          recurso.save()
-          console.log(recurso);
+          recurso.Estado_Recurso = "PRESTADO"
     }).catch(function (error) {
           $("#mensaje").text("Recurso no encontrado");
           console.log(error);
@@ -82,13 +80,11 @@ function generarJSON(){
 
     axios.put('/api/recurso/'+ codigo, recurso, {
         headers: {"X-CSRFToken": token}
-    })
-      .then(function (response) {
+    }).then(function (response) {
         console.log(response);
-      })
-      .catch(function (error) {
+    }).catch(function (error) {
         console.log(error);
-      });
+    });
   }
   return datos;
 }
