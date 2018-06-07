@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.timezone import now
 from personas.models import Personas
 from recursos.models import Recurso
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Prestamo(models.Model):
@@ -17,11 +18,12 @@ class Prestamo(models.Model):
         verbose_name_plural = "Prestamos"
 
     Id_prestamo = models.AutoField(primary_key=True)
+    Usuario_Prestatario = models.ForeignKey(User)
     Persona = models.ForeignKey(Personas, null=True)
     recurso = models.ManyToManyField(Recurso, null=True)
     Estado_prestamo = models.CharField(max_length=20, choices=ESTADO)
     Fecha_prestamo = models.DateField(default=now)
-    Hora_prestamo = models.TimeField(null=True)
+    Hora_prestamo = models.TimeField(default=now)
     Fecha_devolucion = models.DateField(blank=True, null=True)
     Hora_devolucion = models.TimeField(blank=True, null=True)
 

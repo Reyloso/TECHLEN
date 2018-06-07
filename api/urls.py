@@ -7,9 +7,9 @@ from api import views
 
 urlpatterns = [
     url(r'^api/Persona/$', views.PersonasList.as_view()),
-    url(r'^api/Persona/Detail/(?P<pk>\d+)/$', views.PersonasDetail.as_view()),
-    url(r'^api/Prestamo/prestar/$', views.PrestamoList.as_view()),
-    url(r'^api/Prestamo/Detail/(?P<pk>\d+)/$', views.PrestamoDetail.as_view(), name='prestamo'),
+    url(r'^api/Persona/(?P<pk>\d+)/$', views.PersonasDetail.as_view()),
+    url(r'^api/Prestamo/$', views.PrestamoList.as_view()),
+    url(r'^api/Prestamo/(?P<pk>\d+)/$', views.PrestamoDetail.as_view(), name='prestamo'),
     url(r'^api/Recurso/Incidente/$', views.IncidenteList.as_view()),
     url(r'^api/Recurso/Incidente/(?P<pk>\d+)/$', views.IncidenteDetail.as_view()),
     url(r'^api/programa/$', views.ProgramaList.as_view()),

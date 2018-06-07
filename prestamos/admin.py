@@ -17,8 +17,17 @@ class Prestamos (admin.ModelAdmin):
     Devolucion.allow_tags = True
     Devolucion.is_column = True
 
-    list_display = ['Id_prestamo','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo', 'Devolucion' ]
+    def add_view(self, *args, **kwargs):
+        self.fields = ('Usuario_Prestatario','Persona','recurso','Estado_prestamo','Fecha_prestamo','Hora_prestamo','Fecha_devolucion','Hora_devolucion',)
+        return super(Prestamos, self).add_view(*args, **kwargs)
+
+    def change_view(self, *args, **kwargs):
+        self.fields = ('recurso','Estado_prestamo',)
+        return super(Prestamos, self).change_view(*args, **kwargs)
+
+    list_display = ['Id_prestamo','Usuario_Prestatario','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo', 'Devolucion' ]
     search_fields = ('Id_prestamo','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo')
+    list_filter = ('Estado_prestamo','Usuario_Prestatario__username')
 
     class Meta:
 		model = Prestamo

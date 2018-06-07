@@ -9,19 +9,19 @@ class Recursos (admin.ModelAdmin):
         codigo_barras.short_description = "Codigo De Barras"
         codigo_barras.allow_tags = True
         codigo_barras.is_column = True
-        def Incidente(self, instance):
-            return "<a href='/admin/recursos/incidente/add/'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-check-square' aria-hidden='true'></i>  </a>"
-        Incidente.short_description = "Incidente"
-        Incidente.allow_tags = True
-        Incidente.is_column = True
+        # def Incidente(self, instance):
+        #     return "<a href='/admin/recursos/incidente/add/'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-check-square' aria-hidden='true'></i>  </a>"
+        # Incidente.short_description = "Incidente"
+        # Incidente.allow_tags = True
+        # Incidente.is_column = True
 
-        def Devolver(self, instance):
-            return "<a href='#'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-check-square' aria-hidden='true'></i>  </a>"
-        Devolver.short_description = "Devolver"
-        Devolver.allow_tags = True
-        Devolver.is_column = True
+        # def Devolver(self, instance):
+        #     return "<a href='#'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-check-square' aria-hidden='true'></i>  </a>"
+        # Devolver.short_description = "Devolver"
+        # Devolver.allow_tags = True
+        # Devolver.is_column = True
 
-        list_display = ['Id_recurso','tipo_de_recurso','nombre_recurso','referencia','Estado_Recurso','fecha_registro','codigo_barras','Incidente','Devolver']
+        list_display = ['Id_recurso','tipo_de_recurso','nombre_recurso','referencia','Estado_Recurso','fecha_registro','codigo_barras']
         class Meta:
 		          model = Recurso
 

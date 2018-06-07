@@ -32,20 +32,76 @@
 
 <div class="container-fluid perfil" >
   <div class="mensaje-alerta">
-        </div>
+
+  </div>
   <div class="row">
     <div class="col-8">
-    <div class="card text-center cardrecursos">
       <div class="card-header">
-        <input  id="idproduc" autofocus type="text" placeholder="id Producto" onkeydown="buscarp(this)"/>
+        <label for="searchbar">ID PRODUCTO</label>
+        <input type="text" size="40" name="q" value="" id="idproduc" onkeydown="buscarp(this)" autofocus="">
       </div>
-      <div class="card-body cardrecursosb">
-      <div class="row productoslist" id="prod">
+
+      <!-- incio tabla-->
+      <div class="card">
+        <!--<div class="card-header detalle">
+          <h6>Recursos Prestados</h6>
+        </div>-->
+      <div class="results">
+      <table id="result_list">
+      <thead>
+      <tr>
+
+      <th scope="col"  class="sortable column-Id_prestamo">
+
+         <div class="text"><a href="#">Id Recurso</a></div>
+         <div class="clear"></div>
+      </th>
+      <th scope="col"  class="sortable column-Persona">
+
+
+
+         <div class="text"><a href="#">Tipo Recurso</a></div>
+         <div class="clear"></div>
+      </th>
+      <th scope="col"  class="sortable column-Estado_prestamo">
+
+
+
+         <div class="text"><a href="#">Nombre Recurso</a></div>
+         <div class="clear"></div>
+      </th>
+      <th scope="col"  class="sortable column-Fecha_prestamo">
+
+
+
+         <div class="text"><a href="#">Estado Recurso</a></div>
+         <div class="clear"></div>
+      </th>
+      <th scope="col"  class="sortable column-Fecha_prestamo">
+
+
+
+         <div class="text"><a href="#">Quitar</a></div>
+         <div class="clear"></div>
+      </th>
+
+
+
+      </tr>
+      </thead>
+      <tbody  id="tabla">
+
+      </tbody>
+      </table>
       </div>
       </div>
-    </div>
+      <!-- fin tabla-->
+
+
     </div>
     <div class="col-3">
+      <button onclick="guardarPrestamo()" type="button" class="btn btn-primary">Guardar Prestamo</button>
+
       <div class="card cardestudiante">
         <div class="card-header"><h4 id="id"></h4></div>
         <img class="card-img-top" src="{% static '/assets/images/foto.jpg' %}" alt="Card image cap">
@@ -55,7 +111,7 @@
           <h6 class="card-title" id="sede"></h6>
         </div>
       </div>
-      <button onclick="guardarPrestamo()" type="button" class="btn btn-primary">Guardar Prestamo</button>
+
     </div>
 </div>
 </div>
@@ -67,10 +123,11 @@
 function guardarPrestamo(){
 
   var datos = generarJSON();
+  var recursos = DRecursos();
 
   var token = "{{ csrf_token }}"
 
-  axios.post("/api/Prestamo/prestar/", datos, {
+  axios.post("/api/Prestamo/", datos, {
       headers: {"X-CSRFToken": token}
   })
     .then(function (response) {
@@ -80,9 +137,55 @@ function guardarPrestamo(){
       console.log(error);
     });
 
+    for (i in recursos) {
+      var codigo = recursos[i]
+      r={
+        "Estado_Recurso": "PRESTADO",
+      }
+      axios.patch("/api/recurso/" + codigo + "/", r, {
+          headers: {"X-CSRFToken": token,
+          'Content-Type': 'application/json' }
+      }).then(function (response) {
+          console.log(response);
+
+      }).catch(function (error) {
+          console.log(error.response);
+      });
+    }
+
+
   // console.log(token);
 return Mensaje(1);
 }
+
+
+function generarJSON(){
+  // Seleccionamos los datos de los inputs de formulario
+  var date =  new Date();
+  var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
+  //console.log(fecha);
+  var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
+  //console.log(hora);
+  //console.log(this.dbRecursos);
+  //console.log(dbRecursos);
+  usuario = {{user.id}}
+  console.log(usuario)
+  var recursos = DRecursos();
+  var datos = {
+      "Persona" : $("#id").text(),
+      //"Persona" :"123",
+      "recurso": recursos,
+      "Usuario_Prestatario":usuario,
+      //"Recurso":[1],
+      "Fecha_devolucion": fecha,//$("#FD").val(),
+      "Fecha_prestamo": fecha,//generar
+      "Hora_prestamo": hora,//generar
+      "Hora_devolucion": hora,//$("#HD").val(),
+      "Estado_prestamo": "EN CURSO"//generar
+  };
+  console.log(datos)
+  return datos;
+};
 
 </script>
 {% endblock %}

@@ -1,16 +1,20 @@
  //$(".loader-box").hide();
 //$(".inputidestu").hide();
+
+
  $(".perfil").hide();
+
+
  var cantidad = 0;
    function buscar(ele) {
       if(event.key === 'Enter') {
           console.log(ele.value);
           var tarjeta = ele.value;
-          axios.get('/api/Persona/Detail/'+tarjeta)
+          axios.get('/api/Persona/'+tarjeta)
             .then(function (response) {
                   var user = response.data;
                   //console.log(user);
-                  if(user.Nro_Tarjeta !== undefined){
+                  if(user.Estado_tarjeta == "ACTIVA"){
                       $(".loader-box").hide();
                       $(".inputidestu").hide();
                       $(".perfil").show();
@@ -19,6 +23,8 @@
                       $("#nomb").text(last_name);
                       $("#depe").text(user.Correo_Institucional);
                       $("#sede").text(user.Sede);
+                  }else{
+                    $("#mensaje").text("Esta Tarjeta Se Encuentra Inactiva...");
                   }
             })
             .catch(function (error) {
@@ -37,6 +43,10 @@ function guardarRecursoLocal(idRecurso){
   // console.log(dbRecursos);
 }
 
+function DRecursos (){
+  return dbRecursos
+}
+
 //[1,2,3,4,5]
 
 //for x in arra:
@@ -44,99 +54,123 @@ function guardarRecursoLocal(idRecurso){
 //  r = recurso.get(1)
 //  prestamo.recursos.add(r)
 //  r.estado = false
-
-function generarJSON(){
-  // Seleccionamos los datos de los inputs de formulario
-  var date =  new Date();
-  var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
-  //console.log(fecha);
-  var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
-  //console.log(hora);
-  //console.log(this.dbRecursos);
-  console.log(dbRecursos);
-  var datos = {
-      "Persona" : $("#id").text(),
-      //"Persona" :"123",
-      "recurso": dbRecursos,
-      //"Recurso":[1],
-      "Fecha_devolucion": fecha,//$("#FD").val(),
-      "Fecha_prestamo": fecha,//generar
-      "Hora_prestamo": hora,//generar
-      "Hora_devolucion": hora,//$("#HD").val(),
-      "Estado_prestamo": "EN CURSO"//generar
-  };
-  for (i in dbRecursos) {
-    var codigo = dbRecursos[i]
-    var recurso = null
-    axios.get('/api/recurso/'+ codigo)
-    .then(function (response) {
-          recurso = response.data;
-          recurso.Estado_Recurso = "PRESTADO"
-    }).catch(function (error) {
-          $("#mensaje").text("Recurso no encontrado");
-          console.log(error);
-    });
-    var token = "{{ csrf_token }}"
-
-    axios.put('/api/recurso/'+ codigo, recurso, {
-        headers: {"X-CSRFToken": token}
-    }).then(function (response) {
-        console.log(response);
-    }).catch(function (error) {
-        console.log(error);
-    });
-  }
-  return datos;
-}
 function Mensaje(t){
         switch (t) {
             case 1: //
-                $(".mensaje-alerta").append(
-                    "<div class='alert alert-success' role='alert'>Se agrego con exito el Prestamo</div>"
-                );
+                $(".mensaje-alerta").empty();
+                // $(".mensaje-alerta").append(
+                //     "<div class='alert alert-success' role='alert'>Se agrego con exito el Prestamo...</div>"
+                // );
+                dbRecursos=[]
+                $(".perfil").hide();
+                $(".loader-box").show();
+                $(".inputidestu").show();
+                $("#tabla").empty();
                 break;
             case 2: //
+                $(".mensaje-alerta").empty();
                 $(".mensaje-alerta").append(
                     "<div class='alert alert-danger' role='alert'>No se agrego el Prestamo ERROR</div>"
+                );
+                break;
+            case 3: //
+                $(".mensaje-alerta").empty();
+                $(".mensaje-alerta").append(
+                    "<div class='alert alert-danger' role='alert'>¡Este Recurso está en un prestamo actualmente!</div>"
+                );
+                break;
+            case 4: //
+                $(".mensaje-alerta").empty();
+                $(".mensaje-alerta").append(
+                    "<div class='alert alert-danger' role='alert'>¡Este Recurso No Existe!</div>"
+                );
+                break;
+            case 5: //
+                $(".mensaje-alerta").empty();
+                $(".mensaje-alerta").append(
+                    "<div class='alert alert-success' role='alert'>Recurso añadido correntamente...</div>"
+                );
+                break;
+            case 6: //
+                $(".mensaje-alerta").empty();
+                $(".mensaje-alerta").append(
+                  "<div class='alert alert-danger' role='alert'>Este recurso ya se encuentra en la lista.</div>"
+                );
+                break;
+            case 7: //
+                $(".mensaje-alerta").empty();
+                $(".mensaje-alerta").append(
+                  "<div class='alert alert-success' role='alert'>Recurso Borrado de la lista</div>"
                 );
                 break;
             default:
 
         }
     }
+
   function buscarp(ele) {
+    var html="";
     if(event.key === 'Enter') {
-          console.log(ele.value);
+          //console.log(ele.value);
           var codigo = ele.value;
           axios.get('/api/recurso/'+codigo)
             .then(function (response) {
                   var recurso = response.data;
-                  console.log(recurso);
                   if(recurso.Id_recurso !== undefined){
-                    guardarRecursoLocal(recurso.Id_recurso);
-                    var divp = document.getElementById("prod");
-                    var divcard = document.createElement("div");
-                    var html = "<div class='card border-primary mb-3 ' style='max-width: 18rem;margin-right: 10px;margin-left: 10px;'>"+
-                        "<div class='card-header cardprod'>"+ recurso.Id_recurso+"</div>"+
-                        "<div class='card-body text-primary'> "+
-                        "<h5 class='card-title'>"+recurso.nombre_recurso +"</h5>"+
-                        "<p class='card-text'>"+ recurso.tipo_de_recurso+"</br>"+ recurso.Estado_Recurso+ "</p>"+
-                        "</div>";
-                    divcard.innerHTML=html;
-                    divp.appendChild(divcard);
-                      $(".loader-box").hide();
-                      $(".inputidestu").hide();
-                      $(".perfil").show();
-                    cantidad = parseInt($("#cantidad").value) || 0;
-                    val = cantidad + 1;
-                    $("#cantidad").text(cantidad);
+                    if(recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == false){
+
+                      guardarRecursoLocal(recurso.Id_recurso);
+                      html+= '<tr class="row1" >' +
+                          '<td class="field-Id_prestamo">' + recurso.Id_recurso+ "</td>"+
+                          "<td>" + recurso.nombre_recurso + "</td>"+
+                          "<td>" + recurso.referencia + "</td>"+
+                          "<td>" + recurso.Estado_Recurso + "</td>"+
+                          '<td> <button class="btn btn-danger borrar" data-eliminar="' + recurso.Id_recurso + '">Eliminar</button></td>'+
+                          //'<td><button class="btn btn-warnig" onclick="modificar('+datos[key].Nombre+','+datos[key].Apellidos+','+datos[key].Edad+')">Modificar</button></td>'
+                          "</tr>";
+                        $("#tabla").append(html);
+                        $(".loader-box").hide();
+                        $(".inputidestu").hide();
+                        $(".perfil").show();
+                      $("#cantidad").text(dbRecursos.legth);
+                      if (html != "") {
+                  			var eliminar = document.getElementsByClassName("borrar");
+                  			for(var i = 0; i < eliminar.length; i++){
+                  				eliminar[i].addEventListener("click", borrar, false);
+                  			}
+                  		}
+                    }else if (recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == true){
+                      Mensaje(6);
+                    }else {
+                      Mensaje(3);
+                    }
+                  }else{
+                    Mensaje(4);
                   }
             })
             .catch(function (error) {
-                $("#mensaje").text("Persona No Encontrada Reintentar");
+                $("#mensaje").text("Recurso No Encontrado");
                 console.log(error);
+                Mensaje(4);
             });
           ele.value = "";
       }
-
   }
+
+  function borrar(){
+  	var keyborrar = this.getAttribute("data-eliminar");
+    console.log(keyborrar)
+    for (key in dbRecursos ){
+      if(dbRecursos[key]==keyborrar){
+        console.log("borrado: " +dbRecursos[key])
+        dbRecursos.splice(key,1)
+        Mensaje(7)
+      }
+    }
+    // console.log("despues")
+    // console.log(dbRecursos)
+    $(document).on('click', '.borrar', function (event) {
+    event.preventDefault();
+    $(this).closest('tr').remove();
+    });
+}

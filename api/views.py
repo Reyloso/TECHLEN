@@ -77,8 +77,7 @@ class ProgramaDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 #vistas de los recursos
-
-@action(methods=['post','GET', 'PUT'], detail=True)
+@action(methods=['post'], detail=True)
 class RecursoList(generics.ListCreateAPIView):
     permission_classes = (AllowAny,)
     queryset = Recurso.objects.all()

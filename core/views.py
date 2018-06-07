@@ -28,8 +28,11 @@ def codigo_barras(request,Id_recurso):
 @login_required
 def detalle_prestamo(request,Id_prestamo):
     r = get_object_or_404(Prestamo,Id_prestamo=Id_prestamo)
+    recursos = r.recurso.all()
+
     context = admin.site.each_context(request)
     context.update({
         'r': r,
+        'recursos':recursos
     })
     return  render(request,'core/detalle_prestamo.html',context)

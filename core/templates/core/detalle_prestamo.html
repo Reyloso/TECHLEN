@@ -10,10 +10,11 @@
 {%endblock%}
 
 {% block content %}
+<!--<div class="card-header detalle">
+  <h5>Detalle Prestamo : {{r.Id_prestamo}}</h5>
+</div>-->
 <div class="card">
-	<div class="card-header detalle">
-    <h5>Detalle Prestamo : {{r.Id_prestamo}}</h5>
-  </div>
+
 
 <div class="results ">
 <table id="result_list">
@@ -78,9 +79,9 @@
 </div>
 
 <div class="card">
-  <div class="card-header detalle">
+  <!--<div class="card-header detalle">
     <h6>Recursos Prestados</h6>
-  </div>
+  </div>-->
 <div class="results">
 <table id="result_list">
 <thead>
@@ -123,17 +124,7 @@
 
 </tr>
 </thead>
-<tbody>
-  {% for recursos in r.recurso.all %}
-    <tr class="row1">
-    		<th class="field-Id_prestamo">{{ recursos.Id_recurso }}</a></th>
-    	<td class="field-Persona nowrap">{{ recursos.tipo_de_recurso }}</td>
-      <td class="field-Persona nowrap">{{ recursos.nombre_recurso }}</td>
-    	<td class="field-Estado_prestamo">{{recursos.Estado_Recurso}}</td>
-      <td class="field-Hora_prestamo nowrap">  <i style='font-size:20px; display: flex;justify-content: center;'  onclick='devolucion({{ recursos.Id_recurso }})' class='fa fa-chevron-circle-left' aria-hidden='true'></i>  </td>
-    </tr>
-
-  {% endfor %}
+<tbody  id="tabla">
 
 </tbody>
 </table>
@@ -187,13 +178,27 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
+$( document ).ready(function() {
+    mostrar();
+});
 
+
+  var dbRecursos = [];
   var idRecurso = "";
   var prestamo = {{ r.Id_prestamo }}
+  var token = "{{ csrf_token }}"
+  var filasMostrar = "";
+
+  /*function guardarRecursoLocal(idRecurso){
+    dbRecursos.push(idRecurso); // Guardar datos en el array definido globalmente
+    // console.log(dbRecursos);
+  }*/
+  // cerrar modal
   function cerrar(){
     $('#exampleModalCenter').modal('hide');
     var val = $("#selected").val("0")
   }
+  // abrir modal
   function devolucion(id){
     idRecurso = id
     $('#exampleModalCenter').modal('show');
@@ -202,6 +207,7 @@
     $('#savebuton').attr("disabled", true);
   }
 
+  //funcion para el select de el modal de la devolucion
   function select(){
     var val = $("#selected").val();
     if(val == "Si"){
@@ -219,18 +225,22 @@
     }
   }
 var token = "{{ csrf_token }}"
+//funcion para devolver un recurso
   function devol(){
+    idRecurso
     var val = $("#selected").val();
     if(val == "Si") {
-      var recurso=null;
-      axios.get('/api/recurso/'+ idRecurso)
-      .then(function (response) {
-            recurso = response.data;
-            recurso.Estado_Recurso = "EN MANTENIMIENTO";
-            //console.log(recurso);
+      r={
+        "Estado_Recurso": "EN MANTENIMIENTO",
+      }
+      axios.patch("/api/recurso/" + idRecurso + "/", r, {
+          headers: {"X-CSRFToken": token,
+          'Content-Type': 'application/json' }
+      }).then(function (response) {
+          console.log(response);
+
       }).catch(function (error) {
-            $("#mensaje").text("Recurso no encontrado");
-            console.log(error);
+          console.log(error.response);
       });
 
       // Seleccionamos los datos de los inputs de formulario
@@ -262,16 +272,96 @@ var token = "{{ csrf_token }}"
       $('#exampleModalCenter').modal('hide');
       var val = $("#selected").val("0");
       var texto = $("#textarea").val("");
+      filasMostrar ="";
+      //$("#tabla").empty();
+      mostrar()
     }else{
       // se le cambia el estado al recurso
+      r={
+        "Estado_Recurso": "ACTIVO",
+      }
+
+      axios.patch("/api/recurso/" + idRecurso + "/", r, {
+          headers: {"X-CSRFToken": token,
+          'Content-Type': 'application/json' }
+      }).then(function (response) {
+          console.log(response);
+
+      }).catch(function (error) {
+          console.log(error.response);
+      });
 
       $('#exampleModalCenter').modal('hide');
       var val = $("#selected").val("0");
       var texto = $("#textarea").val("");
+      filasMostrar ="";
+    //  $("#tabla").empty();
+      mostrar()
     }
   }
 
 
+  //funcion para cargar los datos a las tablas
+  function guardartabla(row){
+    filasMostrar+=row;
+    //console.log(filasMostrar)
+    $("#tabla").html(filasMostrar);
+  }
+  function mostrar(){
+    var datos = {}
+    // datos del prestamo
+
+    axios.get('/api/Prestamo/'+ prestamo)
+      .then(function (response) {
+            var datos = response.data;
+            for(var key in datos.recurso){
+              //guardarRecursoLocal(datos.recurso[key])
+              axios.get('/api/recurso/'+ datos.recurso[key])
+                  .then(function (response) {
+                    var r = response.data
+                    if(datos.Estado_prestamo == "DEVUELTO"){
+                      r.Estado_Recurso = "DEVUELTO"
+                      r.save
+                    }else if(datos.Estado_prestamo == "DEVUELTO" && r.Estado_Recurso == "ACTIVO" ){
+                      r.Estado_Recurso = "DEVUELTO"
+                      r.save
+                    }
+                    else if(r.Estado_Recurso == "EN MANTENIMIENTO" ){
+                      r.Estado_Recurso = "EN MANTENIMIENTO"
+                      r.save
+                    }else if( r.Estado_Recurso == "ACTIVO"){
+                      r.Estado_Recurso = "DEVUELTO"
+                      r.save
+                    }
+                      var row = '<tr class="row1" >' +
+                          '<td class="field-Id_prestamo">' + r.Id_recurso+ "</td>"+
+                          "<td>" + r.nombre_recurso + "</td>"+
+                          "<td>" + r.referencia + "</td>"+
+                          "<td>" + r.Estado_Recurso + "</td>"+
+                          '<td> <i style="font-size:20px; display: flex;justify-content: center;" onclick="devolucion(' + r.Id_recurso + ')"  class="fa fa-chevron-circle-left devolver" aria-hidden="true"></i></td>'+
+                          //'<td><button class="btn btn-warnig" onclick="modificar('+datos[key].Nombre+','+datos[key].Apellidos+','+datos[key].Edad+')">Modificar</button></td>'
+                          "</tr>";
+                    guardartabla(row);
+                  })
+                  .catch(function (error) {
+                          console.log(error);
+                  });
+            }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+
 
 </script>
+<style>
+body {
+  background-color: #f1f1f1;
+ }
+.card {
+  border: 0px solid rgba(0,0,0,.125);
+  box-shadow: -1 1px 0 0 #e4e4e4;
+}
+</style>
 {% endblock %}
