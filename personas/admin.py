@@ -11,6 +11,8 @@ from configuracion.models import *
 # Register your models here.
 class PersonaResource(resources.ModelResource):
 
+
+
 	Programa_Academico = fields.Field(attribute='Programa_Academico',
 								   widget=ForeignKeyWidget(Programa, 'nombre'))
 
@@ -22,12 +24,19 @@ class PersonaResource(resources.ModelResource):
 
 
 class Persona (ImportExportModelAdmin):
-    list_display = ['Nro_Tarjeta','Id_Persona','Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido','Tipo_Documento','Nro_Documento','Sede','genero','Correo_Institucional','Programa_Academico','Ciclo_Lectivo','Estado_tarjeta', 'Tipo_Persona']
-    list_filter = ['Programa_Academico','Estado_tarjeta','Ciclo_Lectivo' ]
-    search_fields = ('Nro_Tarjeta','Id_Persona','Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido','Tipo_Documento','Nro_Documento')
-    resource_class = PersonaResource
+	def add_view(self, *args, **kwargs):
+		self.fields = ('Nro_Tarjeta','Id_Persona','Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido','Tipo_Documento','Nro_Documento','Sede','genero','Correo_Institucional','Programa_Academico','Ciclo_Lectivo','Estado_tarjeta', 'Tipo_Persona')
+		return super(Persona, self).add_view(*args, **kwargs)
 
-    class Meta:
+	def change_view(self, *args, **kwargs):
+		self.fields = ('Nro_Tarjeta','Tipo_Documento','Nro_Documento','Estado_tarjeta')
+		return super(Persona, self).change_view(*args, **kwargs)
+
+	list_display = ['Nro_Tarjeta','Id_Persona','nombre_completo','Tipo_Documento','Nro_Documento','Correo_Institucional','Programa_Academico','Estado_tarjeta', 'Tipo_Persona']
+	list_filter = ['Programa_Academico','Estado_tarjeta','Ciclo_Lectivo']
+	search_fields = ('Nro_Tarjeta','Id_Persona','Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido','Tipo_Documento','Nro_Documento')
+	resource_class = PersonaResource
+	class Meta:
 		model = Personas
 
 admin.site.register(Personas,Persona)

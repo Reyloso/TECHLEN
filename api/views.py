@@ -22,7 +22,8 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 import django_filters.rest_framework
 from django.contrib.auth.models import User
-from rest_framework.decorators import action
+from rest_framework.decorators import action, detail_route
+from rest_framework import viewsets, status
 
 class UserViewSet(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
@@ -45,10 +46,20 @@ class PersonasDetail(generics.RetrieveUpdateDestroyAPIView):
 
 #vistas del prestamo
 @action(methods=['post'], detail=True)
-class PrestamoList(generics.ListCreateAPIView):
+class PrestamoList(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     queryset = Prestamo.objects.all()
     serializer_class = PrestamoSerializer
+
+    @detail_route(methods=['post'])
+    def set_devolucion(self, request, pk=None):
+        prestamo = self.get_object()
+        serializer = DevolucionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(Prestamo=prestamo)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -86,3 +97,15 @@ class RecursoList(generics.ListCreateAPIView):
 class RecursoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Recurso.objects.all()
     serializer_class = RecursoSerializer
+
+
+#vistas de las devoluciones
+@action(methods=['post'], detail=True)
+class DevolucionList(generics.ListCreateAPIView):
+    permission_classes = (AllowAny,)
+    queryset = Devolucion.objects.all()
+    serializer_class = DevolucionSerializer
+
+class DevolucionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Devolucion.objects.all()
+    serializer_class = DevolucionSerializer

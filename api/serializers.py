@@ -4,8 +4,9 @@ from rest_framework import serializers
 from configuracion.models import Programa
 from recursos.models import Tipo_Recurso, Recurso
 from personas.models import Personas
-from prestamos.models import Prestamo, Incidente
+from prestamos.models import Prestamo, Incidente, Devolucion
 from django.contrib.auth.models import User
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,8 +41,14 @@ class PersonaSerializer(serializers.ModelSerializer):
         model = Personas
         fields = "__all__"
 
+class DevolucionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Devolucion
+        fields = ('Id_devolucion','Prestamo','Fecha_devolucion','Usuario_devolucion','Recurso_devolucion')
 
 class PrestamoSerializer(serializers.ModelSerializer):
+    devoluciones = DevolucionSerializer(many=True, read_only=True, source='devolucion_set')
+
     class Meta:
         model = Prestamo
-        fields = "__all__"
+        fields = ('Id_prestamo', 'Usuario_Prestatario', 'Persona', 'recurso', 'Estado_prestamo', 'Fecha_prestamo','Hora_prestamo','Fecha_devolucion','Hora_devolucion','devoluciones')

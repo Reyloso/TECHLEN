@@ -27,12 +27,19 @@
    <div class="text"><a href="#">Id prestamo</a></div>
    <div class="clear"></div>
 </th>
+<th scope="col"  class="sortable column-Persona">
+
+   <div class="text"><a href="#">Prestatario</a></div>
+   <div class="clear"></div>
+</th>
+
 
 <th scope="col"  class="sortable column-Persona">
 
    <div class="text"><a href="#">Persona</a></div>
    <div class="clear"></div>
 </th>
+
 <th scope="col"  class="sortable column-Persona">
 
    <div class="text"><a href="#">Nro_Tarjeta</a></div>
@@ -62,15 +69,16 @@
 
 </tr>
 </thead>
-<tbody>
-<tr class="row1">
+<tbody id="datosprestamo">
+<!-- <tr class="row1">
 		<th class="field-Id_prestamo">{{ r.Id_prestamo }}</a></th>
+    <td class="field-Persona nowrap">{{ r.Usuario_Prestatario }}</td>
 	<td class="field-Persona nowrap">{{ r.Persona.nombre_completo }}</td>
   <td class="field-Persona nowrap">{{ r.Persona.Nro_Tarjeta }}</td>
 	<td class="field-Estado_prestamo">{{r.Estado_prestamo}}</td>
 	<td class="field-Fecha_prestamo nowrap">{{r.Fecha_prestamo}}</td>
 	<td class="field-Hora_prestamo nowrap">{{r.Hora_prestamo}}</td>
-</tr>
+</tr> -->
 
 </tbody>
 </table>
@@ -179,13 +187,15 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
 $( document ).ready(function() {
+    estadoPrestamo();
     mostrar();
 });
 
-
+  var bandera = false;
   var dbRecursos = [];
   var idRecurso = "";
   var prestamo = {{ r.Id_prestamo }}
+  var usuario = {{user.id}}
   var token = "{{ csrf_token }}"
   var filasMostrar = "";
 
@@ -224,6 +234,8 @@ $( document ).ready(function() {
         $('#label').hide();
     }
   }
+
+
 var token = "{{ csrf_token }}"
 //funcion para devolver un recurso
   function devol(){
@@ -238,7 +250,6 @@ var token = "{{ csrf_token }}"
           'Content-Type': 'application/json' }
       }).then(function (response) {
           console.log(response);
-
       }).catch(function (error) {
           console.log(error.response);
       });
@@ -272,15 +283,14 @@ var token = "{{ csrf_token }}"
       $('#exampleModalCenter').modal('hide');
       var val = $("#selected").val("0");
       var texto = $("#textarea").val("");
-      filasMostrar ="";
-      //$("#tabla").empty();
+      estadoPrestamo()
       mostrar()
     }else{
       // se le cambia el estado al recurso
       r={
         "Estado_Recurso": "ACTIVO",
       }
-
+      // se guardan los cambios del recurso
       axios.patch("/api/recurso/" + idRecurso + "/", r, {
           headers: {"X-CSRFToken": token,
           'Content-Type': 'application/json' }
@@ -291,49 +301,78 @@ var token = "{{ csrf_token }}"
           console.log(error.response);
       });
 
+      // se genera data json para la devolucion
+      var data = {
+        "Prestamo": prestamo,
+        "Usuario_devolucion": usuario,
+        "Recurso_devolucion": idRecurso
+      };
+
+      // se guarda la devolucion
+      axios.post("/api/Prestamo/Devolucion/", data, {
+          headers: {"X-CSRFToken": token}
+      }).then(function (response) {
+          console.log(response);
+      }).catch(function (error) {
+          console.log(error);
+        });
+
+      //se reinician los campos y las variables para una nueva devolucion
       $('#exampleModalCenter').modal('hide');
       var val = $("#selected").val("0");
       var texto = $("#textarea").val("");
-      filasMostrar ="";
-    //  $("#tabla").empty();
+
+      estadoPrestamo()
       mostrar()
     }
   }
 
 
-  //funcion para cargar los datos a las tablas
-  function guardartabla(row){
-    filasMostrar+=row;
-    //console.log(filasMostrar)
-    $("#tabla").html(filasMostrar);
+  function encontrado(b){
+    bandera = b
   }
+
+  // function flat(){
+  //   return bandera
+  // }
+
   function mostrar(){
+    $("#tabla").empty()
+    $("#datosprestamo").empty()
     var datos = {}
     // datos del prestamo
-
     axios.get('/api/Prestamo/'+ prestamo)
       .then(function (response) {
             var datos = response.data;
+            var prestamotabla = '<tr class="row1">'+
+            		'<th class="field-Id_prestamo">'+ datos.Id_prestamo +"</a></th>"+
+                '<td class="field-Persona nowrap">'+ datos.Usuario_Prestatario  +"</td>"+
+            	//'<td class="field-Persona nowrap">'+ datos.Persona.nombre_completo +"</td>"+
+              //'<td class="field-Persona nowrap">'+ datos.Persona.Nro_Tarjeta +"</td>"+
+            	'<td class="field-Estado_prestamo">'+datos.Estado_prestamo +"</td>"+
+              '<td class="field-Fecha_prestamo nowrap">'+datos.Fecha_prestamo+"</td>"+
+            	'<td class="field-Hora_prestamo nowrap">'+datos.Hora_prestamo+"</td>"+
+            '</tr>';
+            $("#datosprestamo").append(prestamotabla);
             for(var key in datos.recurso){
-              //guardarRecursoLocal(datos.recurso[key])
+              //obtener el recurso y mostrar sus datos en la tabla
               axios.get('/api/recurso/'+ datos.recurso[key])
                   .then(function (response) {
                     var r = response.data
+                    // se verifica el estado del recurso y del prestamo
                     if(datos.Estado_prestamo == "DEVUELTO"){
                       r.Estado_Recurso = "DEVUELTO"
                       r.save
-                    }else if(datos.Estado_prestamo == "DEVUELTO" && r.Estado_Recurso == "ACTIVO" ){
-                      r.Estado_Recurso = "DEVUELTO"
-                      r.save
+                    }else{
+                      // cambia el estado a devuelto si existe una devolucion con este elemento
+                      for (var i in datos.devoluciones){
+                        if (datos.devoluciones[i].Recurso_devolucion == r.Id_recurso){
+                            r.Estado_Recurso = "DEVUELTO"
+                            r.save
+                        }
+                      }
                     }
-                    else if(r.Estado_Recurso == "EN MANTENIMIENTO" ){
-                      r.Estado_Recurso = "EN MANTENIMIENTO"
-                      r.save
-                    }else if( r.Estado_Recurso == "ACTIVO"){
-                      r.Estado_Recurso = "DEVUELTO"
-                      r.save
-                    }
-                      var row = '<tr class="row1" >' +
+                    var row = '<tr class="row1" >' +
                           '<td class="field-Id_prestamo">' + r.Id_recurso+ "</td>"+
                           "<td>" + r.nombre_recurso + "</td>"+
                           "<td>" + r.referencia + "</td>"+
@@ -341,7 +380,8 @@ var token = "{{ csrf_token }}"
                           '<td> <i style="font-size:20px; display: flex;justify-content: center;" onclick="devolucion(' + r.Id_recurso + ')"  class="fa fa-chevron-circle-left devolver" aria-hidden="true"></i></td>'+
                           //'<td><button class="btn btn-warnig" onclick="modificar('+datos[key].Nombre+','+datos[key].Apellidos+','+datos[key].Edad+')">Modificar</button></td>'
                           "</tr>";
-                    guardartabla(row);
+                    $("#tabla").append(row);
+                    //guardartabla(row);
                   })
                   .catch(function (error) {
                           console.log(error);
@@ -351,9 +391,52 @@ var token = "{{ csrf_token }}"
       .catch(function (error) {
         console.log(error);
       });
+
     }
 
 
+    function estadoPrestamo(){
+      var bandera =  false;
+      axios.get('/api/Prestamo/'+ prestamo)
+        .then(function (response) {
+          var datos = response.data
+          if(datos.Estado_prestamo =="EN CURSO" || datos.Estado_prestamo == "EN REVISION"){
+            console.log("cambiando estado de prestamo")
+            for(var i in datos.recurso){
+              for(var j in datos.devoluciones){
+                //console.log(datos.recurso[i])
+                //console.log(datos.devoluciones[j].Recurso_devolucion)
+                if(datos.recurso[i] === datos.devoluciones[j].Recurso_devolucion){
+                  bandera = true
+                  break;
+                }else{
+                  bandera = false;
+                }
+              }
+            }
+            if(bandera==!false){
+                console.log("todos los recursos devueltos")
+                p={
+                  "Estado_prestamo": "DEVUELTO",
+                }
+                axios.patch("/api/Prestamo/" + prestamo + "/", p, {
+                    headers: {"X-CSRFToken": token,
+                    'Content-Type': 'application/json' }
+                }).then(function (response) {
+                    console.log(response);
+
+                }).catch(function (error) {
+                    console.log(error.response);
+                });
+            }else{
+              console.log("faltan recursos por devoler")
+            }
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
 </script>
 <style>
 body {

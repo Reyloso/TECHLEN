@@ -55,3 +55,17 @@ class Incidente(models.Model):
 
     def __unicode__(self):
         return unicode(str(self.descripcion))
+
+
+class Devolucion(models.Model):
+    Id_devolucion = models.AutoField(primary_key=True)
+    Prestamo = models.ForeignKey(Prestamo, null=True)
+    Fecha_devolucion = models.DateField(auto_now=True,null=True)
+    Usuario_devolucion = models.ForeignKey(User)
+    Recurso_devolucion = models.ForeignKey(Recurso, null=True)
+
+    class Meta:
+        verbose_name_plural = "Devoluciones"
+
+    def __unicode__(self):
+        return unicode(str(self.Prestamo))
