@@ -30,7 +30,7 @@ class SuitConfig(DjangoSuitConfig):
             ChildItem(model='prestamos.prestamo'),
             ChildItem(model='prestamos.incidente'),
             ChildItem('Prestar ', url='/admin/Prestamo/Prestar/'),
-            ChildItem(model='prestamos.devolucion'),
+            #ChildItem(model='prestamos.devolucion'),
         ]),
         ParentItem('Recursos', children=[
             ChildItem(model='recursos.recurso'),

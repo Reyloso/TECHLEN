@@ -20,11 +20,12 @@ class Recursos (admin.ModelAdmin):
         # Devolver.short_description = "Devolver"
         # Devolver.allow_tags = True
         # Devolver.is_column = True
-
-        list_display = ['Id_recurso','tipo_de_recurso','nombre_recurso','referencia','Estado_Recurso','fecha_registro','codigo_barras']
+        list_filter = ('Estado_Recurso','tipo_de_recurso','Marca')
+        list_display = ['Id_recurso','tipo_de_recurso','Marca','nombre_recurso','referencia','Estado_Recurso','fecha_registro','codigo_barras']
         class Meta:
 		          model = Recurso
 
 
+admin.site.register(Marca)
 admin.site.register(Tipo_Recurso)
 admin.site.register(Recurso,Recursos)

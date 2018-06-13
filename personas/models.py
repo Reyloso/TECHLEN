@@ -52,6 +52,8 @@ class Personas(models.Model):
     def nombre_completo(self):
         return self.Primer_Nombre + " " + self.Segundo_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido
 
+    class Meta:
+        verbose_name_plural = "Personas"
 
     def __unicode__(self):
         return unicode(self.Nro_Tarjeta)

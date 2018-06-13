@@ -47,6 +47,7 @@ class Incidente(models.Model):
         verbose_name_plural = "Registo De Incidentes"
 
     Id_Incidente = models.AutoField(primary_key=True)
+    Persona = models.ForeignKey(Personas, null=True)
     Fecha_Incidente = models.DateField(default=now)
     Recurso = models.ForeignKey(Recurso, null=True)
     Prestamo = models.ForeignKey(Prestamo, null=True)

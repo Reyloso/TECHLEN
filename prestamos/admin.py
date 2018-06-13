@@ -9,6 +9,8 @@ from django.contrib import admin
 
 # Register your models here.
 class Prestamos (admin.ModelAdmin):
+    # def has_add_permission(self, request):
+    #     return False
 
     def Devolucion(self, instance):
 
@@ -33,12 +35,18 @@ class Prestamos (admin.ModelAdmin):
 		model = Prestamo
 
 class Incidentes (admin.ModelAdmin):
+    # def has_add_permission(self, request):
+    #     return False
+
         list_display = ['Id_Incidente','Fecha_Incidente','Recurso','descripcion','Estado']
         list_filter = ('Estado',)
         class Meta:
 		          model = Incidente
 
 class Devoluciones (admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return False
+
         list_display = ['Id_devolucion','Prestamo','Usuario_devolucion','Recurso_devolucion','Fecha_devolucion']
         class Meta:
 		          model = Devolucion

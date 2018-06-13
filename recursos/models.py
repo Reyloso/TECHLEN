@@ -14,6 +14,16 @@ class Tipo_Recurso(models.Model):
     def __unicode__(self):
         return unicode(str(self.tipo_recurso))
 
+class Marca(models.Model):
+
+    class Meta:
+        verbose_name_plural = "Marca"
+
+    Marca = models.CharField(max_length=60, null=True)
+    def __unicode__(self):
+        return unicode(str(self.Marca))
+
+
 class Recurso(models.Model):
     ESTADO = (
         ('ACTIVO', 'ACTIVO'),
@@ -26,6 +36,7 @@ class Recurso(models.Model):
 
     Id_recurso = models.AutoField(primary_key=True,editable=False)
     tipo_de_recurso = models.ForeignKey(Tipo_Recurso, null=True)
+    Marca = models.ForeignKey(Marca, null=True)
     nombre_recurso = models.CharField(max_length=100, null=True)
     referencia = models.CharField(max_length=100)
     Estado_Recurso = models.CharField(max_length=20, choices=ESTADO,default="ACTIVO")

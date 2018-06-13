@@ -10,6 +10,30 @@
 
     <style>
 
+      .loader-box{
+        display: block;
+        margin-top: 0px;
+      }
+      .loader{
+        border-bottom-width: 8px;
+        border-top-width: 8px;
+      }
+      .img-loader{
+         height: 50px;
+      }
+      .inputidestu{
+        height: 33px;
+        margin-top: 30px;
+        margin-bottom: 26px;
+      }
+      .fa {
+        color: #ff0000!important;
+      }
+      .botonadd{
+        background-color: #035a7b;
+        border-color: #035a7b;
+      }
+
     </style>
 
 {%endblock%}
@@ -22,7 +46,7 @@
   <br>
   <div class="loader">
     <div class="element-animation">
-      <img src="{% static '/assets/images/id.png' %}" width="100" height="70";>
+      <img class="img-loader" src="{% static '/assets/images/id.png' %}" width="100" height="70";>
     </div>
   </div>
 </div>
@@ -30,92 +54,76 @@
   <input  id="idestu" autofocus type="text" placeholder="IdEstudiante" onkeydown="buscar(this)"/>
 </div>
 
-<div class="container-fluid perfil" >
-  <div class="mensaje-alerta">
+<div class="container perfil">
+        <div class="col-6">
+          <div class="mensaje-alerta">
+          </div>
+          <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted">Carrito De Prestamo</span>
+            <span class="badge badge-secondary badge-pill" id="cantidad">0</span>
+          </h4>
+          <div class="card p-2">
+            <div class="input-group">
+              <input type="text" id="add" class="form-control" placeholder="Codigo De Recurso" onkeydown="buscarp()">
+              <div class="input-group-append">
 
-  </div>
-  <div class="row">
-    <div class="col-8">
-      <div class="card-header">
-        <label for="searchbar">ID PRODUCTO</label>
-        <input type="text" size="40" name="q" value="" id="idproduc" onkeydown="buscarp(this)" autofocus="">
-      </div>
-
-      <!-- incio tabla-->
-      <div class="card">
-        <!--<div class="card-header detalle">
-          <h6>Recursos Prestados</h6>
-        </div>-->
-      <div class="results">
-      <table id="result_list">
-      <thead>
-      <tr>
-
-      <th scope="col"  class="sortable column-Id_prestamo">
-
-         <div class="text"><a href="#">Id Recurso</a></div>
-         <div class="clear"></div>
-      </th>
-      <th scope="col"  class="sortable column-Persona">
-
-
-
-         <div class="text"><a href="#">Tipo Recurso</a></div>
-         <div class="clear"></div>
-      </th>
-      <th scope="col"  class="sortable column-Estado_prestamo">
-
-
-
-         <div class="text"><a href="#">Nombre Recurso</a></div>
-         <div class="clear"></div>
-      </th>
-      <th scope="col"  class="sortable column-Fecha_prestamo">
-
-
-
-         <div class="text"><a href="#">Estado Recurso</a></div>
-         <div class="clear"></div>
-      </th>
-      <th scope="col"  class="sortable column-Fecha_prestamo">
-
-
-
-         <div class="text"><a href="#">Quitar</a></div>
-         <div class="clear"></div>
-      </th>
-
-
-
-      </tr>
-      </thead>
-      <tbody  id="tabla">
-
-      </tbody>
-      </table>
-      </div>
-      </div>
-      <!-- fin tabla-->
-
-
-    </div>
-    <div class="col-3">
-      <button onclick="guardarPrestamo()" type="button" class="btn btn-primary">Guardar Prestamo</button>
-
-      <div class="card cardestudiante">
-        <div class="card-header"><h4 id="id"></h4></div>
-        <img class="card-img-top" src="{% static '/assets/images/foto.jpg' %}" alt="Card image cap">
-        <div class="card-body cardestudianteb">
-          <h5 class="card-title" id="nomb"></h5>
-          <h6 class="card-title" id="depe"></h6>
-          <h6 class="card-title" id="sede"></h6>
+              </div>
+            </div>
+          </div>
+          <ul class="list-group mb-3" id="listaRecursos">
+          </ul>
+          <hr/>
+        </div>
+        <div class="col-6">
+           <hr/>
+          <h4 class="mb-3">Datos Del Usuario</h4>
+           <hr/>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <img class="card-img-top" src="{% static '/assets/images/foto.jpg' %}" alt="Card image cap">
+              </div>
+              <div class="col-md-6 mb-3">
+                <h6>Nombre & Apellidos</h6>
+                <label for="firstName" id="nombre"></label>
+              </div>
+              <div class="col-md-6 mb-3">
+                <h6>ID</h6>
+                <label for="firstName" id="id"></label>
+              </div>
+              <div class="col-md-6 mb-3">
+                <h6>N° Tarjeta</h6>
+                <label for="firstName" id="tarjeta"></label>
+              </div>
+              <div class="col-md-6 mb-3">
+                <h6>Tipo De Documento</h6>
+                <label for="firstName" id="tipodoc" ></label>
+              </div>
+              <div class="col-md-6 mb-3">
+                <h6>N° Documento</h6>
+                <label for="firstName" id="documento"></label>
+              </div>
+              <div class="col-md-6 mb-3">
+                <h6>Programa Academico</h6>
+                <label for="firstName" id="programa"></label>
+              </div>
+              <div class="col-md-6 mb-3">
+                <h6>Cargo o Tipo</h6>
+                <label for="firstName" id="cargo"></label>
+              </div>
+              <div class="col-md-6 mb-3">
+                <h6>Incidentes</h6>
+                <label for="firstName" id="incidentes"></label>
+              </div>
+              <div class="col-md-6 mb-3">
+                <h6>Cantidad Incidentes</h6>
+                <label for="firstName" id="cantincidentes"></label>
+              </div>
+            </div>
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" onclick="guardarPrestamo()">Guardar Prestamo</button>
         </div>
       </div>
-
     </div>
-</div>
-</div>
-
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script type="text/javascript" src="{% static '/assets/js/prestamo.js' %}"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -124,19 +132,17 @@ function guardarPrestamo(){
 
   var datos = generarJSON();
   var recursos = DRecursos();
-
   var token = "{{ csrf_token }}"
 
   axios.post("/api/Prestamo/", datos, {
       headers: {"X-CSRFToken": token}
   })
     .then(function (response) {
-      console.log(response);
+      //console.log(response);
     })
     .catch(function (error) {
-      console.log(error);
+      //console.log(error);
     });
-
     for (i in recursos) {
       var codigo = recursos[i]
       r={
@@ -146,48 +152,32 @@ function guardarPrestamo(){
           headers: {"X-CSRFToken": token,
           'Content-Type': 'application/json' }
       }).then(function (response) {
-          console.log(response);
-
+          //console.log(response);
       }).catch(function (error) {
-          console.log(error.response);
+          //console.log(error.response);
       });
     }
-
-
-  // console.log(token);
 return Mensaje(1);
 }
 
 function generarJSON(){
-  // generaremos el json de los prestamos
-
-
   // Seleccionamos los datos de los inputs de formulario
   var date =  new Date();
   var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
-  //console.log(fecha);
   var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
-  //console.log(hora);
-  //console.log(this.dbRecursos);
-  //console.log(dbRecursos);
   usuario = {{user.id}}
-  console.log(usuario)
   var recursos = DRecursos();
   var datos = {
-      "Persona" : $("#id").text(),
-      //"Persona" :"123",
+      "personaId" : $("#id").text(),
       "recurso": recursos,
-      "Usuario_Prestatario":usuario,
-      //"Recurso":[1],
+      "PrestatarioId":usuario,
       "Fecha_devolucion": fecha,//$("#FD").val(),
       "Fecha_prestamo": fecha,//generar
       "Hora_prestamo": hora,//generar
       "Hora_devolucion": hora,//$("#HD").val(),
       "Estado_prestamo": "EN CURSO"//generar
   };
-  console.log(datos)
   return datos;
 };
-
 </script>
 {% endblock %}

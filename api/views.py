@@ -36,9 +36,22 @@ class UserViewSet(APIView):
         return Response(serializer.data)
 
 #vistas de estudiantes o adminstrativos
-class PersonasList(generics.ListCreateAPIView):
+
+@action(methods=['post'], detail=True)
+class PersonasList(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
     queryset = Personas.objects.all()
     serializer_class = PersonaSerializer
+
+    @detail_route(methods=['post'])
+    def set_incidente(self, request, pk=None):
+        persona = self.get_object()
+        serializer = IncidenteSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(Persona=persona)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PersonasDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Personas.objects.all()
@@ -60,7 +73,6 @@ class PrestamoList(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class PrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Prestamo.objects.all()
