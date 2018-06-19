@@ -20,11 +20,11 @@ class Prestamos (admin.ModelAdmin):
     Devolucion.is_column = True
 
     def add_view(self, *args, **kwargs):
-        self.fields = ('Usuario_Prestatario','Persona','recurso','Estado_prestamo','Fecha_prestamo','Hora_prestamo','Fecha_devolucion','Hora_devolucion',)
+        self.fields = ('Usuario_Prestatario','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo','Fecha_devolucion','Hora_devolucion',)
         return super(Prestamos, self).add_view(*args, **kwargs)
 
     def change_view(self, *args, **kwargs):
-        self.fields = ('recurso','Estado_prestamo',)
+        self.fields = ('Estado_prestamo',)
         return super(Prestamos, self).change_view(*args, **kwargs)
 
     list_display = ['Id_prestamo','Usuario_Prestatario','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo', 'Devolucion' ]
@@ -38,21 +38,20 @@ class Incidentes (admin.ModelAdmin):
     # def has_add_permission(self, request):
     #     return False
 
-        list_display = ['Id_Incidente','Fecha_Incidente','Recurso','descripcion','Estado']
+        list_display = ['Id_Incidente','Fecha_Incidente','Recurso','descripcion','Estado','usuario']
         list_filter = ('Estado',)
         class Meta:
 		          model = Incidente
 
-class Devoluciones (admin.ModelAdmin):
-    def has_add_permission(self, request):
-        return False
-
-        list_display = ['Id_devolucion','Prestamo','Usuario_devolucion','Recurso_devolucion','Fecha_devolucion']
+class DetallePrestamos (admin.ModelAdmin):
+    #def has_add_permission(self, request):
+    #    return False
+        list_display = ['Id_detalle','Prestamo','Fecha_prestamo','Estado','Fecha_devolucion','Usuario_devolucion','Recurso_detalle']
         class Meta:
-		          model = Devolucion
+		          model = DetallePrestamo
 
 
 
-admin.site.register(Devolucion, Devoluciones)
+admin.site.register(DetallePrestamo, DetallePrestamos)
 admin.site.register(Prestamo, Prestamos)
 admin.site.register(Incidente, Incidentes)

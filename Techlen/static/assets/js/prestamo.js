@@ -113,38 +113,58 @@ function Mensaje(t){
           axios.get('/api/recurso/'+codigo)
             .then(function (response) {
                   var recurso = response.data;
-                  if(recurso.Id_recurso !== undefined){
-                    if(recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == false){
-                      guardarRecursoLocal(recurso.Id_recurso);
-                      tabla+= '<li class="list-group-item d-flex justify-content-between lh-condensed">'+
-                        '<div>'+
-                          '<h6 class="my-0">'+recurso.nombre_recurso+'</h6>'+
-                          '<small class="text-muted">'+ "ID: " + recurso.Id_recurso+'</small>'+
-                        '</div>'+
-                        '<span class="text-muted borrar" data-eliminar="' + recurso.Id_recurso + '"><i class="fa fa-trash"></i></span>'+
-                      '</li>'
-                      $("#listaRecursos").append(tabla);
-                      $("#cantidad").text(dbRecursos.length);
-                      if (tabla != "") {
-                  			var eliminar = document.getElementsByClassName("borrar");
-                  			for(var i = 0; i < eliminar.length; i++){
-                  				eliminar[i].addEventListener("click", borrar, false);
-                  			}
-                  		}
-                    }else if (recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == true){
-                      Mensaje(6);
-                    }else {
-                      Mensaje(3);
-                    }
-                  }else{
-                    Mensaje(4);
-                  }
-            })
-            .catch(function (error) {
-                Mensaje(4);
-            });
-          ele.value = "";
-      }
+                  axios.get('/api/Prestamo/')
+                    .then(function (response) {
+                      var prestamos =  response.data
+                      var bandera=false
+                      for(data in prestamos){
+                        if(prestamos[data].Estado_prestamo !== "DEVUELTO"){
+                          for(detalles in prestamos[data].detailprestamo){
+                            //console.log(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso)
+                            if(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso == recurso.Id_recurso && prestamos[data].detailprestamo[detalles].Estado !== "DEVUELTO" ){
+                              //console.log(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso)
+                              bandera=true
+                              break;
+                            }
+                          }
+                        }
+                        if(bandera==true){
+                          break;
+                        }
+                      }
+
+                      if(recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == false && bandera == false ){
+                        guardarRecursoLocal(recurso.Id_recurso);
+                        tabla+= '<li class="list-group-item d-flex justify-content-between lh-condensed">'+
+                          '<div>'+
+                            '<h6 class="my-0">'+recurso.nombre_recurso+'</h6>'+
+                            '<small class="text-muted">'+ "ID: " + recurso.Id_recurso+'</small>'+
+                          '</div>'+
+                          '<span class="text-muted borrar" data-eliminar="' + recurso.Id_recurso + '"><i class="fa fa-trash"></i></span>'+
+                        '</li>'
+                        $("#listaRecursos").append(tabla);
+                        $("#cantidad").text(dbRecursos.length);
+                        if (tabla != "") {
+                          var eliminar = document.getElementsByClassName("borrar");
+                          for(var i = 0; i < eliminar.length; i++){
+                            eliminar[i].addEventListener("click", borrar, false);
+                          }
+                        }
+                      }else if (recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == true){
+                        Mensaje(6);
+                      }else {
+                        Mensaje(3);
+                      }
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                  });
+           })
+          .catch(function (error) {
+              Mensaje(4);
+          });
+        ele.value = "";
+    }
   }
 
   function borrar(){

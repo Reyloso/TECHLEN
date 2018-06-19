@@ -20,7 +20,6 @@ class Prestamo(models.Model):
     Id_prestamo = models.AutoField(primary_key=True)
     Usuario_Prestatario = models.ForeignKey(User)
     Persona = models.ForeignKey(Personas, null=True)
-    recurso = models.ManyToManyField(Recurso, null=True)
     Estado_prestamo = models.CharField(max_length=20, choices=ESTADO)
     Fecha_prestamo = models.DateField(default=now)
     Hora_prestamo = models.TimeField(default=now)
@@ -47,6 +46,7 @@ class Incidente(models.Model):
         verbose_name_plural = "Registo De Incidentes"
 
     Id_Incidente = models.AutoField(primary_key=True)
+    usuario =  models.ForeignKey(User, null=True)
     Persona = models.ForeignKey(Personas, null=True)
     Fecha_Incidente = models.DateField(default=now)
     Recurso = models.ForeignKey(Recurso, null=True)
@@ -58,15 +58,22 @@ class Incidente(models.Model):
         return unicode(str(self.descripcion))
 
 
-class Devolucion(models.Model):
-    Id_devolucion = models.AutoField(primary_key=True)
+class DetallePrestamo(models.Model):
+    ESTADO = (
+        ('PRESTADO', 'PRESTADO'),
+        ('EN REVISION', 'EN REVISION'),
+        ('DEVUELTO', 'DEVUELTO'),
+    )
+    Id_detalle = models.AutoField(primary_key=True)
     Prestamo = models.ForeignKey(Prestamo, null=True)
-    Fecha_devolucion = models.DateField(auto_now=True,null=True)
-    Usuario_devolucion = models.ForeignKey(User)
-    Recurso_devolucion = models.ForeignKey(Recurso, null=True)
+    Fecha_prestamo = models.DateField(default=now)
+    Estado = models.CharField(max_length=20, choices=ESTADO,default="PRESTADO")
+    Fecha_devolucion = models.DateField(null=True)
+    Usuario_devolucion = models.ForeignKey(User, null=True)
+    Recurso_detalle = models.ForeignKey(Recurso, null=True)
 
     class Meta:
-        verbose_name_plural = "Devoluciones"
+        verbose_name_plural = "Detalle Prestamos"
 
     def __unicode__(self):
-        return unicode(str(self.Prestamo))
+        return unicode(str(self.Id_detalle))

@@ -55,7 +55,7 @@
 </div>
 
 <div class="container perfil">
-        <div class="col-6">
+        <div class="col-4 col-md-6">
           <div class="mensaje-alerta">
           </div>
           <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -74,12 +74,12 @@
           </ul>
           <hr/>
         </div>
-        <div class="col-6">
+        <div class="col-6 col-md-6">
            <hr/>
           <h4 class="mb-3">Datos Del Usuario</h4>
            <hr/>
             <div class="row">
-              <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-5">
                 <img class="card-img-top" src="{% static '/assets/images/foto.jpg' %}" alt="Card image cap">
               </div>
               <div class="col-md-6 mb-3">
@@ -128,35 +128,23 @@
 <script type="text/javascript" src="{% static '/assets/js/prestamo.js' %}"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
+
+var usuario = {{user.id}}
+var detalleprestamo=[];
 function guardarPrestamo(){
 
   var datos = generarJSON();
-  var recursos = DRecursos();
   var token = "{{ csrf_token }}"
 
   axios.post("/api/Prestamo/", datos, {
       headers: {"X-CSRFToken": token}
   })
     .then(function (response) {
-      //console.log(response);
+      window.location.replace("/admin/prestamos/prestamo/")
     })
     .catch(function (error) {
-      //console.log(error);
+      console.log(error);
     });
-    for (i in recursos) {
-      var codigo = recursos[i]
-      r={
-        "Estado_Recurso": "PRESTADO",
-      }
-      axios.patch("/api/recurso/" + codigo + "/", r, {
-          headers: {"X-CSRFToken": token,
-          'Content-Type': 'application/json' }
-      }).then(function (response) {
-          //console.log(response);
-      }).catch(function (error) {
-          //console.log(error.response);
-      });
-    }
 return Mensaje(1);
 }
 
@@ -165,17 +153,33 @@ function generarJSON(){
   var date =  new Date();
   var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
   var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
-  usuario = {{user.id}}
+  var recursos = DRecursos();
+  for (i in recursos) {
+    var recurso = recursos[i];
+    //console.log(recurso)
+    var detalle = {
+      "Fecha_prestamo": fecha,
+  		"Estado": "PRESTADO",
+  		//"Usuario_devolucion": "",
+  		"recursoid": recurso
+  	}
+    detalleprestamo.push(detalle)
+    console.log(detalleprestamo)
+  }
+  //console.log(detalleprestamo)
+  var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
+  var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
+  var usuario = {{user.id}}
   var recursos = DRecursos();
   var datos = {
+      "PrestatarioId": usuario,
       "personaId" : $("#id").text(),
-      "recurso": recursos,
-      "PrestatarioId":usuario,
-      "Fecha_devolucion": fecha,//$("#FD").val(),
-      "Fecha_prestamo": fecha,//generar
-      "Hora_prestamo": hora,//generar
-      "Hora_devolucion": hora,//$("#HD").val(),
-      "Estado_prestamo": "EN CURSO"//generar
+      "Estado_prestamo": "EN CURSO",
+      "Fecha_prestamo": fecha,
+      "Hora_prestamo": hora,
+      "Fecha_devolucion": fecha,
+      "Hora_devolucion": hora,
+      "detalleprestamo": detalleprestamo
   };
   return datos;
 };

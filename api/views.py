@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from rest_framework import viewsets
-
 from configuracion.models import *
 from personas.models import *
 from prestamos.models import *
@@ -24,6 +23,8 @@ import django_filters.rest_framework
 from django.contrib.auth.models import User
 from rest_framework.decorators import action, detail_route
 from rest_framework import viewsets, status
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 class UserViewSet(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
@@ -35,6 +36,9 @@ class UserViewSet(APIView):
         print serializer
         return Response(serializer.data)
 
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 #vistas de estudiantes o adminstrativos
 
 @action(methods=['post'], detail=True)
@@ -63,11 +67,13 @@ class PrestamoList(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     queryset = Prestamo.objects.all()
     serializer_class = PrestamoSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('Estado_prestamo',)
 
     @detail_route(methods=['post'])
-    def set_devolucion(self, request, pk=None):
+    def set_detalleprestamo(self, request, pk=None):
         prestamo = self.get_object()
-        serializer = DevolucionSerializer(data=request.data)
+        serializer = DetallePrestamoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(Prestamo=prestamo)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -110,14 +116,13 @@ class RecursoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Recurso.objects.all()
     serializer_class = RecursoSerializer
 
-
-#vistas de las devoluciones
+#vistas de el detalle_prestamo
 @action(methods=['post'], detail=True)
-class DevolucionList(generics.ListCreateAPIView):
+class DetallePrestamoList(generics.ListCreateAPIView):
     permission_classes = (AllowAny,)
-    queryset = Devolucion.objects.all()
-    serializer_class = DevolucionSerializer
+    queryset = DetallePrestamo.objects.all()
+    serializer_class = DetallePrestamoSerializer
 
-class DevolucionDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Devolucion.objects.all()
-    serializer_class = DevolucionSerializer
+class DetallePrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DetallePrestamo.objects.all()
+    serializer_class = DetallePrestamoSerializer
