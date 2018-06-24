@@ -1,3 +1,4 @@
+# coding=utf-8
 from __future__ import unicode_literals
 
 from django.db import models
@@ -10,7 +11,6 @@ from django.contrib.auth.models import User
 class Prestamo(models.Model):
     ESTADO = (
         ('EN CURSO', 'EN CURSO'),
-        ('EN REVISION', 'EN REVISION'),
         ('DEVUELTO', 'DEVUELTO'),
     )
 
@@ -34,35 +34,12 @@ class Prestamo(models.Model):
     def __unicode__(self):
         return unicode(str(self.Id_prestamo))
 
-
-class Incidente(models.Model):
-    ESTADO = (
-        ('EN REVISION', 'EN REVISION'),
-        ('ACEPTADO', 'ACEPTADO'),
-        ('DADO DE BAJA', 'DADO DE BAJA'),
-    )
-
-    class Meta:
-        verbose_name_plural = "Registo De Incidentes"
-
-    Id_Incidente = models.AutoField(primary_key=True)
-    usuario =  models.ForeignKey(User, null=True)
-    Persona = models.ForeignKey(Personas, null=True)
-    Fecha_Incidente = models.DateField(default=now)
-    Recurso = models.ForeignKey(Recurso, null=True)
-    Prestamo = models.ForeignKey(Prestamo, null=True)
-    descripcion = models.TextField(null=True)
-    Estado= models.CharField(max_length=30, choices=ESTADO)
-
-    def __unicode__(self):
-        return unicode(str(self.descripcion))
-
-
 class DetallePrestamo(models.Model):
     ESTADO = (
         ('PRESTADO', 'PRESTADO'),
-        ('EN REVISION', 'EN REVISION'),
         ('DEVUELTO', 'DEVUELTO'),
+        ('PERDIDO', 'PERDIDO'),
+
     )
     Id_detalle = models.AutoField(primary_key=True)
     Prestamo = models.ForeignKey(Prestamo, null=True)
@@ -77,3 +54,33 @@ class DetallePrestamo(models.Model):
 
     def __unicode__(self):
         return unicode(str(self.Id_detalle))
+
+
+class Incidente(models.Model):
+    ESTADO = (
+        ('EN REVISION', 'EN REVISION'),
+        ('REVISADO', 'REVISADO'),
+    )
+
+    TIPO_INCIDENTE = (
+        ('INCIDENTE TOTAL DEL RECURSO', 'INCIDENTE TOTAL DEL RECURSO'),
+        ('INCIDENTE PARCIAL DEL RECURSO', 'INCIDENTE PARCIAL DEL RECURSO'),
+        ('PERDIDA DEL RECURSO', 'PERDIDA DEL RECURSO'),
+        ('OTRO', 'OTRO'),
+    )
+
+    class Meta:
+        verbose_name_plural = "Registo De Incidentes"
+
+    Id_Incidente = models.AutoField(primary_key=True)
+    usuario =  models.ForeignKey(User, null=True)
+    Persona = models.ForeignKey(Personas, null=True)
+    Tipo_Incidente = models.CharField(max_length=50, choices=TIPO_INCIDENTE)
+    Fecha_Incidente = models.DateField(default=now)
+    Recurso = models.ForeignKey(Recurso, null=True)
+    Prestamo_detalle = models.ForeignKey(DetallePrestamo, null=True)
+    descripcion = models.TextField(null=True)
+    Estado= models.CharField(max_length=30, choices=ESTADO)
+
+    def __unicode__(self):
+        return unicode(str(self.Id_Incidente))

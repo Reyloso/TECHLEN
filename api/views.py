@@ -118,10 +118,20 @@ class RecursoDetail(generics.RetrieveUpdateDestroyAPIView):
 
 #vistas de el detalle_prestamo
 @action(methods=['post'], detail=True)
-class DetallePrestamoList(generics.ListCreateAPIView):
+class DetallePrestamoList(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     queryset = DetallePrestamo.objects.all()
     serializer_class = DetallePrestamoSerializer
+
+    @detail_route(methods=['post'])
+    def set_incidente(self, request, pk=None):
+        DetallePrestamo = self.get_object()
+        serializer = IncidenteSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(Prestamo_detalle=DetallePrestamo)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DetallePrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = DetallePrestamo.objects.all()

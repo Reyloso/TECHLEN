@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.contrib import admin
 from .models import *
 from import_export import resources
@@ -9,12 +10,17 @@ from django.contrib import admin
 
 # Register your models here.
 class Prestamos (admin.ModelAdmin):
-    # def has_add_permission(self, request):
-    #     return False
+    def has_add_permission(self, request):
+         return False
+
+    # def get_actions(self, request):
+    #     actions = super(Prestamos, self).get_actions(request) # Obtenemos todas las acciones de este modelo
+    #     del actions['delete_selected'] # Deshabilitamos la opción de borrar
+    #     return actions
 
     def Devolucion(self, instance):
 
-        return "<a href='/admin/Prestamo/Detalle/%s'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-chevron-circle-left' aria-hidden='true'></i>  </a>" % instance.Id_prestamo
+        return "<a href='/admin/Prestamo/Detalle/%s'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-arrow-left' aria-hidden='true'></i>  </a>" % instance.Id_prestamo
     Devolucion.short_description = "Devolucion"
     Devolucion.allow_tags = True
     Devolucion.is_column = True
@@ -35,13 +41,13 @@ class Prestamos (admin.ModelAdmin):
 		model = Prestamo
 
 class Incidentes (admin.ModelAdmin):
-    # def has_add_permission(self, request):
-    #     return False
+    def has_add_permission(self, request):
+        return False
 
-        list_display = ['Id_Incidente','Fecha_Incidente','Recurso','descripcion','Estado','usuario']
-        list_filter = ('Estado',)
-        class Meta:
-		          model = Incidente
+    list_display = ['Id_Incidente','Prestamo_detalle','Tipo_Incidente','Fecha_Incidente','Recurso','Estado','usuario']
+    list_filter = ('Estado',)
+    class Meta:
+        model = Incidente
 
 class DetallePrestamos (admin.ModelAdmin):
     #def has_add_permission(self, request):

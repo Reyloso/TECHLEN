@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from recursos.models import Recurso
 from django.contrib import admin
 from prestamos.models import Prestamo
+from personas.models import Personas
 
 
 # Create your views here.
@@ -34,3 +35,27 @@ def detalle_prestamo(request,Id_prestamo):
         'r': r,
     })
     return  render(request,'core/detalle_prestamo.html',context)
+
+@login_required
+def persona_reporte(request,Id_Persona):
+    r = get_object_or_404(Personas,Id_Persona=Id_Persona)
+    # P = get_object_or_404(Prestamo,Persona=Id_Persona)
+    # p = Prestamo.objects.filter(Persona=Id_Persona)
+
+    context = admin.site.each_context(request)
+    context.update({
+        'r': r,
+    })
+    return  render(request,'core/reporte_persona.html',context)
+
+@login_required
+def recurso_reporte(request,Id_recurso):
+    r = get_object_or_404(Recurso,Id_recurso=Id_recurso)
+    # P = get_object_or_404(Prestamo,Persona=Id_Persona)
+    # p = Prestamo.objects.filter(Persona=Id_Persona)
+
+    context = admin.site.each_context(request)
+    context.update({
+        'r': r,
+    })
+    return  render(request,'core/reporte_recurso.html',context)

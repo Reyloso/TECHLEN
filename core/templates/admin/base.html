@@ -24,6 +24,7 @@
 
 {% block pretitle %}
 <div class="content-wrap">
+
 {% endblock %}
 
 {% block sidebar %}
@@ -34,9 +35,10 @@
     {% if has_permission %}
 
         <div id="user-tools" class="suit-user-tools">
-            {% block welcome-msg %}
-                <span class="welcome">
 
+            {% block welcome-msg %}
+                <span class="welcome" style="color:#fff;">
+                  Hola {{user.username}}  /
             </span>
 
             {% endblock %}
@@ -54,7 +56,8 @@
                     {% endif %}
                 {% endif %}
                 {% if user.has_usable_password %}
-                   /
+
+
                 {% endif %}
                 <a href="{% url 'admin:logout' %}" class="icon-link logout-link" data-title="{% trans 'Log out' %}">{% trans 'Log out' %}</a>
             {% endblock %}
@@ -64,7 +67,9 @@
 {% endblock %}
 
 {% block nav-global %}
+
     {% include 'suit/menu.html' %}
+
 {% endblock %}
 
 {% block footer %}
@@ -91,11 +96,10 @@
                         <div class="col-xs-12 col-sm-6 text-sm-center footer-copyright">
 
                             {% block copyright %}
-
+                              <br>
+                                UNIVERSIDAD COOPERATIVA DE COLOMBIA SEDE MONTERIA
                                 <br>
-                                <br>
-
-                                © TECHLEN. Desarrollado por Secbi 2018.
+                                © TECHLEN. Desarrollado por <a href="https://secbi.co/">SECBI.CO</a> 2018.
                             {% endblock %}
                         </div>
 

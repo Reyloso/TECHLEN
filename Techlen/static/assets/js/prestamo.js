@@ -95,7 +95,19 @@ function Mensaje(t){
             case 7: //
                 $(".mensaje-alerta").empty();
                 $(".mensaje-alerta").append(
-                  "<div class='alert alert-success' role='alert'>Recurso Borrado de la lista</div>"
+                  "<div class='alert alert-success' role='alert'>Recurso borrado de la lista</div>"
+                );
+                break;
+            case 8: //
+                $(".mensaje-alerta").empty();
+                $(".mensaje-alerta").append(
+                  "<div class='alert alert-danger' role='alert'>Recurso está en revisión por incidente</div>"
+                );
+                break;
+            case 9: //
+                $(".mensaje-alerta").empty();
+                $(".mensaje-alerta").append(
+                  "<div class='alert alert-danger' role='alert'>Recurso fue dado de baja por el administrador</div>"
                 );
                 break;
             default:
@@ -115,7 +127,7 @@ function Mensaje(t){
                   var recurso = response.data;
                   axios.get('/api/Prestamo/')
                     .then(function (response) {
-                      var prestamos =  response.data
+                      var prestamos = response.data
                       var bandera=false
                       for(data in prestamos){
                         if(prestamos[data].Estado_prestamo !== "DEVUELTO"){
@@ -152,7 +164,11 @@ function Mensaje(t){
                         }
                       }else if (recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == true){
                         Mensaje(6);
-                      }else {
+                      }else if(recurso.Estado_Recurso == "EN MANTENIMIENTO"){
+                        Mensaje(8);
+                      }else if(recurso.Estado_Recurso == "DADO DE BAJA POR DAÑO TOTAL"){
+                        Mensaje(9);
+                      }else{
                         Mensaje(3);
                       }
                   })

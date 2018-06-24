@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
 from __future__ import unicode_literals
 from django.db import models
 from configuracion.models import Programa, Cargo, Dependencia
@@ -56,4 +56,4 @@ class Personas(models.Model):
         verbose_name_plural = "Personas"
 
     def __unicode__(self):
-        return unicode(self.Nro_Tarjeta)
+        return unicode(str(self.Primer_Nombre)+ " "+ str(self.Primer_Apellido))

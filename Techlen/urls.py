@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^admin/Prestamo/Prestar/',  views.prestamo_prestar, name='prestamo-prestar'),
     url(r'^admin/recursos/codigo_barras/(?P<Id_recurso>[\w\-]+)$', views.codigo_barras, name='codigo-barras'),
     url(r'^admin/Prestamo/Detalle/(?P<Id_prestamo>[\w\-]+)$', views.detalle_prestamo, name='detalle-prestamo'),
+    url(r'^admin/Persona/Reporte/(?P<Id_Persona>[\w\-]+)$',  views.persona_reporte, name='Persona-Reporte'),
+    url(r'^admin/Recurso/Reporte/(?P<Id_recurso>[\w\-]+)$',  views.recurso_reporte, name='Recurso-Reporte'),
     url(r'', include('api.urls')),
 
 ]

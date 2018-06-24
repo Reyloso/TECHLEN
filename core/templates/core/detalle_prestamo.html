@@ -2,7 +2,7 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
 {% load static %}
-
+{% load consulta %}
 {% block extrastyle %}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
      <link  rel="stylesheet" href="{% static '/assets/css/header.css' %}"/>
@@ -55,6 +55,7 @@
 
         </tr>
         </thead>
+
         <tbody  id="tabla">
 
         </tbody>
@@ -136,7 +137,6 @@
         </button>
       </div>
       <div class="modal-body">
-
             <label for="exampleFormControlFile1">¿El recurso registra alguna incidencia?</label>
             <select class="form-control" id="selected"  onchange="select()">
               <option value="0">--</option>
@@ -144,12 +144,21 @@
               <option value="No">No</option>
             </select>
             <br/>
-              <label for="exampleFormControlFile1" id="label">Escriba toda la informacion posible y detallada sobre la incidencia ocurrida</label>
+            <label id="tipo" for="exampleFormControlFile1">Tipo de incidencia.*</label>
+            <select class="form-control" id="selected2"  onchange="select2()">
+              <option value="0">--</option>
+              <option value="INCIDENTE TOTAL DEL RECURSO">INCIDENTE TOTAL DEL RECURSO</option>
+              <option value="INCIDENTE PARCIAL DEL RECURSO">INCIDENTE PARCIAL DEL RECURSO</option>
+              <option value="PERDIDA DEL RECURSO">PERDIDA DEL RECURSO</option>
+              <option value="OTRO">OTRO</option>
+            </select>
+            <br/>
+              <label for="exampleFormControlFile1" id="label">Escriba toda la informacion posible y detallada sobre la incidencia ocurrida.*</label>
               <div class="input-group" id="incidencia">
               <div class="input-group-prepend">
                 <span class="input-group-text" >Detalle incidencia</span>
               </div>
-              <textarea class="form-control" aria-label="With textarea" id="textarea"></textarea>
+              <textarea class="form-control" aria-label="With textarea" id="textarea" onchange="save()"></textarea>
             </div>
       </div>
 
@@ -177,13 +186,23 @@ $( document ).ready(function() {
     LoadPrestamo();
     loadDetail()
     estadoPrestamo()
+    $(function(){
+  $('#textarea').on('input', function(){
+    var val = $('#textarea').val()
+    if(val ==""){
+        $('#savebuton').attr("disabled", true);
+    }else{
+        $('#savebuton').attr("disabled", false);
+    }
+  });
+});
 });
 
   var bandera = false;
   var dbRecursos = [];
   var idDetalle = "";
   var prestamo = {{ r.Id_prestamo }}
-  var persona = {{r.Persona}}
+  var persona = {{r.Persona.Id_Persona}}
   var usuario = {{user.id}}
   var token = "{{ csrf_token }}"
   var filasMostrar = "";
@@ -193,6 +212,7 @@ $( document ).ready(function() {
   function cerrar(){
     $('#exampleModalCenter').modal('hide');
     var val = $("#selected").val("0")
+    var val = $("#selected2").val("0")
   }
   // abrir modal
   function devolucion(id,recurso){
@@ -202,6 +222,8 @@ $( document ).ready(function() {
     $('#incidencia').hide();
     $('#label').hide();
     $('#savebuton').attr("disabled", true);
+    $('#tipo').hide();
+    $('#selected2').hide();
   }
 
   //funcion para el select de el modal de la devolucion
@@ -210,11 +232,17 @@ $( document ).ready(function() {
     if(val == "Si"){
         $('#savebuton').attr("disabled", false);
         $('#incidencia').show();
+        $('#textarea').attr("disabled", true);
+        $('#savebuton').attr("disabled", true);
         $('#label').show();
+        $('#tipo').show();
+        $('#selected2').show();
     }else if (val == "No"){
       $('#savebuton').attr("disabled", false);
       $('#incidencia').hide();
       $('#label').hide();
+      $('#tipo').hide();
+      $('#selected2').hide();
     }else {
         $('#savebuton').attr("disabled", true);
         $('#incidencia').hide();
@@ -222,6 +250,19 @@ $( document ).ready(function() {
     }
   }
 
+  function select2(){
+    var val = $("#selected2").val();
+    if(val !=="0"){
+        $('#textarea').attr("disabled", false);
+    }else{
+      $('#textarea').attr("disabled", true);
+      $('#savebuton').attr("disabled", true);
+    }
+  }
+
+  function save(){
+      $('#savebuton').attr("disabled", false);
+  }
 var token = "{{ csrf_token }}"
 //funcion para devolver un recurso
   function devol(){
@@ -229,29 +270,62 @@ var token = "{{ csrf_token }}"
     var val = $("#selected").val();
     if(val == "Si") {
       // si existe la incidencia se le cambia el estado al detalle del prestamo
-      dp={
-        "Estado": "EN REVISION",
-      }
-      axios.patch("/api/Prestamo/Detalle/" + idDetalle + "/", dp, {
-          headers: {"X-CSRFToken": token,
-          'Content-Type': 'application/json' }
-      }).then(function (response) {
-          // si es exitoso se le cambia el estado al recurso para que no este disponible a otro prestamo mientras esta en revision
-          var recurso = response.data.Recurso_detalle.Id_recurso
-          r={
-            "Estado_Recurso": "EN MANTENIMIENTO",
-          }
-          axios.patch("/api/recurso/" + recurso + "/", r, {
-              headers: {"X-CSRFToken": token,
-              'Content-Type': 'application/json' }
-          }).then(function (response) {
-              //console.log(response);
-          }).catch(function (error) {
-              //console.log(error.response);
-          });
-      }).catch(function (error) {
-          //console.log(error.response);
+      var date = new Date();
+      var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
+      var tipo = $("#selected2").val();
+      if(tipo==="PERDIDA DEL RECURSO"){
+        dp={
+          "Estado": "PERDIDO",
+          "DevolucionuserId": usuario,
+          "Fecha_devolucion": fecha
+        }
+        axios.patch("/api/Prestamo/Detalle/" + idDetalle + "/", dp, {
+            headers: {"X-CSRFToken": token,
+            'Content-Type': 'application/json' }
+        }).then(function (response) {
+            // si es exitoso se le cambia el estado al recurso para que no este disponible a otro prestamo mientras esta en revision
+            var recurso = response.data.Recurso_detalle.Id_recurso
+            r={
+              "Estado_Recurso": "EN MANTENIMIENTO",
+            }
+            axios.patch("/api/recurso/" + recurso + "/", r, {
+                headers: {"X-CSRFToken": token,
+                'Content-Type': 'application/json' }
+            }).then(function (response) {
+                //console.log(response);
+            }).catch(function (error) {
+                //console.log(error.response);
+            });
+        }).catch(function (error) {
+            //console.log(error.response);
+        });
+
+      }else{
+        dp={
+          "Estado": "DEVUELTO",
+          "DevolucionuserId": usuario,
+          "Fecha_devolucion": fecha
+        }
+        axios.patch("/api/Prestamo/Detalle/" + idDetalle + "/", dp, {
+            headers: {"X-CSRFToken": token,
+            'Content-Type': 'application/json' }
+        }).then(function (response) {
+            // si es exitoso se le cambia el estado al recurso para que no este disponible a otro prestamo mientras esta en revision
+            var recurso = response.data.Recurso_detalle.Id_recurso
+            r={
+              "Estado_Recurso": "EN MANTENIMIENTO",
+            }
+            axios.patch("/api/recurso/" + recurso + "/", r, {
+                headers: {"X-CSRFToken": token,
+                'Content-Type': 'application/json' }
+            }).then(function (response) {
+                //console.log(response);
+            }).catch(function (error) {
+                //console.log(error.response);
+            });
       });
+    }
+
       var date = new Date();
       var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
       var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
@@ -261,28 +335,30 @@ var token = "{{ csrf_token }}"
           "descripcion": texto,
           "Estado": "EN REVISION",
           "Recurso": idRecurso,
-          "Prestamo": prestamo,
-          "Persona": persona
+          "Prestamo_detalle": idDetalle,
+          "Persona": persona,
+          "usuario": usuario,
+          "Tipo_Incidente":tipo
       };
       //console.log(datos)
       axios.post("/api/Recurso/Incidente/", datos, {
           headers: {"X-CSRFToken": token}
       }).then(function (response) {
-          //console.log(response);
+          console.log(response);
+          $('#exampleModalCenter').modal('hide');
+          var val = $("#selected").val("0");
+          var texto = $("#textarea").val("");
       }).catch(function (error) {
-        //  console.log(error);
+      //console.log(error);
       });
-      $('#exampleModalCenter').modal('hide');
-      var val = $("#selected").val("0");
-      var texto = $("#textarea").val("");
     }else{
-      // si existe la incidencia se le cambia el estado al detalle del prestamo
+      // si no existe la incidencia se le cambia el estado al detalle del prestamo
       var date = new Date();
       var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
       dp={
         "Estado": "DEVUELTO",
         "Fecha_devolucion": fecha,
-        "Usuario_devolucion": persona
+        "DevolucionuserId": usuario
       }
       axios.patch("/api/Prestamo/Detalle/" + idDetalle + "/", dp, {
           headers: {"X-CSRFToken": token,
@@ -298,7 +374,6 @@ var token = "{{ csrf_token }}"
     loadDetail()
     estadoPrestamo()
   }
-
   function LoadPrestamo(){
     var datos = {}
     // datos del prestamo
@@ -317,14 +392,23 @@ var token = "{{ csrf_token }}"
             $("#propersonap").text(datos.Persona.Programa_Academico.nombre.toUpperCase());
             $("#cargopersonap").text(datos.Persona.Tipo_Persona);
             if(datos.Persona.Incidentes.length == 0){
-                $("#incidenteper").text("NO");
+              $("#incidenteper").text("NO");
             }else{
               $("#incidenteper").text("SI");
+              $("#incidenteper").css({'color':'#F00'})
+              $("#cantincidentesp").css({'color':'#F00'})
+
             }
             $("#cantincidentesp").text(datos.Persona.Incidentes.length)
+
+            if(datos.Estado_prestamo=="EN CURSO"){
+              $("#estadop").css({'color':'#16ce00'})
+            }else{
+              $("#estadop").css({'color':'#F00'})
+            }
       })
       .catch(function (error) {
-        console.log(error);
+        //console.log(error);
       });
     }
 
@@ -335,16 +419,14 @@ var token = "{{ csrf_token }}"
       var datos = response.data;
       for(var key in datos.detailprestamo){
         //obtener el recurso y mostrar sus datos en la tabla
-          var usuario = " "
-          if(datos.detailprestamo[key].Estado ==="DEVUELTO"){
-              usuario = datos.detailprestamo[key].Usuario_devolucion
-            //console.log(usuario)
+
+          if(datos.detailprestamo[key].Estado !=="PRESTADO"){
               var row = '<tr class="row1" >' +
                      '<td class="field-Id_prestamo">' + datos.detailprestamo[key].Id_detalle+ "</td>"+
                     "<td>" + datos.detailprestamo[key].Recurso_detalle.Id_recurso + "</td>"+
                      "<td>" + datos.detailprestamo[key].Recurso_detalle.nombre_recurso  + "</td>"+
                      "<td>" + datos.detailprestamo[key].Estado + "</td>"+
-                     "<td>" + usuario +  "</td>"+
+                     "<td>" + datos.detailprestamo[key].Usuario_devolucion.get_full_name + "</td>"+
                      "</tr>";
                   $("#tabla").append(row);
           }else{
@@ -353,7 +435,7 @@ var token = "{{ csrf_token }}"
                 "<td>" + datos.detailprestamo[key].Recurso_detalle.Id_recurso + "</td>"+
                  "<td>" + datos.detailprestamo[key].Recurso_detalle.nombre_recurso  + "</td>"+
                  "<td>" + datos.detailprestamo[key].Estado + "</td>"+
-                 "<td>" + usuario+ "</td>"+
+                 "<td>" + "</td>"+
                  '<td> <i style="font-size:20px; display: flex;justify-content: center;" onclick="devolucion(' + datos.detailprestamo[key].Id_detalle+"," + datos.detailprestamo[key].Recurso_detalle.Id_recurso+ ')"  class="fa fa-chevron-circle-left devolver" aria-hidden="true"></i></td>'+
                  //'<td><button class="btn btn-warnig" onclick="modificar('+datos[key].Nombre+','+datos[key].Apellidos+','+datos[key].Edad+')">Modificar</button></td>'
                  "</tr>";
@@ -362,7 +444,7 @@ var token = "{{ csrf_token }}"
           }
         })
       .catch(function (error) {
-        console.log(error);
+        //console.log(error);
       });
     }
 
@@ -373,16 +455,15 @@ var token = "{{ csrf_token }}"
           var bandera = false;
           if(datos.Estado_prestamo !=="DEVUELTO"){
             for (detalles in datos.detailprestamo){
-              if(datos.detailprestamo[detalles].Estado !=="DEVUELTO"){
+              if(datos.detailprestamo[detalles].Estado =="PRESTADO"){
                 bandera = true;
                 break;
               }
             }
             if(bandera == true){
-              console.log("faltan recursos por devolver")
+              //console.log("faltan recursos por devolver")
             }else{
-              console.log("todos los recursos devueltos")
-
+              //console.log("todos los recursos devueltos")
               p={
                 "Estado_prestamo": "DEVUELTO",
               }
@@ -392,6 +473,7 @@ var token = "{{ csrf_token }}"
               }).then(function (response) {
                 //console.log(responde.data)
                 $("#estadop").text("DEVUELTO");
+                $("#estadop").css({'color':'#F00'})
               }).catch(function (error) {
               });
             }

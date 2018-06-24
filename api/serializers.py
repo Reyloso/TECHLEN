@@ -30,11 +30,14 @@ class IncidenteSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class DetallePrestamoSerializer(serializers.ModelSerializer):
+    Usuario_devolucion = UserSerializer(read_only=True)
+    DevolucionuserId = serializers.PrimaryKeyRelatedField(write_only=True, queryset=User.objects.all(), source='Usuario_devolucion')
     Recurso_detalle = RecursoSerializer(read_only=True)
     recursoid = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Recurso.objects.all(), source='Recurso_detalle')
+    Incidentes = IncidenteSerializer(many=True, read_only=True,source='incidente_set')
     class Meta:
         model = DetallePrestamo
-        fields = fields = ('Id_detalle','Fecha_prestamo', 'Estado','Fecha_devolucion','Prestamo','Usuario_devolucion','recursoid','Recurso_detalle')
+        fields = fields = ('Id_detalle','Fecha_prestamo', 'Estado','Fecha_devolucion','Prestamo','Usuario_devolucion','DevolucionuserId','recursoid','Recurso_detalle','Incidentes')
 
 class ProgramaSerializer(serializers.ModelSerializer):
     class Meta:

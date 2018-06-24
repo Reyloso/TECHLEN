@@ -33,7 +33,14 @@ class Persona (ImportExportModelAdmin):
 		self.fields = ('Nro_Tarjeta','Tipo_Documento','Nro_Documento','Estado_tarjeta')
 		return super(Persona, self).change_view(*args, **kwargs)
 
-	list_display = ['Nro_Tarjeta','Id_Persona','nombre_completo','Tipo_Documento','Nro_Documento','Correo_Institucional','Programa_Academico','Estado_tarjeta', 'Tipo_Persona']
+	def reporte_prestamos(self, instance):
+		return "<a href='/admin/Persona/Reporte/%s'> <i style='font-size:17px' class='fa fa-file-pdf-o' aria-hidden='true'></i>  </a>" % instance.Id_Persona
+
+	reporte_prestamos.short_description = "Reporte Persona"
+	reporte_prestamos.allow_tags = True
+	reporte_prestamos.is_column = True
+
+	list_display = ['Nro_Tarjeta','Id_Persona','nombre_completo','Tipo_Documento','Nro_Documento','Correo_Institucional','Programa_Academico','Estado_tarjeta', 'Tipo_Persona','reporte_prestamos']
 	list_filter = ['Programa_Academico','Estado_tarjeta','Ciclo_Lectivo']
 	search_fields = ('Nro_Tarjeta','Id_Persona','Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido','Tipo_Documento','Nro_Documento')
 	resource_class = PersonaResource

@@ -130,6 +130,7 @@
 <script>
 
 var usuario = {{user.id}}
+console.log(usuario)
 var detalleprestamo=[];
 function guardarPrestamo(){
 
@@ -157,10 +158,11 @@ function generarJSON(){
   for (i in recursos) {
     var recurso = recursos[i];
     //console.log(recurso)
+    var usuario = {{user.id}}
     var detalle = {
       "Fecha_prestamo": fecha,
   		"Estado": "PRESTADO",
-  		//"Usuario_devolucion": "",
+  		"DevolucionuserId": usuario,
   		"recursoid": recurso
   	}
     detalleprestamo.push(detalle)

@@ -5,21 +5,21 @@
         }
 
         #suit-nav{
-            background-color:#035A7B !important;
+            background-color:#39778e !important;
         }
 
 
         #suit-nav > ul > li > a {
 
-            border-left: 1px solid #035A7B !important;
+            border-left: 1px solid #39778e !important;
         }
 
         #suit-nav > ul > li > ul {
-             background-color:#035A7B !important;
+             background-color:#39778e !important;
 
         }
         #suit-nav > ul > li > ul > li > a {
-            border: 1px solid #035A7B !important;
+            border: 1px solid #39778e !important;
         }
 
         body.suit_layout_horizontal #suit-nav > ul > li.active a {

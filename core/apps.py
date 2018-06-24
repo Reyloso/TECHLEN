@@ -17,28 +17,34 @@ class SuitConfig(DjangoSuitConfig):
     # Define menu
     #: :type: list of suit.menu.ParentItem
     menu = (
-
-        ParentItem('Configuracion', children=[
-            ChildItem(model='configuracion.programa'),
-            ChildItem(model='configuracion.cargo'),
-            ChildItem(model='configuracion.dependencia'),
+        ParentItem('Prestamos', children=[
+            ChildItem(model='prestamos.prestamo'),
+            ChildItem('Prestar ', url='/admin/Prestamo/Prestar/'),
+            #ChildItem(model='prestamos.detalleprestamo'),
         ]),
         ParentItem('Personas', children=[
             ChildItem(model='personas.personas'),
         ]),
-        ParentItem('Prestamos', children=[
-            ChildItem(model='prestamos.prestamo'),
-            ChildItem(model='prestamos.incidente'),
-            ChildItem('Prestar ', url='/admin/Prestamo/Prestar/'),
-            ChildItem(model='prestamos.detalleprestamo'),
-        ]),
         ParentItem('Recursos', children=[
+            ChildItem(model='recursos.marca'),
+            ChildItem(model='recursos.tipo_recurso'),
+            ChildItem(model='recursos.recurso'),
+        ]),
+        ParentItem('Incidentes', children=[
+            ChildItem(model='prestamos.incidente'),
+        ]),
+        ParentItem('Reportes', children=[
             ChildItem(model='recursos.recurso'),
             ChildItem(model='recursos.tipo_recurso'),
         ]),
         ParentItem('Gestion de usuario', children=[
             ChildItem(model='auth.user'),
             ChildItem(model='auth.group')
+        ]),
+        ParentItem('Configuracion', children=[
+            ChildItem(model='configuracion.programa'),
+            ChildItem(model='configuracion.cargo'),
+            ChildItem(model='configuracion.dependencia'),
         ]),
 
     )

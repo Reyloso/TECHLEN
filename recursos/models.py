@@ -1,3 +1,4 @@
+# coding=utf-8
 from __future__ import unicode_literals
 
 from django.db import models
@@ -28,7 +29,8 @@ class Recurso(models.Model):
     ESTADO = (
         ('ACTIVO', 'ACTIVO'),
         ('EN MANTENIMIENTO', 'EN MANTENIMIENTO'),
-        ('DADO DE BAJA', 'DADO DE BAJA'),
+        ('DADO DE BAJA POR PERDIDA', 'DADO DE BAJA POR PERDIDA'),
+        ('DADO DE BAJA POR DAÑO TOTAL', 'DADO DE BAJA POR DAÑO TOTAL'),
     )
     class Meta:
         verbose_name_plural = "Recursos"
@@ -37,8 +39,9 @@ class Recurso(models.Model):
     tipo_de_recurso = models.ForeignKey(Tipo_Recurso, null=True)
     Marca = models.ForeignKey(Marca, null=True)
     nombre_recurso = models.CharField(max_length=100, null=True)
+    Numero_Serie = models.CharField(max_length=100, null=True,blank=True)
     referencia = models.CharField(max_length=100)
-    Estado_Recurso = models.CharField(max_length=20, choices=ESTADO,default="ACTIVO")
+    Estado_Recurso = models.CharField(max_length=40, choices=ESTADO,default="ACTIVO")
     fecha_registro = models.DateField(default=now)
 
     def __unicode__(self):
