@@ -17,9 +17,13 @@ from django.conf.urls import include,url
 from django.contrib import admin
 from api import views
 from core import views
+from core.views import handler404, handler404
 
+handler404 = handler404
+handler500 = handler404
 urlpatterns = [
     #url(r'^$', include('core.urls')),
+
     url(r'^$',  views.inicio, name='inicio'),
     url(r'^admin/', admin.site.urls),
     url(r'^admin/Prestamo/Prestar/',  views.prestamo_prestar, name='prestamo-prestar'),

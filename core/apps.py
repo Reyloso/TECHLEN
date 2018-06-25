@@ -26,9 +26,10 @@ class SuitConfig(DjangoSuitConfig):
             ChildItem(model='personas.personas'),
         ]),
         ParentItem('Recursos', children=[
+            ChildItem(model='recursos.recurso'),
             ChildItem(model='recursos.marca'),
             ChildItem(model='recursos.tipo_recurso'),
-            ChildItem(model='recursos.recurso'),
+
         ]),
         ParentItem('Incidentes', children=[
             ChildItem(model='prestamos.incidente'),
@@ -37,7 +38,7 @@ class SuitConfig(DjangoSuitConfig):
             ChildItem(model='recursos.recurso'),
             ChildItem(model='recursos.tipo_recurso'),
         ]),
-        ParentItem('Gestion de usuario', children=[
+        ParentItem('Gestion de usuarios', children=[
             ChildItem(model='auth.user'),
             ChildItem(model='auth.group')
         ]),

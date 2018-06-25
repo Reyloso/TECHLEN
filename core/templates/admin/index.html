@@ -43,11 +43,23 @@
 {% block content %}
 {% if request.user.is_superuser %}
 <div  class="col-md-12 config-col">
+
+</di>
+<div  class="col-md-12 config-col">
 <ul class="nav nav-tabs" id="configTab"><br>
 </ul>
 <div class="panel panel-default">
   <div style="text-align:center" class="panel-body">
-    <div class=" main">
+    <br>
+      <h3 style="color:gray; font-size:20px;">Bienvenido la plataforma del area de TIC de la Universidad Cooperativa de Colombia</h3>
+    <br>
+    <div class="main">
+      <a href="/admin/Prestamo/Prestar/" class="main-item">
+        <img src="{% static '/assets/images/prestar.svg' %}" alt="" style="width:100px;">
+        <p>
+          Prestar <br> Recursos
+        </p>
+      </a>
       <a href="/admin/personas/personas/" class=" main-item">
         <img src="{% static '/assets/images/listar.svg' %}" alt="" style="width:100px;">
         <p>
@@ -60,14 +72,13 @@
           Gestion de <br> Recursos
         </p>
       </a>
-      <a href="/admin/Prestamo/Prestar/" class="main-item">
-        <img src="{% static '/assets/images/prestar.svg' %}" alt="" style="width:100px;">
-        <p>
-          Prestar <br> Recursos
-      </div>
+      <a href="/admin/prestamos/incidente/" class="main-item">
+          <img src="{% static '/assets/images/incidentes.svg' %}" alt="" style="width:100px;">
+      <p>
+        Lista De <br> Incidentes
+      </p>
     </a>
-    <br>
-
+    </div>
   </div>
 </div>
 </div>
@@ -82,15 +93,13 @@
     <h3 style="color:gray; font-size:20px;">Bienvenido la plataforma del area de TIC de la Universidad Cooperativa de Colombia</h3>
     <br>
     <div class=" main">
-        </div>
         <a href="/admin/Prestamo/Prestar/" class="main-item">
           <img src="{% static '/assets/images/prestar.svg' %}" alt="" style="width:100px;">
           <p>
             Prestar <br> Recursos
         </div>
       </a>
-    <br>
-
+  </div>
   </div>
 </div>
 </div>
