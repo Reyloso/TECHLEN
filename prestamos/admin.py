@@ -25,6 +25,13 @@ class Prestamos (admin.ModelAdmin):
     Devolucion.allow_tags = True
     Devolucion.is_column = True
 
+    def Reporte_Prestamo(self, instance):
+
+        return "<a href='/admin/Prestamo/Reporte/%s'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-file-pdf-o' aria-hidden='true'></i>  </a>" % instance.Id_prestamo
+    Reporte_Prestamo.short_description = "Reporte Prestamo"
+    Reporte_Prestamo.allow_tags = True
+    Reporte_Prestamo.is_column = True
+
     def add_view(self, *args, **kwargs):
         self.fields = ('Usuario_Prestatario','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo','Fecha_devolucion','Hora_devolucion',)
         return super(Prestamos, self).add_view(*args, **kwargs)
@@ -33,7 +40,7 @@ class Prestamos (admin.ModelAdmin):
         self.fields = ('Estado_prestamo',)
         return super(Prestamos, self).change_view(*args, **kwargs)
 
-    list_display = ['Id_prestamo','Usuario_Prestatario','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo', 'Devolucion' ]
+    list_display = ['Id_prestamo','Usuario_Prestatario','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo','Reporte_Prestamo', 'Devolucion' ]
     search_fields = ('Id_prestamo','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo')
     list_filter = ('Estado_prestamo','Usuario_Prestatario__username')
 

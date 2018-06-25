@@ -33,7 +33,6 @@ class UserViewSet(APIView):
         user_request = request.user
         usuario = User.objects.get(id=user_request.id)
         serializer = UserSerializer(usuario)
-        print serializer
         return Response(serializer.data)
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):

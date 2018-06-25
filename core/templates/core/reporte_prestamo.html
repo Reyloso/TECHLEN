@@ -35,15 +35,15 @@
         <div style="display: inline-block; margin-left: 15px">
           <h3 style="font-size:25px;"> {{r.nombre_recurso}}</h3>
           <p>
-           <b>ID: </b>{{r.Id_recurso}} <br />
-            <b>TIPO: </b> {{r.tipo_de_recurso}} <br />
-            <b>MARCA: </b> {{r.Marca}} <br />
-            <b>N° DE SERIE: </b> {% if r.Numero_Serie != none %} {{r.Numero_Serie}} {% else %} {% endif %}<br />
-            <b>ESTADO: </b> {{r.Estado_Recurso}} <br />
-            <b>FECHA REGISTRO: </b>{{r.fecha_registro}} <br />
+           <b>ID PRESTAMO: </b>{{r.Id_prestamo}} <br />
+            <b>PERSONA: </b> {{r.Persona.nombre_completo}} <br />
+            <b>FECHA: </b> {{r.Fecha_prestamo}}  <br />
+            <b>HORA: </b> {{r.Hora_prestamo}}<br />
+            <b>ESTADO: </b> {{r.Estado_prestamo}} <br />
+            <b> USUARIO PRESTAMISTA: </b>{{r.Usuario_Prestatario.get_full_name}} <br />
           </p>
         </div>
-      <h3 style="display: inline-block; float: right"><i class="fa fa-certificate" aria-hidden="true"></i> Reporte De Recurso - TI
+      <h3 style="display: inline-block; float: right"><i class="fa fa-certificate" aria-hidden="true"></i> Reporte De Prestamo - TI
         <br>
         <small>MONTERIA-CORDOBA </small>
           <br>
@@ -61,14 +61,15 @@
 
 </p>
     <table class="table table-striped table-hover table-bordered">
-      <strong><i class="fa fa-list-alt" aria-hidden="true"></i> Detalle & Consolidado Prestamos:</strong>
+      <strong><i class="fa fa-list-alt" aria-hidden="true"></i> Detalle & Consolidado Prestamo:</strong>
   <thead class="thead-inverse">
     <tr>
-      <th>Prestamo</th>
-      <th>Persona Prestamo</th>
-      <th>Usuario Prestamo</th>
-      <th>Estado Prestamo</th>
+      <th>ID Detalle</th>
+      <th>Recurso </th>
       <th>Fecha Prestamo</th>
+      <th>Estado Prestamo</th>
+      <th>Fecha Devolucion</th>
+      <th>Usuario Devolucion</th>
       <th>Incidente</th>
     </tr>
   </thead >
@@ -85,7 +86,8 @@
     <table class="table table-striped table-hover table-bordered">
   <thead class="thead-inverse">
     <tr>
-      <th>ID Prestamo</th>
+      <th>ID Detalle</th>
+      <th>ID Incidente</th>
       <th>Recurso</th>
       <th>Fecha Incidente</th>
       <th>Tipo Incidente</th>
@@ -96,77 +98,66 @@
   <tbody id="detalleinci">
 
 
-
   </tbody>
 </table>
 
   <div>
     <a onclick="imprimir()" style="color: white;"  class="btn btn-success"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> IMPRIMIR </a>
-    <a href="/admin/recursos/recurso/" class="btn btn-success"><i class="" aria-hidden="true"></i> ATRAS </a>
+    <a href="/admin/prestamos/prestamo/" class="btn btn-success"><i class="" aria-hidden="true"></i> ATRAS </a>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
-  var recurso = {{r.Id_recurso}}
-
+  var prestamo = "{{r.Id_prestamo}}"
+  //console.log(prestamo)
   function imprimir(){
     window.print()
   }
 
-  axios.get('/api/recurso/'+ recurso)
+  axios.get('/api/Prestamo/' + prestamo)
     .then(function (response) {
       var datos = response.data;
       //console.log(datos)
-    })
-    .catch(function (error) {
-      //console.log(error);
-    });
-
-  axios.get('/api/Prestamo/')
-    .then(function (response) {
-      var datos = response.data;
-      var contador = 0;
       var totalprest = 0;
       var cantincidente = 0;
-      for (key in datos){
-        for(i in datos[key].detailprestamo){
-          if(datos[key].detailprestamo[i].Recurso_detalle.Id_recurso==recurso){
-            if(datos[key].detailprestamo[i].Incidentes.length !== 0){
+        for(i in datos.detailprestamo){
+            if(datos.detailprestamo[i].Incidentes.length !== 0){
               incidente ="SI";
             }else{
               incidente ="NO";
             }
             totalprest=totalprest+1;
             var row = '<tr class="row1" >' +
-                   '<td class="field-Id_prestamo">' + datos[key].Id_prestamo+ "</td>"+
-                  "<td>" + datos[key].Persona.Primer_Nombre + " " +datos[key].Persona.Primer_Apellido+" "+datos[key].Persona.Segundo_Apellido +"</td>"+
-                  "<td>" + datos[key].Usuario_Prestatario.get_full_name  + "</td>"+
-                   "<td>" + datos[key].detailprestamo[i].Estado  + "</td>"+
-                  "<td>" +  datos[key].Fecha_prestamo + "</td>"+
+                   '<td class="field-Id_prestamo">' + datos.detailprestamo[i].Id_detalle+ "</td>"+
+                   "<td>" +  datos.detailprestamo[i].Recurso_detalle.nombre_recurso  + "</td>"+
+                  "<td>" + datos.detailprestamo[i].Fecha_prestamo  + "</td>"+
+                   "<td>" + datos.detailprestamo[i].Estado  + "</td>"+
+                  "<td>" +  datos.detailprestamo[i].Fecha_devolucion + "</td>"+
+                  "<td>" +  datos.detailprestamo[i].Usuario_devolucion.get_full_name + "</td>"+
                    "<td>" + incidente + "</td>"+
                    "</tr>";
             $("#detallep").append(row);
 
-            if(datos[key].detailprestamo[i].Incidentes.length !== 0){
+            if(datos.detailprestamo[i].Incidentes.length !== 0){
               cantincidente = cantincidente + 1;
-              for(j in datos[key].detailprestamo[i].Incidentes){
+              for(j in datos.detailprestamo[i].Incidentes){
                 var row = '<tr class="row1" >' +
-                '<td class="field-Id_prestamo">' + datos[key].Id_prestamo+ "</td>"+
-                "<td>" + datos[key].detailprestamo[i].Recurso_detalle.nombre_recurso + "</td>"+
-                "<td>" + datos[key].detailprestamo[i].Incidentes[j].Fecha_Incidente + "</td>"+
-                "<td>" + datos[key].detailprestamo[i].Incidentes[j].Tipo_Incidente + "</td>"+
-                "<td>" + datos[key].detailprestamo[i].Incidentes[j].Estado + "</td>"+
-                "<td>" + datos[key].detailprestamo[i].Incidentes[j].descripcion + "</td>"+
+                '<td class="field-Id_prestamo">' + datos.detailprestamo[i].Id_detalle+ "</td>"+
+                "<td>" + datos.detailprestamo[i].Incidentes[j].Id_Incidente + "</td>"+
+                "<td>" + datos.detailprestamo[i].Recurso_detalle.nombre_recurso + "</td>"+
+                "<td>" + datos.detailprestamo[i].Incidentes[j].Fecha_Incidente + "</td>"+
+                "<td>" + datos.detailprestamo[i].Incidentes[j].Tipo_Incidente + "</td>"+
+                "<td>" + datos.detailprestamo[i].Incidentes[j].Estado + "</td>"+
+                "<td>" + datos.detailprestamo[i].Incidentes[j].descripcion + "</td>"+
                 "</tr>";
                 $("#detalleinci").append(row);
               }
             }
-          }
         }
-      }
       var total = '<tr class="table-info">'+
-          "<td><strong>Total Prestamos: " + totalprest+"</strong></td>"+
+          "<td><strong>Total Recursos: " + totalprest+"</strong></td>"+
+          "<td> </td>"+
           "<td> </td>"+
           "<td> </td>"+
           "<td> </td>"+
@@ -177,6 +168,7 @@
 
         var total2 = '<tr class="table-info">'+
             "<td><strong>Total Incidentes: " + cantincidente +"</strong></td>"+
+            "<td> </td>"+
             "<td> </td>"+
             "<td> </td>"+
             "<td> </td>"+

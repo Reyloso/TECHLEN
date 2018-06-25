@@ -69,7 +69,6 @@ class PrestamoSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         detalleprestamo_data = validated_data.pop('detalleprestamo')
         prestamo = Prestamo.objects.create(**validated_data)
-        print detalleprestamo_data
         for Detalle_data in detalleprestamo_data:
             DetallePrestamo.objects.create(Prestamo=prestamo,**Detalle_data)
         return prestamo
