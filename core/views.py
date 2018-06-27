@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from recursos.models import Recurso
 from django.contrib import admin
-from prestamos.models import Prestamo
+from prestamos.models import Prestamo, Incidente
 from personas.models import Personas
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -59,6 +59,7 @@ def prestamo_reporte(request,Id_prestamo):
     })
     return  render(request,'core/reporte_prestamo.html',context)
 
+@login_required
 def recurso_reporte(request,Id_recurso):
     r = get_object_or_404(Recurso,Id_recurso=Id_recurso)
     context = admin.site.each_context(request)
@@ -66,6 +67,15 @@ def recurso_reporte(request,Id_recurso):
         'r': r,
     })
     return  render(request,'core/reporte_recurso.html',context)
+
+@login_required
+def incidente_reporte(request,Id_Incidente):
+    r = get_object_or_404(Incidente,Id_Incidente=Id_Incidente)
+    context = admin.site.each_context(request)
+    context.update({
+        'r': r,
+    })
+    return  render(request,'core/Reporte_Incidente.html',context)
 
 def handler404(request):
     return render(request, 'admin/404.html', status=404)

@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^admin/Persona/Reporte/(?P<Id_Persona>[\w\-]+)$',  views.persona_reporte, name='Persona-Reporte'),
     url(r'^admin/Recurso/Reporte/(?P<Id_recurso>[\w\-]+)$',  views.recurso_reporte, name='Recurso-Reporte'),
     url(r'^admin/Prestamo/Reporte/(?P<Id_prestamo>[\w\-]+)$',  views.prestamo_reporte, name='Prestamo-Reporte'),
+    url(r'^admin/Incidente/Reporte/(?P<Id_Incidente>[\w\-]+)$',  views.incidente_reporte, name='Incidente-Reporte'),
     url(r'', include('api.urls')),
 
 ]

@@ -41,8 +41,8 @@ class Persona (ImportExportModelAdmin):
 	reporte_prestamos.is_column = True
 
 	list_display = ['Nro_Tarjeta','Id_Persona','nombre_completo','Tipo_Documento','Nro_Documento','Correo_Institucional','Programa_Academico','Estado_tarjeta', 'Tipo_Persona','reporte_prestamos']
-	list_filter = ['Programa_Academico','Estado_tarjeta','Ciclo_Lectivo']
-	search_fields = ('Nro_Tarjeta','Id_Persona','Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido','Tipo_Documento','Nro_Documento')
+	list_filter = ['Programa_Academico','Estado_tarjeta','Tipo_Persona']
+	search_fields = ('Nro_Tarjeta','Id_Persona','Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido','Tipo_Documento','Nro_Documento','Tipo_Persona')
 	resource_class = PersonaResource
 	class Meta:
 		model = Personas

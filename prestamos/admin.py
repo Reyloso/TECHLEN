@@ -41,18 +41,30 @@ class Prestamos (admin.ModelAdmin):
         return super(Prestamos, self).change_view(*args, **kwargs)
 
     list_display = ['Id_prestamo','Usuario_Prestatario','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo','Reporte_Prestamo', 'Devolucion' ]
-    search_fields = ('Id_prestamo','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo')
+    search_fields = ('Id_prestamo','Estado_prestamo','Usuario_Prestatario__username','Persona__Primer_Apellido','Persona__Primer_Nombre','Persona__Segundo_Apellido','Persona__Nro_Tarjeta',)
     list_filter = ('Estado_prestamo','Usuario_Prestatario__username')
 
     class Meta:
 		model = Prestamo
 
 class Incidentes (admin.ModelAdmin):
+    def change_view(self, *args, **kwargs):
+        self.fields = ('descripcion',)
+        return super(Incidentes, self).change_view(*args, **kwargs)
+
     def has_add_permission(self, request):
         return False
 
-    list_display = ['Id_Incidente','Prestamo_detalle','Tipo_Incidente','Fecha_Incidente','Recurso','Estado','usuario']
-    list_filter = ('Estado',)
+    def Reporte_Incidente(self, instance):
+
+        return "<a href='/admin/Incidente/Reporte/%s'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-file-pdf-o' aria-hidden='true'></i>  </a>" % instance.Id_Incidente
+    Reporte_Incidente.short_description = "Reporte Incidente"
+    Reporte_Incidente.allow_tags = True
+    Reporte_Incidente.is_column = True
+
+    list_display = ['Id_Incidente','usuario','Persona','Recurso','Tipo_Incidente','Estado','Fecha_Incidente','Reporte_Incidente']
+    search_fields = ('Estado','Tipo_Incidente','Persona__Primer_Apellido','Persona__Primer_Nombre','Persona__Segundo_Apellido','Persona__Nro_Tarjeta','usuario__username','Recurso__Id_recurso')
+    list_filter = ('Estado','Tipo_Incidente',)
     class Meta:
         model = Incidente
 

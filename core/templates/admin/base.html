@@ -6,7 +6,25 @@
 {% block extrastyle %}
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
     <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+    <link rel="apple-touch-icon" sizes="57x57" href="{% static '/assets/images/apple-icon-57x57.png' %}">
+<link rel="apple-touch-icon" sizes="60x60" href="{% static '/assets/images/apple-icon-60x60.png' %}">
+<link rel="apple-touch-icon" sizes="72x72" href="{% static '/assets/images/apple-icon-72x72.png' %}">
+<link rel="apple-touch-icon" sizes="76x76" href="{% static '/assets/images/apple-icon-76x76.png' %}">
+<link rel="apple-touch-icon" sizes="114x114" href="{% static '/assets/images/apple-icon-114x114.png' %}">
+<link rel="apple-touch-icon" sizes="120x120" href="{% static '/assets/images/apple-icon-120x120.png' %}">
+<link rel="apple-touch-icon" sizes="144x144" href="{% static '/assets/images/apple-icon-144x144.png' %}">
+<link rel="apple-touch-icon" sizes="152x152" href="{% static '/assets/images/apple-icon-152x152.png' %}">
+<link rel="apple-touch-icon" sizes="180x180" href="{% static '/assets/images/apple-icon-180x180.png' %}">
+<link rel="icon" type="image/png" sizes="192x192"  href="{% static '/assets/images/android-icon-192x192.png' %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static '/assets/images/favicon-32x32.png' %}">
+<link rel="icon" type="image/png" sizes="96x96" href="{% static '/assets/images/favicon-96x96.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static '/assets/images/favicon-16x16.png' %}">
+<link rel="manifest" href="{% static '/assets/images/manifest.json' %}">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="{% static '/assets/images/ms-icon-144x144.png' %}">
+<meta name="theme-color" content="#ffffff">
     <link  href="{% static '/assets/css/header.css' %}"
+
 {% endblock %}
 
 {% block bodyclass %}{{ block.super|suit_body_class:request }}{% endblock %}
@@ -17,7 +35,7 @@
     <h1 id="site-name">
       <a href="/admin" class="logo"><img style='width:70px' src="{% static 'assets/images/logo2.png' %}" alt=""></a>
         <a href="/">
-                <p style="margin-top: 15px; margin-bottom:5px" > TECHLEN</p>
+                <p style="margin-top: 15px; margin-bottom:5px" >TECHLEN </p>
                 <span style="float: left; color: #90A4AE;" class="header-label">Sede Monteria</span></a>
     </h1>
 {% endblock %}

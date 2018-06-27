@@ -50,10 +50,10 @@ class Personas(models.Model):
     #Dependencias = models.ForeignKey(Dependencia,blank=True, null=True)
 
     def nombre_completo(self):
-        return self.Primer_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido
+        return unicode(self.Primer_Nombre + " " + self.Primer_Apellido + " " + self.Segundo_Apellido)
 
     class Meta:
         verbose_name_plural = "Personas"
 
     def __unicode__(self):
-        return unicode(str(self.Primer_Nombre)+ " "+ str(self.Primer_Apellido))
+        return unicode(str(self.Primer_Nombre)+ " "+ str(self.Primer_Apellido)+" "+str(self.Segundo_Apellido))

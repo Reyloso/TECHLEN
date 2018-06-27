@@ -29,6 +29,7 @@ class Recursos (admin.ModelAdmin):
         # Devolver.allow_tags = True
         # Devolver.is_column = True
         list_filter = ('Estado_Recurso','tipo_de_recurso','Marca')
+        search_fields = ('Id_recurso','Estado_Recurso','nombre_recurso','Numero_Serie','tipo_de_recurso__tipo_recurso','Marca__Marca','referencia')
         list_display = ['Id_recurso','Numero_Serie','tipo_de_recurso','Marca','nombre_recurso','referencia','Estado_Recurso','fecha_registro','codigo_barras','Reporte_Recurso']
         class Meta:
 		          model = Recurso
