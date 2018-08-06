@@ -178,9 +178,9 @@ $( document ).ready(function() {
   var bandera = false;
   var dbRecursos = [];
   var idDetalle = "";
-  var prestamo = {{ r.Id_prestamo }}
-  var persona = {{r.Persona.Id_Persona}}
-  var usuario = {{user.id}}
+  var prestamo = "{{ r.Id_prestamo }}"
+  var persona = "{{r.Persona.Id_Persona}}"
+  var usuario = "{{user.id}}"
   var token = "{{ csrf_token }}"
   var filasMostrar = "";
   var idRecurso="";
@@ -257,7 +257,7 @@ var token = "{{ csrf_token }}"
     if(val == "Si") {
       // si existe la incidencia se le cambia el estado al detalle del prestamo
       var date = new Date();
-      var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
+      var fecha  = date.getFullYear() +"-"+ (date.getMonth()+1)+ "-" + date.getDate();
       var tipo = $("#selected2").val();
       if(tipo==="PERDIDA DEL RECURSO"){
         dp={
@@ -313,7 +313,7 @@ var token = "{{ csrf_token }}"
     }
 
       var date = new Date();
-      var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
+      var fecha  = date.getFullYear() +"-"+ (date.getMonth()+1) + "-" + date.getDate();
       var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
       var texto = $("#textarea").val()
       var datos = {
@@ -330,7 +330,7 @@ var token = "{{ csrf_token }}"
       axios.post("/api/Recurso/Incidente/", datos, {
           headers: {"X-CSRFToken": token}
       }).then(function (response) {
-          console.log(response);
+          //console.log(response);
           $('#exampleModalCenter').modal('hide');
           var val = $("#selected").val("0");
           var texto = $("#textarea").val("");
@@ -340,7 +340,7 @@ var token = "{{ csrf_token }}"
     }else{
       // si no existe la incidencia se le cambia el estado al detalle del prestamo
       var date = new Date();
-      var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
+      var fecha  = date.getFullYear() +"-"+ (date.getMonth()+1) + "-" + date.getDate();
       dp={
         "Estado": "DEVUELTO",
         "Fecha_devolucion": fecha,
@@ -367,12 +367,17 @@ var token = "{{ csrf_token }}"
       .then(function (response) {
           var datos = response.data;
           var f = new Date();
-          fecha = f.getFullYear() + "-" + "0"+(f.getMonth()) + "-" +f.getDate()
+          fecha = f.getFullYear() + "-" + "0"+(f.getMonth()+1) + "-" +"0"+f.getDate()
 
             if(datos.Fecha_prestamo==fecha && datos.Estado_prestamo !=="DEVUELTO"){
-              console.log(" si es la misma fecha")
+              // console.log(" si es la misma fecha")
+              // console.log(fecha)
+              // console.log(datos.Fecha_prestamo)
               $('#addrecurso').show();
             }else{
+              // console.log("no es la misma fecha")
+              // console.log(fecha)
+              // console.log(datos.Fecha_prestamo)
               $('#addrecurso').hide();
             }
             var nombre = datos.Persona.Primer_Nombre + " " +datos.Persona.Primer_Apellido + " " +datos.Persona.Segundo_Apellido
@@ -511,7 +516,7 @@ var token = "{{ csrf_token }}"
                         }
                         if(recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == false && bandera == false ){
                           var date =  new Date();
-                          var fecha  = date.getFullYear() +"-"+ date.getMonth() + "-" + date.getDate();
+                          var fecha  = date.getFullYear() +"-"+ (date.getMonth()+1) + "-" + date.getDate();
                           datos = {
                             "Prestamo": prestamo,
                             "Fecha_prestamo": fecha,
@@ -528,7 +533,7 @@ var token = "{{ csrf_token }}"
                               loadDetail()
                             })
                             .catch(function (error) {
-                              console.log(error);
+                              // console.log(error);
                             });
 
                         }else if (recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == true){
@@ -556,7 +561,7 @@ var token = "{{ csrf_token }}"
             switch (t) {
                 case 1: //
                     $(".mensaje-alerta").empty();
-                    console.log("prestamo guardado!!")
+                    // console.log("prestamo guardado!!")
                     dbRecursos=[]
                     break;
                 case 2: //

@@ -25,11 +25,11 @@ class Prestamo(models.Model):
     Hora_prestamo = models.TimeField(default=now)
     Fecha_devolucion = models.DateField(blank=True, null=True)
     Hora_devolucion = models.TimeField(blank=True, null=True)
-
-    def get_recurso(self):
-       return ",".join([r.nombre_recurso for r in self.recurso.all()])
-    get_recurso.short_description = 'recurso'
-    get_recurso.allow_tags = True
+    #
+    # def get_recurso(self):
+    #    return ",".join([r.nombre_recurso for r in self.recurso.all()])
+    # get_recurso.short_description = 'recurso'
+    # get_recurso.allow_tags = True
 
     def __unicode__(self):
         return unicode(str(self.Id_prestamo))

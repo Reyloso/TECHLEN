@@ -135,3 +135,20 @@ class DetallePrestamoList(viewsets.ModelViewSet):
 class DetallePrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = DetallePrestamo.objects.all()
     serializer_class = DetallePrestamoSerializer
+
+
+class TipoRecursoList(generics.ListCreateAPIView):
+    queryset = Tipo_Recurso.objects.all()
+    serializer_class = Tipo_RecursoSerializer
+
+class DetallePrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Tipo_Recurso.objects.all()
+    serializer_class = Tipo_RecursoSerializer
+
+class MarcaList(generics.ListCreateAPIView):
+    queryset = Marca.objects.all()
+    serializer_class = MarcaSerializer
+
+class MarcaDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Marca.objects.all()
+    serializer_class = MarcaSerializer

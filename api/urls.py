@@ -64,6 +64,8 @@ urlpatterns = [
     url(r'^api/Prestamo/(?P<pk>\d+)/devolucion/$', Detalle_prestamo),
     url(r'^api/Recurso/Incidente/$', views.IncidenteList.as_view()),
     url(r'^api/Recurso/Incidente/(?P<pk>\d+)/$', views.IncidenteDetail.as_view()),
+    url(r'^api/Recurso/Tipo/$', views.TipoRecursoList.as_view()),
+    url(r'^api/Recurso/Marca/$', views.MarcaList.as_view()),
     url(r'^api/programa/$', views.ProgramaList.as_view()),
     url(r'^api/programa/(?P<pk>\d+)/$', views.ProgramaDetail.as_view()),
     url(r'^api/recurso/$', views.RecursoList.as_view()),

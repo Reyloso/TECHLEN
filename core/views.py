@@ -77,6 +77,11 @@ def incidente_reporte(request,Id_Incidente):
     })
     return  render(request,'core/Reporte_Incidente.html',context)
 
+@login_required
+def reporte(request):
+    context = admin.site.each_context(request)
+    return  render(request,'core/Reporte.html',context)
+
 def handler404(request):
     return render(request, 'admin/404.html', status=404)
 

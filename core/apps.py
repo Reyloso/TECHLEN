@@ -35,8 +35,7 @@ class SuitConfig(DjangoSuitConfig):
             ChildItem(model='prestamos.incidente'),
         ]),
         ParentItem('Reportes', children=[
-            ChildItem(model='recursos.recurso'),
-            ChildItem(model='recursos.tipo_recurso'),
+            ChildItem('Reporte ', url='/admin/Reporte/'),
         ]),
         ParentItem('Gestion de usuarios', children=[
             ChildItem(model='auth.user'),

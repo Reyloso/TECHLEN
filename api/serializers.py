@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from rest_framework import serializers
 from configuracion.models import Programa
-from recursos.models import Tipo_Recurso, Recurso
+from recursos.models import Tipo_Recurso, Recurso, Marca
 from personas.models import Personas
 from prestamos.models import Prestamo, Incidente, DetallePrestamo
 from django.contrib.auth.models import User
@@ -16,6 +16,11 @@ class UserSerializer(serializers.ModelSerializer):
 class Tipo_RecursoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tipo_Recurso
+        fields = "__all__"
+
+class MarcaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Marca
         fields = "__all__"
 
 class RecursoSerializer(serializers.ModelSerializer):
