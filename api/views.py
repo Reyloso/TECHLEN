@@ -38,8 +38,17 @@ class UserViewSet(APIView):
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-#vistas de estudiantes o adminstrativos
 
+# vista para el tipo de persona
+class TipoPersonaList(generics.ListCreateAPIView):
+    queryset = TipoPersona.objects.all()
+    serializer_class = TipoPersonaSerializer
+
+class TipoPersonaDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = TipoPersona.objects.all()
+    serializer_class = TipoPersonaSerializer
+
+#vistas de estudiantes, Profesores o adminstrativos
 @action(methods=['post'], detail=True)
 class PersonasList(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
@@ -67,7 +76,7 @@ class PrestamoList(viewsets.ModelViewSet):
     queryset = Prestamo.objects.all()
     serializer_class = PrestamoSerializer
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('Estado_prestamo',)
+    filter_fields = ('Estado_prestamo','Persona','Fecha_prestamo','Fecha_devolucion',)
 
     @detail_route(methods=['post'])
     def set_detalleprestamo(self, request, pk=None):
@@ -82,6 +91,7 @@ class PrestamoList(viewsets.ModelViewSet):
 class PrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Prestamo.objects.all()
     serializer_class = PrestamoSerializer
+
 
 #vistas de los Incidentes
 @action(methods=['post'], detail=True)
@@ -121,6 +131,8 @@ class DetallePrestamoList(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     queryset = DetallePrestamo.objects.all()
     serializer_class = DetallePrestamoSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('Recurso_detalle',)
 
     @detail_route(methods=['post'])
     def set_incidente(self, request, pk=None):

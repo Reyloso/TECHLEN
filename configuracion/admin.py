@@ -1,26 +1,25 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from django.contrib import admin
 from .models import *
+from import_export.admin import ImportExportModelAdmin
+from import_export import resources
 
 # Register your models here.
-class Programas (admin.ModelAdmin):
+class ProgramasResource(resources.ModelResource):
+
+    class Meta:
+        import_id_fields = ('cod',)
+        model = Programa
+        export_order = ('nombre','cod')
+        fields =  ('cod','nombre')
+
+class Programas (ImportExportModelAdmin):
     list_display = ['cod','nombre']
-    list_filter = ['nombre','cod' ]
+    list_filter = ['nombre']
     search_fields = ('nombre','cod')
+    resource_class = ProgramasResource
     class Meta:
 		model = Programa
-class Cargos (admin.ModelAdmin):
-    list_display = ['cod','Cargo']
-    list_filter = ['Cargo','cod' ]
-    search_fields = ('Cargo','cod')
-    class Meta:
-		model = Cargo
-class Dependencias (admin.ModelAdmin):
-    list_display = ['cod','Dependencia']
-    list_filter = ['Dependencia','cod' ]
-    search_fields = ('Dependencia','cod')
-    class Meta:
-		model = Dependencia
 
 admin.site.register(Programa,Programas),
-admin.site.register(Cargo, Cargos),
-admin.site.register(Dependencia, Dependencias)

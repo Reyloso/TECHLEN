@@ -179,7 +179,7 @@ $( document ).ready(function() {
   var dbRecursos = [];
   var idDetalle = "";
   var prestamo = "{{ r.Id_prestamo }}"
-  var persona = "{{r.Persona.Id_Persona}}"
+  var persona = "{{r.Persona.Nro_Tarjeta}}"
   var usuario = "{{user.id}}"
   var token = "{{ csrf_token }}"
   var filasMostrar = "";
@@ -365,46 +365,49 @@ var token = "{{ csrf_token }}"
     // datos del prestamo
     axios.get('/api/Prestamo/'+ prestamo)
       .then(function (response) {
-          var datos = response.data;
-          var f = new Date();
-          fecha = f.getFullYear() + "-" + "0"+(f.getMonth()+1) + "-" +"0"+f.getDate()
-
-            if(datos.Fecha_prestamo==fecha && datos.Estado_prestamo !=="DEVUELTO"){
-              // console.log(" si es la misma fecha")
-              // console.log(fecha)
-              // console.log(datos.Fecha_prestamo)
-              $('#addrecurso').show();
-            }else{
-              // console.log("no es la misma fecha")
-              // console.log(fecha)
-              // console.log(datos.Fecha_prestamo)
-              $('#addrecurso').hide();
-            }
-            var nombre = datos.Persona.Primer_Nombre + " " +datos.Persona.Primer_Apellido + " " +datos.Persona.Segundo_Apellido
-            $("#idp").text(datos.Id_prestamo);
-            $("#fechap").text(datos.Fecha_prestamo);
-            $("#usuariop").text(datos.Usuario_Prestatario.get_full_name.toUpperCase());
-            $("#estadop").text(datos.Estado_prestamo.toUpperCase());
-            $("#nombpersonap").text(nombre.toUpperCase());
-            $("#tarpersonap").text(datos.Persona.Nro_Tarjeta);
-            $("#nrodocumentop").text( datos.Persona.Tipo_Documento+".   " +datos.Persona.Nro_Documento);
-            $("#propersonap").text(datos.Persona.Programa_Academico.nombre.toUpperCase());
-            $("#cargopersonap").text(datos.Persona.Tipo_Persona);
-            if(datos.Persona.Incidentes.length == 0){
-              $("#incidenteper").text("NO");
-            }else{
-              $("#incidenteper").text("SI");
-              $("#incidenteper").css({'color':'#F00'})
-              $("#cantincidentesp").css({'color':'#F00'})
-
-            }
-            $("#cantincidentesp").text(datos.Persona.Incidentes.length)
-
-            if(datos.Estado_prestamo=="EN CURSO"){
-              $("#estadop").css({'color':'#16ce00'})
-            }else{
-              $("#estadop").css({'color':'#F00'})
-            }
+        var datos = response.data;
+        // console.log(datos)
+        var f = new Date();
+        var dia = f.getDate();
+        if(dia<10){
+          dia = "0"+dia;
+        }
+        fecha = f.getFullYear() + "-" + "0"+(f.getMonth()+1) + "-" +(dia)
+        // console.log(fecha)
+        if(datos.Fecha_prestamo==fecha && datos.Estado_prestamo !=="DEVUELTO"){
+          // console.log(" si es la misma fecha")
+          // console.log(fecha)
+          // console.log(datos.Fecha_prestamo)
+          $('#addrecurso').show();
+        }else{
+          // console.log("no es la misma fecha")
+          // console.log(fecha)
+          // console.log(datos.Fecha_prestamo)
+          $('#addrecurso').hide();
+        }
+        var nombre =  datos.Persona.Nombres + " " +datos.Persona.Apellidos
+        $("#idp").text(datos.Id_prestamo);
+        $("#fechap").text(datos.Fecha_prestamo);
+        $("#usuariop").text(datos.Usuario_Prestatario.get_full_name.toUpperCase());
+        $("#estadop").text(datos.Estado_prestamo.toUpperCase());
+        $("#nombpersonap").text(nombre.toUpperCase());
+        $("#tarpersonap").text(datos.Persona.Nro_Tarjeta);
+        $("#nrodocumentop").text(datos.Persona.Nro_Documento);
+        $("#propersonap").text(datos.Persona.Dependencia.nombre.toUpperCase());
+        $("#cargopersonap").text(datos.Persona.Tipo_Persona.Tipo_persona);
+        if(datos.Persona.Incidentes.length == 0){
+          $("#incidenteper").text("NO");
+        }else{
+          $("#incidenteper").text("SI");
+          $("#incidenteper").css({'color':'#F00'})
+          $("#cantincidentesp").css({'color':'#F00'})
+        }
+        $("#cantincidentesp").text(datos.Persona.Incidentes.length)
+        if(datos.Estado_prestamo=="EN CURSO"){
+          $("#estadop").css({'color':'#16ce00'})
+        }else{
+          $("#estadop").css({'color':'#F00'})
+        }
       })
       .catch(function (error) {
         //console.log(error);

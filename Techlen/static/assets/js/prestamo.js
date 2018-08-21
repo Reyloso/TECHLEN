@@ -12,19 +12,17 @@ $( document ).ready(function() {
           axios.get('/api/Persona/'+tarjeta)
             .then(function (response) {
                   var user = response.data;
-                  //console.log(user);
-                  if(user.Estado_tarjeta == "ACTIVA"){
+                  // console.log(user);
+                  if(user.Estado_Tarjeta == "ACTIVA"){
                       $(".loader-box").hide();
                       $(".inputidestu").hide();
                       $(".perfil").show();
-                      var last_name = user.Primer_Nombre + " " + user.Primer_Apellido + " " + user.Segundo_Apellido
+                      var last_name = user.Nombres + " " + user.Apellidos
                       $("#tarjeta").text(user.Nro_Tarjeta);
-                      $("#id").text(user.Id_Persona);
                       $("#nombre").text(last_name.toUpperCase());
-                      $("#tipodoc").text(user.Tipo_Documento);
+                      $("#cargo").text(user.Tipo_Persona.Tipo_persona);
                       $("#documento").text(user.Nro_Documento);
-                      $("#programa").text(user.Programa_Academico.nombre.toUpperCase());
-                      $("#cargo").text(user.Correo_Institucional.toUpperCase());
+                      $("#programa").text(user.Dependencia.nombre.toUpperCase());
                       if(user.Incidentes.length == 0){
                           $("#incidentes").text("NO");
                       }else{

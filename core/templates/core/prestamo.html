@@ -76,34 +76,26 @@
         </div>
         <div class="col-6 col-md-6">
            <hr/>
-          <h4 class="mb-3">Datos Del Usuario</h4>
+          <h4 class="mb-3">Datos Del Usuario <i class="fa fa-list-alt" style="color: #035a7b!important;" aria-hidden="true"></i></h4>
            <hr/>
             <div class="row">
-              <div class="col-md-6 mb-5">
+              <!-- <div class="col-md-6 mb-5">
                 <img class="card-img-top" src="{% static '/assets/images/foto.jpg' %}" alt="Card image cap">
-              </div>
+              </div> -->
               <div class="col-md-6 mb-3">
                 <h6>Nombre & Apellidos</h6>
                 <label for="firstName" id="nombre"></label>
-              </div>
-              <div class="col-md-6 mb-3">
-                <h6>ID</h6>
-                <label for="firstName" id="id"></label>
               </div>
               <div class="col-md-6 mb-3">
                 <h6>N° Tarjeta</h6>
                 <label for="firstName" id="tarjeta"></label>
               </div>
               <div class="col-md-6 mb-3">
-                <h6>Tipo De Documento</h6>
-                <label for="firstName" id="tipodoc" ></label>
-              </div>
-              <div class="col-md-6 mb-3">
                 <h6>N° Documento</h6>
                 <label for="firstName" id="documento"></label>
               </div>
               <div class="col-md-6 mb-3">
-                <h6>Programa Academico</h6>
+                <h6>Programa O Dependencia</h6>
                 <label for="firstName" id="programa"></label>
               </div>
               <div class="col-md-6 mb-3">
@@ -129,8 +121,8 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
 
-var usuario = {{user.id}}
-//console.log(usuario)
+var usuario = "{{user.id}}"
+console.log(usuario)
 var detalleprestamo=[];
 function guardarPrestamo(){
 
@@ -159,7 +151,7 @@ function generarJSON(){
   for (i in recursos) {
     var recurso = recursos[i];
     //console.log(recurso)
-    var usuario = {{user.id}}
+    var usuario = "{{user.id}}"
     var detalle = {
       "Fecha_prestamo": fecha,
   		"Estado": "PRESTADO",
@@ -172,11 +164,11 @@ function generarJSON(){
   //console.log(detalleprestamo)
   var fecha  = date.getFullYear() +"-"+ (date.getMonth() + 1) + "-" + date.getDate()
   var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
-  var usuario = {{user.id}}
+  var usuario = "{{user.id}}"
   var recursos = DRecursos();
   var datos = {
       "PrestatarioId": usuario,
-      "personaId" : $("#id").text(),
+      "personaId" : $("#tarjeta").text(),
       "Estado_prestamo": "EN CURSO",
       "Fecha_prestamo": fecha,
       "Hora_prestamo": hora,

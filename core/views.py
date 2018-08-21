@@ -42,8 +42,8 @@ def detalle_prestamo(request,Id_prestamo):
     return  render(request,'core/detalle_prestamo.html',context)
 
 @login_required
-def persona_reporte(request,Id_Persona):
-    r = get_object_or_404(Personas,Id_Persona=Id_Persona)
+def persona_reporte(request,Nro_Tarjeta):
+    r = get_object_or_404(Personas,Nro_Tarjeta=Nro_Tarjeta)
     context = admin.site.each_context(request)
     context.update({
         'r': r,

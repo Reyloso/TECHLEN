@@ -43,8 +43,8 @@ class SuitConfig(DjangoSuitConfig):
         ]),
         ParentItem('Configuracion', children=[
             ChildItem(model='configuracion.programa'),
-            ChildItem(model='configuracion.cargo'),
-            ChildItem(model='configuracion.dependencia'),
+            ChildItem(model='personas.codigoacceso'),
+            ChildItem(model='personas.tipopersona'),
         ]),
 
     )

@@ -3,9 +3,14 @@ from __future__ import unicode_literals
 from rest_framework import serializers
 from configuracion.models import Programa
 from recursos.models import Tipo_Recurso, Recurso, Marca
-from personas.models import Personas
+from personas.models import Personas,TipoPersona
 from prestamos.models import Prestamo, Incidente, DetallePrestamo
 from django.contrib.auth.models import User
+
+class TipoPersonaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoPersona
+        fields = "__all__"
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,13 +55,15 @@ class ProgramaSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class PersonaSerializer(serializers.ModelSerializer):
-    Programa_Academico = ProgramaSerializer(read_only=True)
-    ProgramaId = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Programa.objects.all(), source='Programa_Academico')
+    Tipo_Persona = TipoPersonaSerializer(read_only=True)
+    Tipo_PersonaId = serializers.PrimaryKeyRelatedField(write_only=True, queryset=TipoPersona.objects.all(), source='Tipo_Persona')
+    Dependencia = ProgramaSerializer(read_only=True)
+    ProgramaId = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Programa.objects.all(), source='Dependencia')
     Incidentes = IncidenteSerializer(many=True, read_only=True,source='incidente_set')
 
     class Meta:
         model = Personas
-        fields = ('Nro_Tarjeta','Id_Persona','Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido','Tipo_Documento','Nro_Documento','Sede','genero','Correo_Institucional','Estado_tarjeta','Tipo_Persona','Programa_Academico','ProgramaId','Ciclo_Lectivo','Incidentes')
+        fields = ('Nro_Tarjeta','Nro_Documento','Nombres','Apellidos','Estado_Tarjeta','Tipo_Persona','Tipo_PersonaId','Dependencia','Codigo_Acceso','ProgramaId','Incidentes')
 
 
 class PrestamoSerializer(serializers.ModelSerializer):

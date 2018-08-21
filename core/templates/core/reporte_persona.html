@@ -2,7 +2,6 @@
 {% load i18n %}
 {% load static %}
 
-
 {% block extrastyle %}
     <script src="https://use.fontawesome.com/b7fd754cf7.js"></script>
     <link  rel="stylesheet" href="{% static '/assets/css/header.css' %}"/>
@@ -30,30 +29,24 @@
     </style>
 
 {% endblock %}
-
 {% block content %}
-
             {% if r.foto_url %}
                 <img style="width:150px; height:150px; border-radius:50%" src="{{ r.foto_url }}" alt="" />
 
             {% else %}
 
-            <img style="width:150px; height:150px; border-radius:50%" src="http://dk6kcyuwrpkrj.cloudfront.net/wp-content/uploads/sites/45/2014/05/avatar-blank.jpg" alt="" />
+            <img style="width:150px; height:150px; margin-bottom:60px; border-radius:50%" src="https://www.worldcrunch.com/assets/img/avatars/thumbnails/default-user-img-profile.jpg" alt="" />
             {% endif %}
 
         <div style="display: inline-block; margin-left: 10px">
-
-
-          <h3 style="font-size:17px;">{{ r.nombre_completo }} </h3>
-            <small>ID: {{ r.Id_Persona }}</small>
-            <small>Correo: <a href="mailto:{{ r.Correo_Institucional }}">{{ r.Correo_Institucional }}</a></small>
-
+          <h3 style="font-size:17px;">{{ r.Nombres }} {{ r.Apellidos }}</h3>
           <p>
-            PROGRAMA: {{ r.Programa_Academico }} <br />
-            TIPO DOCUMENTO: {{ r.Tipo_Documento }}<br />
-            DOCUMENTO: {{ r.Nro_Documento }}
-          </p>
+            <strong>N° TARJETA:</strong>  {{ r.Nro_Tarjeta }} <br/>
+            <strong>DOCUMENTO:</strong> {{ r.Nro_Documento }} <br />
+            <strong>PROGRAMA O DEPENDENCIA: </strong> {{ r.Dependencia }} <br />
+            <strong>TIPO PERSONA:</strong> {{ r.Tipo_Persona }}<br />
 
+          </p>
         </div>
 
       <h3 style="display: inline-block; float: right"> <i class="fa fa-certificate" aria-hidden="true"></i> Certificado 01 - Reporte TI
@@ -64,15 +57,12 @@
         <br>
       <small>Emitido Por: {{user.get_full_name}}</small>
       </h3>
-
     <div class="card">
   <div class="card-block">
-   
+
   </div>
 </div>
 <p>
-
-
 </p>
 
     <table class="table table-striped table-hover table-bordered">
@@ -110,8 +100,6 @@
   </thead>
   <tbody id="detalleinci">
 
-
-
   </tbody>
 </table>
 
@@ -119,44 +107,33 @@
     <a onclick="imprimir()" style="color: white;"  class="btn btn-success"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> IMPRIMIR </a>
     <a href="/admin/personas/personas/" class="btn btn-success"><i class="" aria-hidden="true"></i> ATRAS </a>
   </div>
-
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
-  var persona = {{r.Id_Persona}}
+  var persona = "{{r.Nro_Tarjeta}}"
 
   function imprimir(){
     window.print()
   }
 
-  axios.get('/api/Persona/'+ persona)
+  axios.get('/api/Prestamo/?Persona='+persona)
     .then(function (response) {
       var datos = response.data;
-      //console.log(datos)
-
-    })
-    .catch(function (error) {
-      //console.log(error);
-    });
-
-  axios.get('/api/Prestamo/')
-    .then(function (response) {
-      var datos = response.data;
+      // console.log(datos)
       var contador = 0;
       var totalrecurso = 0;
       var cantincidente = 0;
       for (key in datos){
-        if(datos[key].Persona.Id_Persona == persona){
           var cantrecurso = datos[key].detailprestamo.length;
           totalrecurso = totalrecurso + datos[key].detailprestamo.length
           var incidente ="";
           for(i in datos[key].detailprestamo){
             if(datos[key].detailprestamo[i].Incidentes.length !== 0){
-                console.log(datos[key].detailprestamo[i])
+                // console.log(datos[key].detailprestamo[i])
                 incidente ="SI";
                 break;
             }else{
-                console.log(datos[key].detailprestamo[i])
+                // console.log(datos[key].detailprestamo[i])
                 incidente ="NO";
             }
           }
@@ -172,7 +149,7 @@
 
           for(i in datos[key].detailprestamo){
             if(datos[key].detailprestamo[i].Incidentes.length !== 0){
-                console.log(datos[key].detailprestamo[i])
+                // console.log(datos[key].detailprestamo[i])
                 cantincidente = cantincidente + 1;
                 for(j in datos[key].detailprestamo[i].Incidentes){
                   var row = '<tr class="row1" >' +
@@ -187,7 +164,6 @@
                 }
             }
           }
-        }
       }
 
       var total = '<tr class="table-info">'+
@@ -208,21 +184,10 @@
             "<td> </td>"+
         "</tr>"
           $("#detalleinci").append(total2);
-
-
     })
     .catch(function (error) {
       //console.log(error);
     });
 
-
   </script>
-
-
-
-
-
-
-
-
 {% endblock %}

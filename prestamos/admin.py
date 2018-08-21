@@ -36,11 +36,14 @@ class Prestamos (admin.ModelAdmin):
         self.fields = ('Usuario_Prestatario','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo','Fecha_devolucion','Hora_devolucion',)
         return super(Prestamos, self).add_view(*args, **kwargs)
 
-    def change_view(self, *args, **kwargs):
-        self.fields = ('Estado_prestamo',)
-        return super(Prestamos, self).change_view(*args, **kwargs)
+    # def change_view(self, *args, **kwargs):
+    #     self.fields = ('Estado_prestamo',)
+    #     return super(Prestamos, self).change_view(*args, **kwargs)
 
-    list_display = ['Id_prestamo','Usuario_Prestatario','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo','Reporte_Prestamo', 'Devolucion' ]
+    def Nombre_Completo(self, obj):
+        return obj.Persona.Nombres + " " + obj.Persona.Apellidos
+
+    list_display = ['Id_prestamo','Usuario_Prestatario','Nombre_Completo','Estado_prestamo','Fecha_prestamo','Hora_prestamo','Reporte_Prestamo', 'Devolucion' ]
     search_fields = ('Id_prestamo','Estado_prestamo','Usuario_Prestatario__username','Persona__Primer_Apellido','Persona__Primer_Nombre','Persona__Segundo_Apellido','Persona__Nro_Tarjeta',)
     list_filter = ('Estado_prestamo','Usuario_Prestatario__username')
 
