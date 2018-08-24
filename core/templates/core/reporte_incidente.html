@@ -36,7 +36,7 @@
           <h3 style="font-size:25px;"> {{r.nombre_recurso}}</h3>
           <p>
            <b>ID INCIDENTE: </b>{{r.Id_Incidente}} <br />
-            <b>PERSONA: </b> {{r.Persona.nombre_completo}} <br />
+            <b>PERSONA: </b> {{r.Persona.Nombres}} {{r.Persona.Apellidos}}<br />
             <b>FECHA: </b> {{r.Fecha_Incidente}}  <br />
             <b> USUARIO PRESTAMISTA: </b>{{r.Prestamo_detalle.Prestamo.Usuario_Prestatario.get_full_name}} <br />
           </p>

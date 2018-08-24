@@ -30,27 +30,6 @@ function valid(){
   }
 }
 
-//funcion validar fecha en rango
-function validateDate(dateStart,dateEnd,dateValide){
-  valuesStart = dateStart.split("-");
-  valuesEnd = dateEnd.split("-");
-  valuesValid = dateValide.split("-");
-  // Verificamos que la fecha no sea posterior a la actual
-  var Start=new Date(valuesStart[2],valuesStart[1]-1,valuesStart[0]);
-  var End=new Date(valuesEnd[2],valuesEnd[1]-1,valuesEnd[0]);
-  var valid = new Date(valuesValid[0],valuesValid[1]-1,valuesValid[2])
-  Start.setHours(0,0,0,0);
-  End.setHours(0,0,0,0);
-  valid.setHours(0,0,0,0);
-  if(valid>=Start && valid <=End){
-    console.log("si esta en el rango");
-    return 0;
-  }else{
-    console.log("No esta en el rango");
-    return 1;
-  }
-}
-
 //instancia los parametros del reporte
 function parameterReport(){
   //instancia el select de programas
@@ -88,23 +67,40 @@ function parameterReport(){
   });
 }
 
+//invertir fecha
+function convertirfecha(date){
+  console.log("fecha antes de convertir " + date)
+  date = date.split("-");
+  var value=new Date(date[2],(date[1]-1),date[0]);
+  value.setHours(0,0,0,0);
+  fecha = value.getFullYear()+'-'+(value.getMonth()+1)+'-'+value.getDate()
+  console.log("fecha despues de convertir " + fecha)
+  return fecha
+}
 
 function generateReport(){
-  //condicionales o casos del reporte
-  axios.get('/api/Prestamo/')
-    .then(function (response) {
-    var datos = response.data;
-    // console.log(datos)
-    for(var key in datos){
-      // console.log(datos[key].Fecha_prestamo);
-      var dateData = datos[key].Fecha_prestamo;
-      // var valueData = new Date(dateData[0],(dateData[1]-1),dateData[2]);
-      // console.log(valueData);
-      var start = $('#date1').val();
-      var end = $('#date2').val();
-      validateDate(start,end,dateData)
-    }
-  }).catch(function (error) {
-      //console.log(error);
-  });
+  var date1 = convertirfecha($('#date1').val())
+  var date2 = convertirfecha($('#date2').val())
+  if(date1===date2){
+    console.log("si son iguales");
+    axios.get('/api/Prestamo/?Fecha_prestamo='+date1)
+      .then(function (response) {
+      var datos = response.data;
+      report(datos)
+    }).catch(function (error) {
+        // console.log(error);
+    });
+  }else{
+    axios.get('/api/Prestamo/?Fecha_0='+date1+'&Fecha_1='+date2)
+      .then(function (response) {
+      var datos = response.data;
+      report(datos)
+    }).catch(function (error) {
+        // console.log(error);
+    });
+  }
+}
+
+function report(data){
+  console.log(data)
 }

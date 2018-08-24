@@ -24,6 +24,8 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import action, detail_route
 from rest_framework import viewsets, status
 from django_filters.rest_framework import DjangoFilterBackend
+import django_filters.rest_framework as filters
+from django_filters import DateRangeFilter,DateFilter,DateTimeFromToRangeFilter
 
 
 class UserViewSet(APIView):
@@ -69,6 +71,18 @@ class PersonasDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Personas.objects.all()
     serializer_class = PersonaSerializer
 
+# clase para filtro por campos
+class PrestamoFilter(django_filters.FilterSet):
+    Fecha_prestamo =  filters.DateTimeFilter(name='Fecha_prestamo')
+    Fecha =  filters.DateTimeFromToRangeFilter(name='Fecha_prestamo')
+
+    class Meta:
+        model = Prestamo
+        fields = ('Persona','Fecha_prestamo')
+        #ejemplo de consulta por los dos campos definidos
+        # ?Persona=3333031643
+        # ?Fecha_prestamo_0=2018-08-20&Fecha_prestamo_1=2018-08-21
+
 #vistas del prestamo
 @action(methods=['post'], detail=True)
 class PrestamoList(viewsets.ModelViewSet):
@@ -76,7 +90,7 @@ class PrestamoList(viewsets.ModelViewSet):
     queryset = Prestamo.objects.all()
     serializer_class = PrestamoSerializer
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('Estado_prestamo','Persona','Fecha_prestamo','Fecha_devolucion',)
+    filter_class = PrestamoFilter
 
     @detail_route(methods=['post'])
     def set_detalleprestamo(self, request, pk=None):

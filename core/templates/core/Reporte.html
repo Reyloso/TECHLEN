@@ -71,23 +71,23 @@
   <br>
   <div class="input-group">
     <span class="input-group-addon" id="sizing-addon2">PROGRAMA ACADEMICO: </span>
-    <select class="form-control" id="select1"  onchange="select2()">
+    <select class="form-control" id="select1"  onchange="">
       <option value="0">--</option>
 
     </select>
     <span class="input-group-addon" id="sizing-addon2">CARGO </span>
-    <select class="form-control" id="select2"  onchange="select2()">
+    <select class="form-control" id="select2"  onchange="">
       <option value="0">--</option>
       <option value="ESTUDIANTE">ESTUDIANTE</option>
       <option value="ADM O PROFESOR">ADM O PROFESOR</option>
     </select>
     <span class="input-group-addon" id="sizing-addon2">TIPO DE RECURSO </span>
-    <select class="form-control" id="select3"  onchange="select2()">
+    <select class="form-control" id="select3"  onchange="">
       <option value="0">--</option>
 
     </select>
     <span class="input-group-addon" id="sizing-addon2">MARCA </span>
-    <select class="form-control" id="select4"  onchange="select2()">
+    <select class="form-control" id="select4"  onchange="">
       <option value="0">--</option>
 
     </select>
@@ -95,7 +95,7 @@
   </div>
     <br>
     <br>
-<button style="display: flex;float: right; margin-bottom: 4px;" id="gReport" class="btn btn-primary" onclick="generateReport()">Generar Reporte</button>
+      <button type="button" style="display:flex;float: right; margin-bottom: 4px;" id="gReport" class="btn btn-primary" onclick="generateReport()"> Generar Reporte</button>
       </div>
   </div>
   </div>
@@ -184,6 +184,6 @@
 
   <script type="text/javascript" src="{% static '/assets/js/reporte.js' %}"></script>
   <script>
-// http://127.0.0.1:8000/api/Prestamo/?Fecha_prestamo%3E=01%2F08%2F2018&Fecha_devolucion%3C=19%2F08%2F2018
+
   </script>
 {% endblock %}

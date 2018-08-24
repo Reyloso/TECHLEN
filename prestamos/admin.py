@@ -58,6 +58,9 @@ class Incidentes (admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+    def Nombre_Completo(self, obj):
+        return obj.Persona.Nombres + " " + obj.Persona.Apellidos
+
     def Reporte_Incidente(self, instance):
 
         return "<a href='/admin/Incidente/Reporte/%s'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-file-pdf-o' aria-hidden='true'></i>  </a>" % instance.Id_Incidente
@@ -65,11 +68,16 @@ class Incidentes (admin.ModelAdmin):
     Reporte_Incidente.allow_tags = True
     Reporte_Incidente.is_column = True
 
-    list_display = ['Id_Incidente','usuario','Persona','Recurso','Tipo_Incidente','Estado','Fecha_Incidente','Reporte_Incidente']
+
+
+    list_display = ['Id_Incidente','usuario','Nombre_Completo','Recurso','Tipo_Incidente','Estado','Fecha_Incidente','Reporte_Incidente']
     search_fields = ('Estado','Tipo_Incidente','Persona__Primer_Apellido','Persona__Primer_Nombre','Persona__Segundo_Apellido','Persona__Nro_Tarjeta','usuario__username','Recurso__Id_recurso')
     list_filter = ('Estado','Tipo_Incidente',)
     class Meta:
         model = Incidente
+
+
+
 
 class DetallePrestamos (admin.ModelAdmin):
     #def has_add_permission(self, request):

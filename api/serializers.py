@@ -6,6 +6,8 @@ from recursos.models import Tipo_Recurso, Recurso, Marca
 from personas.models import Personas,TipoPersona
 from prestamos.models import Prestamo, Incidente, DetallePrestamo
 from django.contrib.auth.models import User
+from django_filters.rest_framework import DjangoFilterBackend
+import django_filters.rest_framework as filters
 
 class TipoPersonaSerializer(serializers.ModelSerializer):
     class Meta:
