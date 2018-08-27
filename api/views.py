@@ -127,7 +127,6 @@ class ProgramaDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Programa.objects.all()
     serializer_class = ProgramaSerializer
 
-
 #vistas de los recursos
 @action(methods=['post'], detail=True)
 class RecursoList(generics.ListCreateAPIView):
@@ -161,7 +160,6 @@ class DetallePrestamoList(viewsets.ModelViewSet):
 class DetallePrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = DetallePrestamo.objects.all()
     serializer_class = DetallePrestamoSerializer
-
 
 class TipoRecursoList(generics.ListCreateAPIView):
     queryset = Tipo_Recurso.objects.all()

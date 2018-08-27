@@ -7,9 +7,10 @@
     <script src="https://use.fontawesome.com/b7fd754cf7.js"></script>
     <link  rel="stylesheet" href="{% static '/assets/css/header.css' %}"/>
     <link  rel="stylesheet" href="{% static '/assets/css/jquery-ui.min.css' %}"/>
+
     <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <style>
         #suit-nav{
         display: none
@@ -30,7 +31,11 @@
 
     .thead-inverse th {
     background-color: #035a7b;
-  }
+    }
+
+    .alert{
+      background-color: #f8d7da;
+    }
     </style>
 
 {% endblock %}
@@ -39,7 +44,12 @@
 <div id="cabecera">
   <div class="content-wrap">
 
-      <h1>Lista asistencia</h1>
+    <div class="alert alert-warning alert-dismissible show" id="alert" role="alert">
+      <strong>SIN RESULTADOS!</strong>...Esta consulta no arrojó resultados, compruebe los campos de filtro.
+      <button type="button" class="close" onclick="closet()" >
+        <span >&times;</span>
+      </button>
+    </div>
 
   <div class="card">
       <div class="card-header" style="background: #035a7b;color:#fff;">
@@ -50,45 +60,54 @@
 
 
         <strong> *Campos Obligatorios</strong>
-  <div class="input-group">
+        <div class="input-group" style="width: 25%;">
+          <span class="input-group-addon" id="sizing-addon">DETALLAR REPORTE </span>
+        <select class="form-control" name="reporte" id="tipoReporte" onchange="TipoReport()">
+          <option value="0">--</option>
+          <option value="1">POR INCIDENTES</option>
+          <option value="2">POR PRESTAMOS</option>
+          <option value="3">POR RECURSOS</option>
+        </select>
+        </div>
+          <br>
+  <div class="input-group" id="filtros">
   <span class="input-group-addon" id="sizing-addon2">*FECHA INICIO: </span>
   <input type="text" id="date1" onchange="valid()" class="form-control date" required>
   <span class="input-group-addon" id="sizing-addon2">*FECHA FINAL:  </span>
   <input type="text" id="date2" onchange="" class="form-control date" required>
   <span class="input-group-addon" id="sizing-addon2">ESTADO PRESTAMO: </span>
-  <select class="form-control" id="select0"  onchange="select2()">
-    <option value="TODOS">--</option>
-    <option value="EN CURSO">EN CURSO</option>
-    <option value="DEVUELTO">DEVUELTO</option>
+  <select class="form-control" name="estado" id="select" >
+    <option value="0">TODOS</option>
+    <option value="1">EN CURSO</option>
+    <option value="2">DEVUELTO</option>
   </select>
   <span class="input-group-addon" id="sizing-addon2">*INCIDENTES: </span>
-  <select class="form-control" id="select0"  onchange="select2()"required>
-    <option value="NO">NO</option>
+  <select class="form-control" name="incidente" id="selectOne" required>
     <option value="SI">SI</option>
+    <option value="NO">NO</option>
     <option value="SOLO INCIDENTES">SOLO INCIDENTES</option>
   </select>
   </div>
   <br>
-  <div class="input-group">
-    <span class="input-group-addon" id="sizing-addon2">PROGRAMA ACADEMICO: </span>
-    <select class="form-control" id="select1"  onchange="">
-      <option value="0">--</option>
+  <div class="input-group" id="filtros">
+    <span class="input-group-addon" id="sizing-addon2">PROGRAMA O DEPENDENCIA: </span>
+    <select class="form-control" name="programa" id="select2" >
+      <option value="0">TODOS</option>
 
     </select>
-    <span class="input-group-addon" id="sizing-addon2">CARGO </span>
-    <select class="form-control" id="select2"  onchange="">
-      <option value="0">--</option>
-      <option value="ESTUDIANTE">ESTUDIANTE</option>
-      <option value="ADM O PROFESOR">ADM O PROFESOR</option>
+    <span class="input-group-addon" id="sizing-addon2">TIPO PERSONA</span>
+    <select class="form-control" name="cargo"  id="select3" >
+      <option value="0">TODOS</option>
+
     </select>
     <span class="input-group-addon" id="sizing-addon2">TIPO DE RECURSO </span>
-    <select class="form-control" id="select3"  onchange="">
-      <option value="0">--</option>
+    <select class="form-control" name="recurso" id="select4" >
+      <option value="0">TODOS</option>
 
     </select>
     <span class="input-group-addon" id="sizing-addon2">MARCA </span>
-    <select class="form-control" id="select4"  onchange="">
-      <option value="0">--</option>
+    <select class="form-control" name="marca" id="select5">
+      <option value="0">TODOS</option>
 
     </select>
 
@@ -102,76 +121,34 @@
 </div>
 
 <div id="reporte">
-        <div style="display: inline-block; margin-left: 15px">
-          <h3 style="font-size:25px;"> {{r.nombre_recurso}}</h3>
-          <p>
-           <b>ID: </b>{{r.Id_recurso}} <br />
-            <b>TIPO: </b> {{r.tipo_de_recurso}} <br />
-            <b>MARCA: </b> {{r.Marca}} <br />
-            <b>N° DE SERIE: </b> {% if r.Numero_Serie != none %} {{r.Numero_Serie}} {% else %} {% endif %}<br />
-            <b>ESTADO: </b> {{r.Estado_Recurso}} <br />
-            <b>FECHA REGISTRO: </b>{{r.fecha_registro}} <br />
-          </p>
+        <div id="encabezado" style="display: inline-block; margin-left: 15px">
+
         </div>
-      <h3 style="display: inline-block; float: right"><i class="fa fa-certificate" aria-hidden="true"></i> Reporte De Recurso - TI
+      <h3 style="display: inline-block; float: right"><i class="fa fa-certificate" aria-hidden="true"></i> Reporte General - TI
         <br>
         <small>MONTERIA-CORDOBA </small>
           <br>
-        <small>Fecha de emision: {% now "M-d-y" %} </small>
+        <small>Fecha De Emision: {% now "M-d-y" %} </small>
         <br>
       <small>Emitido Por: {{user.get_full_name}}</small>
       </h3>
 
-    <div class="card">
-  <div class="card-block">
 
-  </div>
-</div>
 <p>
-
 </p>
-    <table class="table table-striped table-hover table-bordered">
-      <strong><i class="fa fa-list-alt" aria-hidden="true"></i> Detalle & Consolidado Prestamos:</strong>
-  <thead class="thead-inverse">
-    <tr>
-      <th>Prestamo</th>
-      <th>Persona Prestamo</th>
-      <th>Usuario Prestamo</th>
-      <th>Estado Prestamo</th>
-      <th>Fecha Prestamo</th>
-      <th>Incidente</th>
-    </tr>
+  <table class="table table-striped table-hover table-bordered">
+      <strong id="titulotabla"></strong>
+  <thead id="cabezaReporte" class="thead-inverse">
+
   </thead >
   <tbody id="detallep">
-  </tbody>
-</table>
-
-<p>
-  <strong><i class="fa fa-list-alt" aria-hidden="true"></i> Detalle & Consolidado Incidentes :</strong>
-
-</p>
-
-    <table class="table table-striped table-hover table-bordered">
-  <thead class="thead-inverse">
-    <tr>
-      <th>ID Prestamo</th>
-      <th>Recurso</th>
-      <th>Fecha Incidente</th>
-      <th>Tipo Incidente</th>
-      <th>Estado</th>
-      <th>Descripción</th>
-    </tr>
-  </thead>
-  <tbody id="detalleinci">
-
-
 
   </tbody>
 </table>
 
   <div>
     <a onclick="imprimir()" style="color: white;"  class="btn btn-success"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> IMPRIMIR </a>
-    <a href="/admin/recursos/recurso/" class="btn btn-success"><i class="" aria-hidden="true"></i> ATRAS </a>
+    <a onclick="atras()" style="color: #fff;" class="btn btn-success"><i class="" aria-hidden="true"></i> ATRAS </a>
   </div>
 </div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -182,6 +159,8 @@
   <script src="{% static '/assets/js/datepicker-es.js' %}"></script>
   <script src="http://momentjs.com/downloads/moment.min.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   <script type="text/javascript" src="{% static '/assets/js/reporte.js' %}"></script>
   <script>
 

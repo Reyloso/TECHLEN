@@ -59,6 +59,8 @@ urlpatterns = [
     url(r'^api/Persona/$', persona_list),
     url(r'^api/Persona/(?P<pk>\d+)/$', persona_detail),
     url(r'^api/Persona/(?P<pk>\d+)/incidentes/$', incidente),
+    url(r'^api/Persona/tipo/$', views.TipoPersonaList.as_view()),
+    url(r'^api/Persona/tipo/(?P<pk>\d+)/$', views.TipoPersonaDetail.as_view()),
     url(r'^api/Prestamo/$', prestamo_list),
     url(r'^api/Prestamo/(?P<pk>\d+)/$', prestamo_detail),
     url(r'^api/Prestamo/(?P<pk>\d+)/devolucion/$', Detalle_prestamo),
