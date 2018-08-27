@@ -78,12 +78,23 @@ def incidente_reporte(request,Id_Incidente):
     return  render(request,'core/Reporte_Incidente.html',context)
 
 @login_required
+def incidente_revision(request,Id_Incidente):
+    r = get_object_or_404(Incidente,Id_Incidente=Id_Incidente)
+    context = admin.site.each_context(request)
+    context.update({
+        'r': r,
+    })
+    return  render(request,'core/revision_Incidente.html',context)
+
+@login_required
 def reporte(request):
     context = admin.site.each_context(request)
     return  render(request,'core/Reporte.html',context)
 
+@login_required
 def handler404(request):
     return render(request, 'admin/404.html', status=404)
 
+@login_required
 def handler500(request):
     return render(request, 'admin/500.html', status=500)

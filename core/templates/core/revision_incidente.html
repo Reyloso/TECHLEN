@@ -1,0 +1,156 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+{% load static %}
+
+
+{% block extrastyle %}
+    <script src="https://use.fontawesome.com/b7fd754cf7.js"></script>
+    <link  rel="stylesheet" href="{% static '/assets/css/header.css' %}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <style>
+        #suit-nav{
+        display: none
+        }
+    .breadcrumbs{
+        display: none;
+    }
+    #suit-sub-nav {
+        display: none !important;
+    }
+    #user-tools{
+        display: none;
+    }
+
+    #header {
+      padding-bottom: 12px;
+    }
+
+    .thead-inverse th {
+    background-color: #035a7b;
+  }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header" style="background: #035a7b;color:#fff;">
+        DETALLE INCIDENTE
+    </div>
+    <div class="card-block">
+<strong><i class="fa fa-list-alt" aria-hidden="true"></i> Datos Del Incidente</strong>
+<div class="input-group">
+<span class="input-group-addon" id="sizing-addon2">ID INCIDENTE: </span>
+<label class="form-control"  aria-describedby="sizing-addon2" id="idp">{{r.Id_Incidente}} </label>
+<span class="input-group-addon" id="sizing-addon2">FECHA INCIDENTE: </span>
+<label  class="form-control"  aria-describedby="sizing-addon2" id="fechap">{{r.Fecha_Incidente}}</label>
+<span class="input-group-addon" id="sizing-addon2">TIPO INCIDENTE: </span>
+<label  class="form-control"  aria-describedby="sizing-addon2" id="usuariop">{{r.Tipo_Incidente}}</label>
+<span class="input-group-addon" id="sizing-addon2">ESTADO INCIDENTE: </span>
+<label  class="form-control"  aria-describedby="sizing-addon2" id="estadop">{{r.Estado}}</label>
+</div>
+<br>
+<strong><i class="fa fa-list-alt" aria-hidden="true"></i> Datos De La Persona</strong>
+<div class="input-group">
+  <span class="input-group-addon" id="sizing-addon2">NOMBRE & APELLIDOS: </span>
+  <label class="form-control"  aria-describedby="sizing-addon2" id="nombpersonap">{{r.Persona.Nombres}} {{r.Persona.Apellidos}} </label>
+  <span class="input-group-addon" id="sizing-addon2">N° TARJETA: </span>
+  <label  class="form-control"  aria-describedby="sizing-addon2" id="tarpersonap">{{r.Persona.Nro_Tarjeta}} </label>
+  <span class="input-group-addon" id="sizing-addon2">DOCUMENTO: </span>
+  <label  class="form-control"  aria-describedby="sizing-addon2" id="nrodocumentop">{{r.Persona.Nro_Documento}}</label>
+</div>
+<br>
+<div class="input-group">
+  <span class="input-group-addon" id="sizing-addon2">PROGRAMA ACADEMICO: </span>
+  <label class="form-control"  aria-describedby="sizing-addon2" id="propersonap">{{r.Persona.Dependencia.nombre}} </label>
+  <span class="input-group-addon" id="sizing-addon2">TIPO PERSONA </span>
+  <label  class="form-control"  aria-describedby="sizing-addon2" id="cargopersonap">{{r.Persona.Tipo_Persona.Tipo_persona}}</label>
+</div>
+  <br>
+  <strong><i class="fa fa-list-alt" aria-hidden="true"></i> Datos Del Recurso</strong>
+  <div class="input-group">
+    <span class="input-group-addon" id="sizing-addon2">TIPO RECURSO: </span>
+    <label class="form-control"  aria-describedby="sizing-addon2" id="nombpersonap">{{r.Recurso.tipo_de_recurso.tipo_recurso}}  </label>
+    <span class="input-group-addon" id="sizing-addon2">ID RECURSO: </span>
+    <label  class="form-control"  aria-describedby="sizing-addon2" id="tarpersonap">{{r.Recurso.Id_recurso}} </label>
+    <span class="input-group-addon" id="sizing-addon2">MARCA: </span>
+    <label  class="form-control"  aria-describedby="sizing-addon2" id="nrodocumentop">{{r.Recurso.Marca.Marca}}</label>
+    <span class="input-group-addon" id="sizing-addon2">NOMBRE RECURSO: </span>
+    <label class="form-control"  aria-describedby="sizing-addon2" id="nombpersonap">{{r.Recurso.nombre_recurso}}  </label>
+  </div>
+  <br>
+  <div class="input-group">
+    <span class="input-group-addon" id="sizing-addon2">REFERENCIA: </span>
+    <label  class="form-control"  aria-describedby="sizing-addon2" id="tarpersonap">{{r.Recurso.referencia}} </label>
+    <span class="input-group-addon" id="sizing-addon2">FECHA DE REGISTRO: </span>
+    <label  class="form-control"  aria-describedby="sizing-addon2" id="nrodocumentop">{{r.Recurso.fecha_registro}}</label>
+    <span class="input-group-addon" id="sizing-addon2">ESTADO RECURSO: </span>
+    <label  class="form-control"  aria-describedby="sizing-addon2" id="nrodocumentop">{{r.Recurso.Estado_Recurso}}</label>
+  </div>
+  <br>
+<button style="display: flex;float: right; margin-bottom: 4px;" id="addrecurso" class="btn btn-primary" onclick="RevIncidente()">REVISAR INCIDENTE</button>
+<br/>
+
+    </div>
+</div>
+    <br class="clear" />
+<!-- END Content -->
+<div class="modal fade" id="revIncidente" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">REVISION INCIDENTE</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <label for="exampleFormControlFile1">ESTADO FINAL DEL RECURSO</label>
+            <select class="form-control" id="selected"  onchange="select()">
+              <option value="0">ACTIVO</option>
+              <option value="1">DADO DE BAJA POR PERDIDA</option>
+              <option value="2">DADO DE BAJA POR DAÑO TOTAL</option>
+            </select>
+            <br/>
+              <label for="exampleFormControlFile1" id="label">Escriba toda la informacion posible y detallada sobre la incidencia ocurrida.*</label>
+              <div class="input-group" id="incidencia">
+              <div class="input-group-prepend">
+                <span class="input-group-text" >Detalle incidencia</span>
+              </div>
+              <textarea class="form-control" aria-label="With textarea" id="textarea"></textarea>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="savebuton" onclick="devol()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  <script>
+
+    var incidente = "{{r}}";
+
+    function RevIncidente(){
+      $('#revIncidente').modal('show');
+      axios.get("/api/Recurso/Incidente/" + incidente)
+      .then(function (response) {
+          console.log(response.data);
+          var datos = response.data
+           $("#textarea").val(datos.descripcion);
+      }).catch(function (error) {
+      //console.log(error);
+      });
+    }
+
+    
+
+
+  </script>
+{% endblock %}

@@ -68,16 +68,18 @@ class Incidentes (admin.ModelAdmin):
     Reporte_Incidente.allow_tags = True
     Reporte_Incidente.is_column = True
 
+    def Revision_Incidente(self, instance):
 
+        return "<a href='/admin/Incidente/Revision/%s'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-check-square-o' aria-hidden='true'></i>  </a>" % instance.Id_Incidente
+    Revision_Incidente.short_description = "Revision Incidente"
+    Revision_Incidente.allow_tags = True
+    Revision_Incidente.is_column = True
 
-    list_display = ['Id_Incidente','usuario','Nombre_Completo','Recurso','Tipo_Incidente','Estado','Fecha_Incidente','Reporte_Incidente']
+    list_display = ['Id_Incidente','usuario','Nombre_Completo','Recurso','Tipo_Incidente','Estado','Fecha_Incidente','Reporte_Incidente','Revision_Incidente']
     search_fields = ('Estado','Tipo_Incidente','Persona__Primer_Apellido','Persona__Primer_Nombre','Persona__Segundo_Apellido','Persona__Nro_Tarjeta','usuario__username','Recurso__Id_recurso')
     list_filter = ('Estado','Tipo_Incidente',)
     class Meta:
         model = Incidente
-
-
-
 
 class DetallePrestamos (admin.ModelAdmin):
     #def has_add_permission(self, request):
@@ -85,8 +87,6 @@ class DetallePrestamos (admin.ModelAdmin):
         list_display = ['Id_detalle','Prestamo','Fecha_prestamo','Estado','Fecha_devolucion','Usuario_devolucion','Recurso_detalle']
         class Meta:
 		          model = DetallePrestamo
-
-
 
 admin.site.register(DetallePrestamo, DetallePrestamos)
 admin.site.register(Prestamo, Prestamos)

@@ -2,7 +2,6 @@
 {% load i18n %}
 {% load static %}
 
-
 {% block extrastyle %}
     <script src="https://use.fontawesome.com/b7fd754cf7.js"></script>
     <link  rel="stylesheet" href="{% static '/assets/css/header.css' %}"/>
@@ -62,8 +61,6 @@
       <th>Tipo De Incidente</th>
       <th>Recurso </th>
       <th>Estado Del Incidente</th>
-
-
     </tr>
   </thead >
   <tbody id="detallep">
@@ -94,58 +91,8 @@
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
-  var prestamo = "{{r.Id_prestamo}}"
-  //console.log(prestamo)
   function imprimir(){
     window.print()
   }
-
-  axios.get('/api/Prestamo/' + prestamo)
-    .then(function (response) {
-      var datos = response.data;
-      //console.log(datos)
-      var totalprest = 0;
-      var cantincidente = 0;
-        for(i in datos.detailprestamo){
-            if(datos.detailprestamo[i].Incidentes.length !== 0){
-              incidente ="SI";
-            }else{
-              incidente ="NO";
-            }
-            totalprest=totalprest+1;
-            var row = '<tr class="row1" >' +
-                   '<td class="field-Id_prestamo">' + datos.detailprestamo[i].Id_detalle+ "</td>"+
-                   "<td>" +  datos.detailprestamo[i].Recurso_detalle.nombre_recurso  + "</td>"+
-                  "<td>" + datos.detailprestamo[i].Fecha_prestamo  + "</td>"+
-                   "<td>" + datos.detailprestamo[i].Estado  + "</td>"+
-                  "<td>" +  datos.detailprestamo[i].Fecha_devolucion + "</td>"+
-                  "<td>" +  datos.detailprestamo[i].Usuario_devolucion.get_full_name + "</td>"+
-                   "<td>" + incidente + "</td>"+
-                   "</tr>";
-            $("#detallep").append(row);
-
-            if(datos.detailprestamo[i].Incidentes.length !== 0){
-              cantincidente = cantincidente + 1;
-              for(j in datos.detailprestamo[i].Incidentes){
-                var row = '<tr class="row1" >' +
-                '<td class="field-Id_prestamo">' + datos.detailprestamo[i].Id_detalle+ "</td>"+
-                "<td>" + datos.detailprestamo[i].Incidentes[j].Id_Incidente + "</td>"+
-                "<td>" + datos.detailprestamo[i].Recurso_detalle.nombre_recurso + "</td>"+
-                "<td>" + datos.detailprestamo[i].Incidentes[j].Fecha_Incidente + "</td>"+
-                "<td>" + datos.detailprestamo[i].Incidentes[j].Tipo_Incidente + "</td>"+
-                "<td>" + datos.detailprestamo[i].Incidentes[j].Estado + "</td>"+
-                "<td>" + datos.detailprestamo[i].Incidentes[j].descripcion + "</td>"+
-                "</tr>";
-                $("#detalleinci").append(row);
-              }
-            }
-        }
-
-
-
-    })
-    .catch(function (error) {
-      //console.log(error);
-    });
   </script>
 {% endblock %}
