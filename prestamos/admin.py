@@ -61,6 +61,10 @@ class Incidentes (admin.ModelAdmin):
     def Nombre_Completo(self, obj):
         return obj.Persona.Nombres + " " + obj.Persona.Apellidos
 
+    def Id_Recurso(self, obj):
+
+        return obj.Recurso.Id_recurso
+
     def Reporte_Incidente(self, instance):
 
         return "<a href='/admin/Incidente/Reporte/%s'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-file-pdf-o' aria-hidden='true'></i>  </a>" % instance.Id_Incidente
@@ -75,7 +79,7 @@ class Incidentes (admin.ModelAdmin):
     Revision_Incidente.allow_tags = True
     Revision_Incidente.is_column = True
 
-    list_display = ['Id_Incidente','usuario','Nombre_Completo','Recurso','Tipo_Incidente','Estado','Fecha_Incidente','Reporte_Incidente','Revision_Incidente']
+    list_display = ['usuario','Nombre_Completo','Id_Recurso','Recurso','Tipo_Incidente','Estado','Fecha_Incidente','Reporte_Incidente','Revision_Incidente']
     search_fields = ('Estado','Tipo_Incidente','Persona__Primer_Apellido','Persona__Primer_Nombre','Persona__Segundo_Apellido','Persona__Nro_Tarjeta','usuario__username','Recurso__Id_recurso')
     list_filter = ('Estado','Tipo_Incidente',)
     class Meta:

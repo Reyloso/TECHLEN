@@ -89,9 +89,18 @@
     <label  class="form-control"  aria-describedby="sizing-addon2" id="nrodocumentop">{{r.Recurso.Estado_Recurso}}</label>
   </div>
   <br>
-<button style="display: flex;float: right; margin-bottom: 4px;" id="addrecurso" class="btn btn-primary" onclick="RevIncidente()">REVISAR INCIDENTE</button>
-<br/>
-
+  <div class="card">
+  <div class="card-block">
+      <strong><i class="fa fa-list-alt" aria-hidden="true"></i> Descripcion Del Incidente</strong><br/><br/>
+      <p>
+        {{r.descripcion}}
+      </p>
+  </div>
+  </div>
+  <br>
+    <div>
+      <a href="/admin/prestamos/incidente/" class="btn btn-success"><i class="" aria-hidden="true"></i> ATRAS </a>
+      <button  id="addrecurso" class="btn btn-primary" onclick="RevIncidente()">REVISAR INCIDENTE</button>
     </div>
 </div>
     <br class="clear" />
@@ -107,7 +116,7 @@
       </div>
       <div class="modal-body">
             <label for="exampleFormControlFile1">ESTADO FINAL DEL RECURSO</label>
-            <select class="form-control" id="selected"  onchange="select()">
+            <select class="form-control" name="estado" id="selected">
               <option value="0">ACTIVO</option>
               <option value="1">DADO DE BAJA POR PERDIDA</option>
               <option value="2">DADO DE BAJA POR DAÑO TOTAL</option>
@@ -123,7 +132,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
-        <button type="button" class="btn btn-primary" id="savebuton" onclick="devol()">Guardar</button>
+        <button type="button" class="btn btn-primary" id="savebuton" onclick="save()">Guardar</button>
       </div>
     </div>
   </div>
@@ -136,12 +145,20 @@
   <script>
 
     var incidente = "{{r}}";
+    var estadoInci = "{{r.Estado}}"
+    var recurso = "{{r.Recurso.Id_recurso}}"
+    var token = "{{ csrf_token }}"
+
+    if(estadoInci == "REVISADO"){
+      $('#addrecurso').hide();
+    }else{
+        $('#addrecurso').show();
+    }
 
     function RevIncidente(){
       $('#revIncidente').modal('show');
       axios.get("/api/Recurso/Incidente/" + incidente)
       .then(function (response) {
-          console.log(response.data);
           var datos = response.data
            $("#textarea").val(datos.descripcion);
       }).catch(function (error) {
@@ -149,7 +166,39 @@
       });
     }
 
-    
+    function save(){
+      var Estado =  $('select[name="estado"] option:selected').text()
+      var descripcion =  $("#textarea").val();
+      var data = {
+        "Estado_Recurso": Estado
+      }
+      axios.patch("/api/recurso/" + recurso + "/", data, {
+          headers: {"X-CSRFToken": token,
+          'Content-Type': 'application/json' }
+      }).then(function (response) {
+        // console.log(response.data);
+      }).catch(function (error) {
+          // console.log(error.response);
+      });
+      var data2 = {
+         "Estado": "REVISADO",
+         "descripcion": descripcion
+      }
+      axios.patch("/api/Recurso/Incidente/" + incidente + "/", data2, {
+          headers: {"X-CSRFToken": token,
+          'Content-Type': 'application/json' }
+      }).then(function (response) {
+        // console.log(response.data);
+        $('#estadop').val("REVISADO");
+        $('#revIncidente').modal('hide');
+        $('#addrecurso').hide();
+      }).catch(function (error) {
+          // console.log(error.response);
+      });
+    }
+
+
+
 
 
   </script>
