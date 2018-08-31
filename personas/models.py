@@ -22,7 +22,7 @@ class Personas(models.Model):
         ('ACTIVA', 'ACTIVA'),
         ('INACTIVA', 'INACTIVA'),
     )
-    Nro_Tarjeta = models.CharField(max_length=10, null=False, unique=True, primary_key=True)
+    Nro_Tarjeta = models.CharField(max_length=50, null=False, unique=True)
     Nro_Documento = models.CharField(max_length=80,null=False)
     Nombres = models.CharField(max_length=80)
     Apellidos = models.CharField(max_length=80)

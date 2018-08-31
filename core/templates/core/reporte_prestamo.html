@@ -127,13 +127,21 @@
             }else{
               incidente ="NO";
             }
+
+            var devol = "";
+            if(datos.detailprestamo[i].Fecha_devolucion==null){
+              devol = " ";
+            }else{
+              devol= datos.detailprestamo[i].Fecha_devolucion
+            }
+
             totalprest=totalprest+1;
             var row = '<tr class="row1" >' +
                    '<td class="field-Id_prestamo">' + datos.detailprestamo[i].Id_detalle+ "</td>"+
                    "<td>" +  datos.detailprestamo[i].Recurso_detalle.nombre_recurso  + "</td>"+
                   "<td>" + datos.detailprestamo[i].Fecha_prestamo  + "</td>"+
                    "<td>" + datos.detailprestamo[i].Estado  + "</td>"+
-                  "<td>" +  datos.detailprestamo[i].Fecha_devolucion + "</td>"+
+                  "<td>" +  devol + "</td>"+
                   "<td>" +  datos.detailprestamo[i].Usuario_devolucion.get_full_name + "</td>"+
                    "<td>" + incidente + "</td>"+
                    "</tr>";

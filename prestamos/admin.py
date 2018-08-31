@@ -10,8 +10,9 @@ from django.contrib import admin
 
 # Register your models here.
 class Prestamos (admin.ModelAdmin):
-    def has_add_permission(self, request):
-         return False
+    actions = None
+    # def has_add_permission(self, request):
+    #      return False
 
     # def get_actions(self, request):
     #     actions = super(Prestamos, self).get_actions(request) # Obtenemos todas las acciones de este modelo
@@ -36,9 +37,9 @@ class Prestamos (admin.ModelAdmin):
         self.fields = ('Usuario_Prestatario','Persona','Estado_prestamo','Fecha_prestamo','Hora_prestamo','Fecha_devolucion','Hora_devolucion',)
         return super(Prestamos, self).add_view(*args, **kwargs)
 
-    # def change_view(self, *args, **kwargs):
-    #     self.fields = ('Estado_prestamo',)
-    #     return super(Prestamos, self).change_view(*args, **kwargs)
+    def change_view(self, *args, **kwargs):
+        self.fields = ('Estado_prestamo','Fecha_devolucion')
+        return super(Prestamos, self).change_view(*args, **kwargs)
 
     def Nombre_Completo(self, obj):
         return obj.Persona.Nombres + " " + obj.Persona.Apellidos
@@ -46,17 +47,20 @@ class Prestamos (admin.ModelAdmin):
     list_display = ['Id_prestamo','Usuario_Prestatario','Nombre_Completo','Estado_prestamo','Fecha_prestamo','Hora_prestamo','Reporte_Prestamo', 'Devolucion' ]
     search_fields = ('Id_prestamo','Estado_prestamo','Usuario_Prestatario__username','Persona__Primer_Apellido','Persona__Primer_Nombre','Persona__Segundo_Apellido','Persona__Nro_Tarjeta',)
     list_filter = ('Estado_prestamo','Usuario_Prestatario__username')
+    raw_id_fields = ('Persona',)
 
     class Meta:
 		model = Prestamo
 
 class Incidentes (admin.ModelAdmin):
+    actions = None
+
     def change_view(self, *args, **kwargs):
         self.fields = ('descripcion',)
         return super(Incidentes, self).change_view(*args, **kwargs)
 
-    def has_add_permission(self, request):
-        return False
+    # def has_add_permission(self, request):
+    #     return False
 
     def Nombre_Completo(self, obj):
         return obj.Persona.Nombres + " " + obj.Persona.Apellidos
@@ -92,6 +96,15 @@ class DetallePrestamos (admin.ModelAdmin):
         class Meta:
 		          model = DetallePrestamo
 
+class Detalle_Incidentes (admin.ModelAdmin):
+    #def has_add_permission(self, request):
+    #    return False
+        list_display = ['id','incidente','descripcion']
+        class Meta:
+		          model = Detalle_Incidente
+
+
+admin.site.register(Detalle_Incidente, Detalle_Incidentes)
 admin.site.register(DetallePrestamo, DetallePrestamos)
 admin.site.register(Prestamo, Prestamos)
 admin.site.register(Incidente, Incidentes)

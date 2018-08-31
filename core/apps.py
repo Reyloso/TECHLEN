@@ -33,6 +33,7 @@ class SuitConfig(DjangoSuitConfig):
         ]),
         ParentItem('Incidentes', children=[
             ChildItem(model='prestamos.incidente'),
+            ChildItem(model='prestamos.detalle_incidente'),
         ]),
         ParentItem('Reportes', children=[
             ChildItem('Reporte ', url='/admin/Reporte/'),

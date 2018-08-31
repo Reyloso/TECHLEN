@@ -7,7 +7,7 @@ from import_export import resources
 
 # Register your models here.
 class ProgramasResource(resources.ModelResource):
-
+    actions = None
     class Meta:
         import_id_fields = ('cod',)
         model = Programa
@@ -15,6 +15,7 @@ class ProgramasResource(resources.ModelResource):
         fields =  ('cod','nombre')
 
 class Programas (ImportExportModelAdmin):
+    actions = None
     list_display = ['cod','nombre']
     list_filter = ['nombre']
     search_fields = ('nombre','cod')

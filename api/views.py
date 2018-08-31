@@ -50,15 +50,24 @@ class TipoPersonaDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = TipoPersona.objects.all()
     serializer_class = TipoPersonaSerializer
 
+
+class PersonaFilter(django_filters.FilterSet):
+
+    class Meta:
+        model = Personas
+        fields = ('Nro_Tarjeta',)
+
 #vistas de estudiantes, Profesores o adminstrativos
 @action(methods=['post'], detail=True)
 class PersonasList(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     queryset = Personas.objects.all()
     serializer_class = PersonaSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = PersonaFilter
 
     @detail_route(methods=['post'])
-    def set_incidente(self, request, pk=None):
+    def set_inciDetalle(self, request, pk=None):
         persona = self.get_object()
         serializer = IncidenteSerializer(data=request.data)
         if serializer.is_valid():
@@ -78,7 +87,7 @@ class PrestamoFilter(django_filters.FilterSet):
 
     class Meta:
         model = Prestamo
-        fields = ('Persona','Fecha_prestamo')
+        fields = ('Persona__Nro_Tarjeta','Fecha_prestamo','Estado_prestamo',)
         #ejemplo de consulta por los dos campos definidos
         # ?Persona=3333031643
         # ?Fecha_prestamo_0=2018-08-20&Fecha_prestamo_1=2018-08-21
@@ -109,14 +118,35 @@ class PrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
 
 #vistas de los Incidentes
 @action(methods=['post'], detail=True)
-class IncidenteList(generics.ListCreateAPIView):
+class IncidenteList(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     queryset = Incidente.objects.all()
     serializer_class = IncidenteSerializer
 
+    @detail_route(methods=['post'])
+    def set_detalleincidente(self, request, pk=None):
+        Incidente = self.get_object()
+        serializer = DetalleIncidenteSerializer(data=request.data)
+        if serializer.is_valid():
+            print Incidente
+            print serializer.incidente
+            serializer.save(incidente=Incidente)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class IncidenteDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Incidente.objects.all()
     serializer_class = IncidenteSerializer
+
+#vita de detalle prestamo
+class DetalleIncidenteList(generics.ListCreateAPIView):
+    queryset = Detalle_Incidente.objects.all()
+    serializer_class = DetalleIncidenteSerializer
+
+class DetalleIncidenteDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Detalle_Incidente.objects.all()
+    serializer_class = DetalleIncidenteSerializer
 
 #vistas de los programas
 class ProgramaList(generics.ListCreateAPIView):

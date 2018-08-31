@@ -4,7 +4,7 @@ from rest_framework import serializers
 from configuracion.models import Programa
 from recursos.models import Tipo_Recurso, Recurso, Marca
 from personas.models import Personas,TipoPersona
-from prestamos.models import Prestamo, Incidente, DetallePrestamo
+from prestamos.models import Prestamo, Incidente, DetallePrestamo, Detalle_Incidente
 from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 import django_filters.rest_framework as filters
@@ -36,10 +36,24 @@ class RecursoSerializer(serializers.ModelSerializer):
         fields = "__all__"
         #fields = ('Id_recurso','tipo_de_recurso','Marca','nombre_recurso','referencia','Estado_Recurso','fecha_registro','Detalle_Prestamo')
 
+class DetalleIncidenteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Detalle_Incidente
+        fields = "__all__"
+
 class IncidenteSerializer(serializers.ModelSerializer):
+    detalleincidente = DetalleIncidenteSerializer(many=True,write_only=True)
+    detailincidente = DetalleIncidenteSerializer(many=True, read_only=True, source='detalleincidente_set')
     class Meta:
         model = Incidente
-        fields = "__all__"
+        fields = ('Id_Incidente','usuario', 'Persona','Tipo_Incidente','Fecha_Incidente','Recurso','Prestamo_detalle','Estado','detalleincidente','detailincidente')
+
+    def create(self, validated_data):
+        detalleincidente_data = validated_data.pop('detalleincidente')
+        Incidente = Incidente.objects.create(**validated_data)
+        for Detallei_data in detalleincidente_data:
+            Detalle_Incidente.objects.create(incidente=Incidente,**Detallei_data)
+        return Incidente
 
 class DetallePrestamoSerializer(serializers.ModelSerializer):
     Usuario_devolucion = UserSerializer(read_only=True)
@@ -49,7 +63,7 @@ class DetallePrestamoSerializer(serializers.ModelSerializer):
     Incidentes = IncidenteSerializer(many=True, read_only=True,source='incidente_set')
     class Meta:
         model = DetallePrestamo
-        fields = fields = ('Id_detalle','Fecha_prestamo', 'Estado','Fecha_devolucion','Prestamo','Usuario_devolucion','DevolucionuserId','recursoid','Recurso_detalle','Incidentes')
+        fields = ('Id_detalle','Fecha_prestamo', 'Estado','Fecha_devolucion','Prestamo','Usuario_devolucion','DevolucionuserId','recursoid','Recurso_detalle','Incidentes')
 
 class ProgramaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -65,7 +79,7 @@ class PersonaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Personas
-        fields = ('Nro_Tarjeta','Nro_Documento','Nombres','Apellidos','Estado_Tarjeta','Tipo_Persona','Tipo_PersonaId','Dependencia','Codigo_Acceso','ProgramaId','Incidentes')
+        fields = ('id','Nro_Tarjeta','Nro_Documento','Nombres','Apellidos','Estado_Tarjeta','Tipo_Persona','Tipo_PersonaId','Dependencia','Codigo_Acceso','ProgramaId','Incidentes')
 
 
 class PrestamoSerializer(serializers.ModelSerializer):

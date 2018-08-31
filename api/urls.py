@@ -55,6 +55,23 @@ incidentep = views.DetallePrestamoList.as_view({
     'post': 'set_incidente'
 })
 
+#vista personalizada de detalle incidente
+incidente_list = views.IncidenteList.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+
+incidente_detail = views.IncidenteList.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+
+incidentedetail = views.IncidenteList.as_view({
+    'post': 'set_detalleincidente'
+})
+
 urlpatterns = [
     url(r'^api/Persona/$', persona_list),
     url(r'^api/Persona/(?P<pk>\d+)/$', persona_detail),
@@ -64,8 +81,11 @@ urlpatterns = [
     url(r'^api/Prestamo/$', prestamo_list),
     url(r'^api/Prestamo/(?P<pk>\d+)/$', prestamo_detail),
     url(r'^api/Prestamo/(?P<pk>\d+)/devolucion/$', Detalle_prestamo),
-    url(r'^api/Recurso/Incidente/$', views.IncidenteList.as_view()),
-    url(r'^api/Recurso/Incidente/(?P<pk>\d+)/$', views.IncidenteDetail.as_view()),
+    url(r'^api/Recurso/Incidente/$', incidente_list),
+    url(r'^api/Recurso/Incidente/(?P<pk>\d+)/$', incidente_detail),
+    url(r'^api/Recurso/Incidente/(?P<pk>\d+)/detalle/$', incidentedetail),
+    url(r'^api/Incidente/detalle/$', views.DetalleIncidenteList.as_view()),
+    url(r'^api/Incidente/detalle/(?P<pk>\d+)/$', views.DetalleIncidenteDetail.as_view()),
     url(r'^api/Recurso/Tipo/$', views.TipoRecursoList.as_view()),
     url(r'^api/Recurso/Marca/$', views.MarcaList.as_view()),
     url(r'^api/programa/$', views.ProgramaList.as_view()),

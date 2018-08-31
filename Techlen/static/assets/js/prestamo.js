@@ -2,46 +2,57 @@ $( document ).ready(function() {
   //$(".loader-box").hide();
   //$(".inputidestu").hide();
   $(".perfil").hide();
+  var cantidad = 0;
 });
-
- var cantidad = 0;
-   function buscar(ele) {
-      if(event.key === 'Enter') {
+   function buscar(ele,e) {
+      if(e.keyCode === 13) {
           //console.log(ele.value);
           var tarjeta = ele.value;
-          axios.get('/api/Persona/'+tarjeta)
-            .then(function (response) {
-                  var user = response.data;
-                  // console.log(user);
-                  if(user.Estado_Tarjeta == "ACTIVA"){
-                      $(".loader-box").hide();
-                      $(".inputidestu").hide();
-                      $(".perfil").show();
-                      var last_name = user.Nombres + " " + user.Apellidos
-                      $("#tarjeta").text(user.Nro_Tarjeta);
-                      $("#nombre").text(last_name.toUpperCase());
-                      $("#cargo").text(user.Tipo_Persona.Tipo_persona);
-                      $("#documento").text(user.Nro_Documento);
-                      $("#programa").text(user.Dependencia.nombre.toUpperCase());
-                      if(user.Incidentes.length == 0){
-                          $("#incidentes").text("NO");
-                      }else{
-                        $("#incidentes").text("SI");
-                      }
-                      $("#cantincidentes").text(user.Incidentes.length)
+          axios.get('/api/Prestamo/?Estado_prestamo=EN+CURSO&Persona__Nro_Tarjeta=' + tarjeta )
+          .then(function (response) {
+              prestamos =response.data
+              if(prestamos.length == 0){
+                axios.get('/api/Persona/?Nro_Tarjeta='+tarjeta)
+                  .then(function (response) {
+                        var user = response.data;
+                        if(user[0].Estado_Tarjeta == "ACTIVA"){
+                            $(".loader-box").hide();
+                            $(".inputidestu").hide();
+                            $(".perfil").show();
+                            var last_name = user[0].Nombres + " " + user[0].Apellidos
+                            $("#tarjeta").text(user[0].Nro_Tarjeta);
+                            $("#tarjeta").val(user[0].id);
+                            $("#nombre").text(last_name.toUpperCase());
+                            $("#cargo").text(user[0].Tipo_Persona.Tipo_persona);
+                            $("#documento").text(user[0].Nro_Documento);
+                            $("#programa").text(user[0].Dependencia.nombre.toUpperCase());
+                            if(user[0].Incidentes.length == 0){
+                                $("#incidentes").text("NO");
+                            }else{
+                              $("#incidentes").text("SI");
+                            }
+                            $("#cantincidentes").text(user[0].Incidentes.length)
 
-                  }else{
-                    $("#mensaje").text("Esta Tarjeta Se Encuentra Inactiva...");
-                  }
-            })
-            .catch(function (error) {
-                $("#mensaje").text("Persona No Encontrada Reintentar");
-                //console.log(error);
-            });
-          ele.value = "";
+                        }else{
+                          $("#mensaje").text("Esta Tarjeta Se Encuentra Inactiva...");
+                        }
+                  })
+                  .catch(function (error) {
+                      $("#mensaje").text("Persona No Encontrada Reintentar");
+                      // console.log(error);
+                  });
+                ele.value = "";
+              }else{
+                // console.log(prestamos[0].Id_prestamo)
+                window.location.replace("/admin/Prestamo/Detalle/"+prestamos[0].Id_prestamo)
+              }
+          })
+          .catch(function (error) {
+              $("#mensaje").text("Persona No Encontrada Reintentar");
+                // console.log(error);
+          });
       }
   }
-
 var dbRecursos = [];
 
 function guardarRecursoLocal(idRecurso){
@@ -57,7 +68,7 @@ function Mensaje(t){
         switch (t) {
             case 1: //
                 $(".mensaje-alerta").empty();
-                console.log("prestamo guardado!!")
+                // console.log("prestamo guardado!!")
                 dbRecursos=[]
                 break;
             case 2: //
@@ -108,76 +119,81 @@ function Mensaje(t){
                   "<div class='alert alert-danger' role='alert'>Recurso fue dado de baja por el administrador</div>"
                 );
                 break;
+            case 10: //
+                $(".mensaje-alerta").empty();
+                $(".mensaje-alerta").append(
+                  "<div class='alert alert-danger' role='alert'>No ha agregado recursos a este prestamo</div>"
+                );
+                break;
             default:
 
         }
     }
 
-  function buscarp() {
-    var tabla="";
-    var ele = $("#add").val()
-    if(event.key === 'Enter') {
-          $("#add").val("");
-          //console.log(ele.value);
-          var codigo = ele;
-          axios.get('/api/recurso/'+codigo)
-            .then(function (response) {
-                  var recurso = response.data;
-                  axios.get('/api/Prestamo/')
-                    .then(function (response) {
-                      var prestamos = response.data
-                      var bandera=false
-                      for(data in prestamos){
-                        if(prestamos[data].Estado_prestamo !== "DEVUELTO"){
-                          for(detalles in prestamos[data].detailprestamo){
-                            //console.log(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso)
-                            if(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso == recurso.Id_recurso && prestamos[data].detailprestamo[detalles].Estado !== "DEVUELTO" ){
-                              //console.log(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso)
-                              bandera=true
-                              break;
-                            }
-                          }
-                        }
-                        if(bandera==true){
-                          break;
-                        }
-                      }
 
-                      if(recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == false && bandera == false ){
-                        guardarRecursoLocal(recurso.Id_recurso);
-                        tabla+= '<li class="list-group-item d-flex justify-content-between lh-condensed">'+
-                          '<div>'+
-                            '<h6 class="my-0">'+recurso.nombre_recurso+'</h6>'+
-                            '<small class="text-muted">'+ "ID: " + recurso.Id_recurso+'</small>'+
-                          '</div>'+
-                          '<span class="text-muted borrar" data-eliminar="' + recurso.Id_recurso + '"><i class="fa fa-trash"></i></span>'+
-                        '</li>'
-                        $("#listaRecursos").append(tabla);
-                        $("#cantidad").text(dbRecursos.length);
-                        if (tabla != "") {
-                          var eliminar = document.getElementsByClassName("borrar");
-                          for(var i = 0; i < eliminar.length; i++){
-                            eliminar[i].addEventListener("click", borrar, false);
-                          }
-                        }
-                      }else if (recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == true){
-                        Mensaje(6);
-                      }else if(recurso.Estado_Recurso == "EN MANTENIMIENTO"){
-                        Mensaje(8);
-                      }else if(recurso.Estado_Recurso == "DADO DE BAJA POR DAÑO TOTAL"){
-                        Mensaje(9);
-                      }else{
-                        Mensaje(3);
-                      }
-                  })
-                  .catch(function (error) {
-                      console.log(error);
-                  });
+
+  function buscarp(ele,e) {
+    var tabla="";
+    if(e.keyCode === 13) {
+      var codigo = ele.value;
+      axios.get('/api/recurso/' + codigo)
+        .then(function (response) {
+            var recurso = response.data;
+            console.log(recurso)
+            axios.get('/api/Prestamo/?Estado_prestamo=EN+CURSO')
+              .then(function (response) {
+                var prestamos = response.data
+                console.log(prestamos)
+                var bandera=false
+                for(data in prestamos){
+                  for(detalles in prestamos[data].detailprestamo){
+                    //console.log(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso)
+                    if(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso == recurso.Id_recurso && prestamos[data].detailprestamo[detalles].Estado !== "DEVUELTO" ){
+                      //console.log(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso)
+                      bandera=true
+                      break;
+                    }
+                  }
+                  if(bandera==true){
+                    break;
+                  }
+                }
+                if(recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == false && bandera == false ){
+                  guardarRecursoLocal(recurso.Id_recurso);
+                  tabla+= '<li class="list-group-item d-flex justify-content-between lh-condensed">'+
+                    '<div>'+
+                    '<h6 class="my-0">'+recurso.nombre_recurso+'</h6>'+
+                    '<small class="text-muted">'+ "ID: " + recurso.Id_recurso+'</small>'+
+                    '</div>'+
+                    '<span class="text-muted borrar" data-eliminar="' + recurso.Id_recurso + '"><i class="fa fa-trash"></i></span>'+
+                    '</li>'
+                  $("#listaRecursos").append(tabla);
+                  $("#cantidad").text(dbRecursos.length);
+                  if (tabla != "") {
+                    var eliminar = document.getElementsByClassName("borrar");
+                    for(var i = 0; i < eliminar.length; i++){
+                      eliminar[i].addEventListener("click", borrar, false);
+                    }
+                  }
+                }else if (recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == true){
+                  Mensaje(6);
+                }else if(recurso.Estado_Recurso == "EN MANTENIMIENTO"){
+                  Mensaje(8);
+                }else if(recurso.Estado_Recurso == "DADO DE BAJA POR DAÑO TOTAL"){
+                  Mensaje(9);
+                }else{
+                  Mensaje(3);
+                }
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
            })
           .catch(function (error) {
-              Mensaje(4);
+            Mensaje(4);
+              // console.log(error)
           });
-        ele.value = "";
+      ele.value = "";
     }
   }
 
@@ -194,7 +210,7 @@ function Mensaje(t){
     $("#cantidad").text(dbRecursos.length);
 
     $(document).on('click', '.borrar', function (event) {
-    event.preventDefault();
-    $(this).closest('li').remove();
+      event.preventDefault();
+      $(this).closest('li').remove();
     });
 }

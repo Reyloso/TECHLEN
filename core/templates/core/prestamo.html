@@ -51,7 +51,7 @@
   </div>
 </div>
 <div class="container inputidestu" style="height: 33px;" id="#inputidestu">
-  <input  id="idestu" autofocus type="text" placeholder="IdEstudiante" onkeydown="buscar(this)"/>
+  <input  id="idestu" autofocus type="text" placeholder="IdEstudiante" onkeydown="buscar(this,event)"/>
 </div>
 
 <div class="container perfil">
@@ -64,7 +64,7 @@
           </h4>
           <div class="card p-2">
             <div class="input-group">
-              <input type="text" id="add" class="form-control" placeholder="Codigo De Recurso" onkeydown="buscarp()">
+              <input type="text" id="add" class="form-control" placeholder="Codigo De Recurso" onkeydown="buscarp(this,event)">
               <div class="input-group-append">
 
               </div>
@@ -88,7 +88,7 @@
               </div>
               <div class="col-md-6 mb-3">
                 <h6>N° Tarjeta</h6>
-                <label for="firstName" id="tarjeta"></label>
+                <label for="firstName" value="" id="tarjeta"></label>
               </div>
               <div class="col-md-6 mb-3">
                 <h6>N° Documento</h6>
@@ -122,23 +122,26 @@
 <script>
 
 var usuario = "{{user.id}}"
-console.log(usuario)
 var detalleprestamo=[];
 function guardarPrestamo(){
 
   var datos = generarJSON();
   var token = "{{ csrf_token }}"
-
-  axios.post("/api/Prestamo/", datos, {
-      headers: {"X-CSRFToken": token}
-  })
-    .then(function (response) {
-      window.location.replace("/admin/prestamos/prestamo/")
+  var recursos = DRecursos();
+  if(recursos.length == 0){
+    Mensaje(10);
+  }else{
+    axios.post("/api/Prestamo/", datos, {
+        headers: {"X-CSRFToken": token}
     })
-    .catch(function (error) {
-      //console.log(error);
-    });
-return Mensaje(1);
+      .then(function (response) {
+        window.location.replace("/admin/prestamos/prestamo/")
+      })
+      .catch(function (error) {
+        //console.log(error);
+      });
+    return Mensaje(1);
+  }
 }
 
 function generarJSON(){
@@ -162,13 +165,15 @@ function generarJSON(){
     //console.log(detalleprestamo)
   }
   //console.log(detalleprestamo)
+
+  var personaid = $("#tarjeta").val();
   var fecha  = date.getFullYear() +"-"+ (date.getMonth() + 1) + "-" + date.getDate()
   var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
   var usuario = "{{user.id}}"
   var recursos = DRecursos();
   var datos = {
       "PrestatarioId": usuario,
-      "personaId" : $("#tarjeta").text(),
+      "personaId" : personaid,
       "Estado_prestamo": "EN CURSO",
       "Fecha_prestamo": fecha,
       "Hora_prestamo": hora,

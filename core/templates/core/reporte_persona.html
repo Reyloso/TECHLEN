@@ -30,13 +30,6 @@
 
 {% endblock %}
 {% block content %}
-            {% if r.foto_url %}
-                <img style="width:150px; height:150px; border-radius:50%" src="{{ r.foto_url }}" alt="" />
-
-            {% else %}
-
-            <img style="width:150px; height:150px; margin-bottom:60px; border-radius:50%" src="https://www.worldcrunch.com/assets/img/avatars/thumbnails/default-user-img-profile.jpg" alt="" />
-            {% endif %}
 
         <div style="display: inline-block; margin-left: 10px">
           <h3 style="font-size:17px;">{{ r.Nombres }} {{ r.Apellidos }}</h3>
@@ -49,7 +42,7 @@
           </p>
         </div>
 
-      <h3 style="display: inline-block; float: right"> <i class="fa fa-certificate" aria-hidden="true"></i> Certificado 01 - Reporte TI
+      <h3 style="display: inline-block; float: right"> <i class="fa fa-certificate" aria-hidden="true"></i> Reporte Personal - Reporte TI
         <br>
         <small>MONTERIA-CORDOBA </small>
           <br>

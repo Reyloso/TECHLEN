@@ -79,8 +79,18 @@ class Incidente(models.Model):
     Fecha_Incidente = models.DateField(default=now)
     Recurso = models.ForeignKey(Recurso, null=True)
     Prestamo_detalle = models.ForeignKey(DetallePrestamo, null=True)
-    descripcion = models.TextField(null=True)
     Estado= models.CharField(max_length=30, choices=ESTADO)
 
     def __unicode__(self):
         return unicode(str(self.Id_Incidente))
+
+
+class Detalle_Incidente(models.Model):
+    descripcion = models.TextField(null=True)
+    incidente =  models.ForeignKey(Incidente, null=True)
+
+    class Meta:
+        verbose_name_plural = "detalle incidencias"
+
+    def __unicode__(self):
+        return unicode(str(self.descripcion))
