@@ -96,15 +96,15 @@ class DetallePrestamos (admin.ModelAdmin):
         class Meta:
 		          model = DetallePrestamo
 
-class Detalle_Incidentes (admin.ModelAdmin):
+class DetalleIncidentes (admin.ModelAdmin):
     #def has_add_permission(self, request):
     #    return False
-        list_display = ['id','incidente','descripcion']
+        list_display = ['id','Incidente','descripcion']
         class Meta:
-		          model = Detalle_Incidente
+		          model = DetalleIncidente
 
 
-admin.site.register(Detalle_Incidente, Detalle_Incidentes)
+admin.site.register(DetalleIncidente, DetalleIncidentes)
 admin.site.register(DetallePrestamo, DetallePrestamos)
 admin.site.register(Prestamo, Prestamos)
 admin.site.register(Incidente, Incidentes)

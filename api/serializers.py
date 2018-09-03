@@ -4,7 +4,7 @@ from rest_framework import serializers
 from configuracion.models import Programa
 from recursos.models import Tipo_Recurso, Recurso, Marca
 from personas.models import Personas,TipoPersona
-from prestamos.models import Prestamo, Incidente, DetallePrestamo, Detalle_Incidente
+from prestamos.models import Prestamo, Incidente, DetallePrestamo, DetalleIncidente
 from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 import django_filters.rest_framework as filters
@@ -38,7 +38,7 @@ class RecursoSerializer(serializers.ModelSerializer):
 
 class DetalleIncidenteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Detalle_Incidente
+        model = DetalleIncidente
         fields = "__all__"
 
 class IncidenteSerializer(serializers.ModelSerializer):
@@ -50,10 +50,10 @@ class IncidenteSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         detalleincidente_data = validated_data.pop('detalleincidente')
-        Incidente = Incidente.objects.create(**validated_data)
+        incidente = Incidente.objects.create(**validated_data)
         for Detallei_data in detalleincidente_data:
-            Detalle_Incidente.objects.create(incidente=Incidente,**Detallei_data)
-        return Incidente
+            DetalleIncidente.objects.create(Incidente=incidente,**Detallei_data)
+        return incidente
 
 class DetallePrestamoSerializer(serializers.ModelSerializer):
     Usuario_devolucion = UserSerializer(read_only=True)

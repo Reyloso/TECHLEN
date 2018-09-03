@@ -125,12 +125,10 @@ class IncidenteList(viewsets.ModelViewSet):
 
     @detail_route(methods=['post'])
     def set_detalleincidente(self, request, pk=None):
-        Incidente = self.get_object()
+        incidente = self.get_object()
         serializer = DetalleIncidenteSerializer(data=request.data)
         if serializer.is_valid():
-            print Incidente
-            print serializer.incidente
-            serializer.save(incidente=Incidente)
+            serializer.save(Incidente=incidente)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -141,11 +139,11 @@ class IncidenteDetail(generics.RetrieveUpdateDestroyAPIView):
 
 #vita de detalle prestamo
 class DetalleIncidenteList(generics.ListCreateAPIView):
-    queryset = Detalle_Incidente.objects.all()
+    queryset = DetalleIncidente.objects.all()
     serializer_class = DetalleIncidenteSerializer
 
 class DetalleIncidenteDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Detalle_Incidente.objects.all()
+    queryset = DetalleIncidente.objects.all()
     serializer_class = DetalleIncidenteSerializer
 
 #vistas de los programas

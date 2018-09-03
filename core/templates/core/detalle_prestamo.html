@@ -179,7 +179,7 @@ $( document ).ready(function() {
   var dbRecursos = [];
   var idDetalle = "";
   var prestamo = "{{ r.Id_prestamo }}"
-  var persona = "{{r.Persona.Nro_Tarjeta}}"
+  var persona = "{{r.Persona.id}}"
   var usuario = "{{user.id}}"
   var token = "{{ csrf_token }}"
   var filasMostrar = "";
@@ -262,7 +262,7 @@ var token = "{{ csrf_token }}"
 $(document).on('click', '.update', function (event) {
   event.preventDefault();
   elemento = this
-  console.log(elemento)
+  // console.log(elemento)
 });
 
 function devol(){
@@ -337,26 +337,33 @@ function devol(){
   var fecha  = date.getFullYear() +"-"+ (date.getMonth()+1) + "-" + date.getDate();
   var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
   var texto = $("#textarea").val()
+
+  var descripcion = {
+  "descripcion": texto
+  }
+
+  var detalleincidente = []
+  detalleincidente.push(descripcion)
   var datos = {
     "Fecha_Incidente": fecha,
-    "descripcion": texto,
     "Estado": "EN REVISION",
     "Recurso": idRecurso,
     "Prestamo_detalle": idDetalle,
     "Persona": persona,
     "usuario": usuario,
-    "Tipo_Incidente":tipo
+    "Tipo_Incidente":tipo,
+    "detalleincidente": detalleincidente
   };
     //console.log(datos)
   axios.post("/api/Recurso/Incidente/", datos, {
     headers: {"X-CSRFToken": token}
   }).then(function (response) {
-    //console.log(response);
+    // console.log(response);
     $('#exampleModalCenter').modal('hide');
     var val = $("#selected").val("0");
     var texto = $("#textarea").val("");
   }).catch(function (error) {
-    //console.log(error);
+    // console.log(error);
   });
 }else{
     // si no existe la incidencia se le cambia el estado al detalle del prestamo

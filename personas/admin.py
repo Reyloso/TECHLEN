@@ -39,18 +39,12 @@ class PersonaResource(resources.ModelResource):
 		export_order = ('Apellidos','Nombres','Dependencia','Nro_Tarjeta','Tipo_Persona','Codigo_Acceso','Estado_Tarjeta','Nro_Documento')
 		fields =  ('Nro_Tarjeta','Nro_Documento','Nombres','Apellidos','Estado_Tarjeta','Tipo_Persona','Dependencia','Codigo_Acceso')
 
-
 class Persona (ImportExportModelAdmin):
     list_per_page = 40
     actions = None
     def has_delete_permission(self, request, obj=None):
         return False
 
-
-	# def add_view(self, *args, **kwargs):
-	# 	self.fields = ('Nro_Tarjeta','Id_Persona','Primer_Nombre','Segundo_Nombre','Primer_Apellido','Segundo_Apellido','Tipo_Documento','Nro_Documento','Sede','genero','Correo_Institucional','Programa_Academico','Ciclo_Lectivo','Estado_tarjeta', 'Tipo_Persona')
-	# 	return super(Persona, self).add_view(*args, **kwargs)
-	#
     def change_view(self, *args, **kwargs):
 	 	self.fields = ('Nro_Documento','Estado_Tarjeta','Tipo_Persona','Dependencia','Codigo_Acceso')
 	 	return super(Persona, self).change_view(*args, **kwargs)
@@ -67,14 +61,11 @@ class Persona (ImportExportModelAdmin):
     search_fields = ('Nro_Tarjeta','Nro_Documento','Nombres','Apellidos')
     resource_class = PersonaResource
 
-
     def Nombre_Completo(self, obj):
         return obj.Nombres + " " + obj.Apellidos
 
     class Meta:
         	model = Personas
-
-
 
 
 admin.site.register(Personas,Persona)

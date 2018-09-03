@@ -85,9 +85,9 @@ class Incidente(models.Model):
         return unicode(str(self.Id_Incidente))
 
 
-class Detalle_Incidente(models.Model):
+class DetalleIncidente(models.Model):
     descripcion = models.TextField(null=True)
-    incidente =  models.ForeignKey(Incidente, null=True)
+    Incidente =  models.ForeignKey(Incidente, null=True)
 
     class Meta:
         verbose_name_plural = "detalle incidencias"

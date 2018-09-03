@@ -100,7 +100,8 @@
   <br>
     <div>
       <a href="/admin/prestamos/incidente/" class="btn btn-success"><i class="" aria-hidden="true"></i> ATRAS </a>
-      <button  id="addrecurso" class="btn btn-primary" onclick="RevIncidente()">REVISAR INCIDENTE</button>
+      <button  id="addetail" class="btn btn-success" onclick="add()">AÑADIR DETALLE A INCIDENTE</button>
+      <button  id="addrecurso" class="btn btn-danger" onclick="RevIncidente()">CERRAR INCIDENTE</button>
     </div>
 </div>
     <br class="clear" />
@@ -109,7 +110,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">REVISION INCIDENTE</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">CERRAR INCIDENTE</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -137,6 +138,36 @@
     </div>
   </div>
 </div>
+
+
+<!--modal add detail incidente   -->
+
+<div class="modal fade" id="detailincidente" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">AÑADIR DETALLE A INCIDENTE</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+              <label for="exampleFormControlFile1" id="label">Escriba toda la informacion posible y detallada sobre la incidencia ocurrida.*</label>
+              <div class="input-group" id="incidencia">
+              <div class="input-group-prepend">
+                <span class="input-group-text" >Detalle incidencia</span>
+              </div>
+              <textarea class="form-control" aria-label="With textarea" id="textarea2"></textarea>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="savebuton" onclick="addetail()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--end modal add detail   -->
 </div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -151,19 +182,19 @@
 
     if(estadoInci == "REVISADO"){
       $('#addrecurso').hide();
+      $('#addetail').hide();
     }else{
         $('#addrecurso').show();
+        $('#addetail').show();
     }
 
     function RevIncidente(){
       $('#revIncidente').modal('show');
-      axios.get("/api/Recurso/Incidente/" + incidente)
-      .then(function (response) {
-          var datos = response.data
-           $("#textarea").val(datos.descripcion);
-      }).catch(function (error) {
-      //console.log(error);
-      });
+
+    }
+
+    function add(){
+      $('#detailincidente').modal('show');
     }
 
     function save(){
@@ -180,9 +211,22 @@
       }).catch(function (error) {
           // console.log(error.response);
       });
+
+      var data3 = {
+        "Incidente": incidente,
+        "descripcion": descripcion
+      }
+
+      axios.post("/api/Incidente/detalle/", data3, {
+        headers: {"X-CSRFToken": token}
+      }).then(function (response) {
+        // console.log(response);
+      }).catch(function (error) {
+        // console.log(error);
+      });
+
       var data2 = {
          "Estado": "REVISADO",
-         "descripcion": descripcion
       }
       axios.patch("/api/Recurso/Incidente/" + incidente + "/", data2, {
           headers: {"X-CSRFToken": token,
@@ -192,8 +236,28 @@
         $('#estadop').val("REVISADO");
         $('#revIncidente').modal('hide');
         $('#addrecurso').hide();
+        $('#addetail').hide();
       }).catch(function (error) {
           // console.log(error.response);
+      });
+    }
+
+
+    function addetail(){
+      var descripcion2 =  $("#textarea2").val();
+
+      var data3 = {
+        "Incidente": incidente,
+        "descripcion": descripcion2
+      }
+
+      axios.post("/api/Incidente/detalle/", data3, {
+        headers: {"X-CSRFToken": token}
+      }).then(function (response) {
+        $('#detailincidente').modal('hide');
+        // console.log(response);
+      }).catch(function (error) {
+        // console.log(error);
       });
     }
 
