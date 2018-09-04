@@ -78,7 +78,7 @@ function TipoReport(){
 
 function countRow(){
   var nFilas = $("#detallep tr").length;
-  console.log("n filas "+nFilas)
+  // console.log("n filas "+nFilas)
   return nFilas;
 }
 
@@ -205,7 +205,7 @@ function instanciarReporte(query){
       "<th>Fecha Incidente</th>"+
       "<th>Estado Incidente</th>"+
       "<th>Recurso Incidente</th>"+
-      "<th>descripcion Incidente</th>"+
+      "<th>Tipo Incidente</th>"+
     "</tr>"
       $( "#cabezaReporte" ).append(thead);
   }else if($( "#tipoReporte" ).val()=="2"){
@@ -248,7 +248,7 @@ function instanciarReporte(query){
             "<td>" + query[key].detailprestamo[j].Incidentes[0].Fecha_Incidente + "</td>"+
             "<td>" + query[key].detailprestamo[j].Incidentes[0].Estado + "</td>"+
             "<td>" + query[key].detailprestamo[j].Recurso_detalle.nombre_recurso + "</td>"+
-            "<td>" + query[key].detailprestamo[j].Incidentes[0].descripcion + "</td>"+
+            "<td>" + query[key].detailprestamo[j].Incidentes[0].Tipo_Incidente + "</td>"+
             "</tr>";
           $("#detallep").append(row);
         }
@@ -308,8 +308,7 @@ function instanciarReporte(query){
       "</tr>";
     $("#detallep").append(row);
   }else if($( "#tipoReporte" ).val() =="3" & query.length != 0){
-
-    console.log(query)
+    // console.log(query)
     for(key in query){
       //si tipo de recurso es todos
       if($("#select4").val() == "0" ){

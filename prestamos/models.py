@@ -1,6 +1,5 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.db import models
 from django.utils.timezone import now
 from personas.models import Personas
@@ -88,9 +87,12 @@ class Incidente(models.Model):
 class DetalleIncidente(models.Model):
     descripcion = models.TextField(null=True)
     Incidente =  models.ForeignKey(Incidente, null=True)
+    usuario = models.ForeignKey(User, null=True)
+    Fecha = models.DateField(null=True)
+    Hora = models.TimeField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "detalle incidencias"
 
     def __unicode__(self):
-        return unicode(str(self.descripcion))
+        return unicode(str(self.id))

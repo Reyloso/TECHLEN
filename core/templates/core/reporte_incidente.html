@@ -75,10 +75,19 @@
 </table>
 <div class="card">
 <div class="card-block">
-    <strong><i class="fa fa-list-alt" aria-hidden="true"></i> Descripcion Del Incidente</strong><br/><br/>
-    <p>
-      {{r.descripcion}}
-    </p>
+    <strong><i class="fa fa-list-alt" aria-hidden="true"></i> Descripciones Incidente</strong><br/><br/>
+    <table class="table table-striped table-hover ">
+    <thead>
+    <tr><th>Id detalle</th>
+      <th>Usuario</th>
+      <th>Fecha - Hora</th>
+      <th>Descripcion</th>
+    </tr>
+    </thead>
+    <tbody id="tabla">
+
+    </tbody>
+    </table>
 </div>
 </div>
 </div>
@@ -94,5 +103,26 @@
   function imprimir(){
     window.print()
   }
+
+  var incidente = "{{r.Id_Incidente}}"
+
+  axios.get('/api/Recurso/Incidente/'+ incidente)
+    .then(function (response) {
+      var datos = response.data
+      // console.log(datos)
+      for(i in datos.detailincidente){
+        var row = '<tr class="row1" >' +
+          '<td class="field-Id_prestamo" id="iddetalle">' + datos.detailincidente[i].id+ "</td>"+
+          '<td id="idrecurso">' + datos.detailincidente[i].usuario.get_full_name + "</td>"+
+          '<td id="nombRecurso" >'+  datos.detailincidente[i].Fecha + "  "+ datos.detailincidente[i].Hora +"</td>"+
+          "<td>"+datos.detailincidente[i].descripcion +"</td>"+
+          "</tr>";
+        $("#tabla").append(row);
+      }
+
+     })
+    .catch(function (error) {
+      //console.log(error);
+    });
   </script>
 {% endblock %}

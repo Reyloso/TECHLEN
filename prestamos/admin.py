@@ -1,4 +1,5 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from django.contrib import admin
 from .models import *
 from import_export import resources
@@ -10,14 +11,14 @@ from django.contrib import admin
 
 # Register your models here.
 class Prestamos (admin.ModelAdmin):
-    actions = None
-    # def has_add_permission(self, request):
-    #      return False
+    # actions = None
+    def has_add_permission(self, request):
+         return False
 
-    # def get_actions(self, request):
-    #     actions = super(Prestamos, self).get_actions(request) # Obtenemos todas las acciones de este modelo
-    #     del actions['delete_selected'] # Deshabilitamos la opción de borrar
-    #     return actions
+    def get_actions(self, request):
+        actions = super(Prestamos, self).get_actions(request) # Obtenemos todas las acciones de este modelo
+        del actions['delete_selected'] # Deshabilitamos la opción de borrar
+        return actions
 
     def Devolucion(self, instance):
 
@@ -38,7 +39,7 @@ class Prestamos (admin.ModelAdmin):
         return super(Prestamos, self).add_view(*args, **kwargs)
 
     def change_view(self, *args, **kwargs):
-        self.fields = ('Estado_prestamo','Fecha_devolucion')
+        self.fields = ('Fecha_devolucion',)
         return super(Prestamos, self).change_view(*args, **kwargs)
 
     def Nombre_Completo(self, obj):
@@ -84,7 +85,7 @@ class Incidentes (admin.ModelAdmin):
     Revision_Incidente.is_column = True
 
     list_display = ['usuario','Nombre_Completo','Id_Recurso','Recurso','Tipo_Incidente','Estado','Fecha_Incidente','Reporte_Incidente','Revision_Incidente']
-    search_fields = ('Estado','Tipo_Incidente','Persona__Primer_Apellido','Persona__Primer_Nombre','Persona__Segundo_Apellido','Persona__Nro_Tarjeta','usuario__username','Recurso__Id_recurso')
+    search_fields = ('Estado','Tipo_Incidente','Persona__Nombres','Persona__Apellidos','Persona__Nro_Tarjeta','usuario__username','Recurso__Id_recurso')
     list_filter = ('Estado','Tipo_Incidente',)
     class Meta:
         model = Incidente
@@ -99,7 +100,7 @@ class DetallePrestamos (admin.ModelAdmin):
 class DetalleIncidentes (admin.ModelAdmin):
     #def has_add_permission(self, request):
     #    return False
-        list_display = ['id','Incidente','descripcion']
+        list_display = ['id','Incidente','descripcion','usuario','Fecha','Hora']
         class Meta:
 		          model = DetalleIncidente
 

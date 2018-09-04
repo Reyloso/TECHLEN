@@ -92,7 +92,6 @@
       <th>Fecha Incidente</th>
       <th>Tipo Incidente</th>
       <th>Estado</th>
-      <th>Descripción</th>
     </tr>
   </thead>
   <tbody id="detalleinci">
@@ -157,7 +156,6 @@
                 "<td>" + datos.detailprestamo[i].Incidentes[j].Fecha_Incidente + "</td>"+
                 "<td>" + datos.detailprestamo[i].Incidentes[j].Tipo_Incidente + "</td>"+
                 "<td>" + datos.detailprestamo[i].Incidentes[j].Estado + "</td>"+
-                "<td>" + datos.detailprestamo[i].Incidentes[j].descripcion + "</td>"+
                 "</tr>";
                 $("#detalleinci").append(row);
               }
@@ -176,7 +174,6 @@
 
         var total2 = '<tr class="table-info">'+
             "<td><strong>Total Incidentes: " + cantincidente +"</strong></td>"+
-            "<td> </td>"+
             "<td> </td>"+
             "<td> </td>"+
             "<td> </td>"+

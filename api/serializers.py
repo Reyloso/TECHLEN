@@ -37,9 +37,12 @@ class RecursoSerializer(serializers.ModelSerializer):
         #fields = ('Id_recurso','tipo_de_recurso','Marca','nombre_recurso','referencia','Estado_Recurso','fecha_registro','Detalle_Prestamo')
 
 class DetalleIncidenteSerializer(serializers.ModelSerializer):
+    usuario = UserSerializer(read_only=True)
+    UsuarioId = serializers.PrimaryKeyRelatedField(write_only=True, queryset=User.objects.all(), source='usuario')
+
     class Meta:
         model = DetalleIncidente
-        fields = "__all__"
+        fields =  ('id','Incidente', 'Fecha','Hora','descripcion','usuario','UsuarioId')
 
 class IncidenteSerializer(serializers.ModelSerializer):
     detalleincidente = DetalleIncidenteSerializer(many=True,write_only=True)

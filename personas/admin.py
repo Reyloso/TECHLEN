@@ -11,11 +11,13 @@ from configuracion.models import *
 # Register your models here.
 
 class CodigoAccesos (admin.ModelAdmin):
+        actions = None
         list_display = ['id','Codigo']
         class Meta:
 		          model = CodigoAcceso
 
 class TipoPersonas (admin.ModelAdmin):
+        actions = None
         list_display = ['id','Tipo_persona']
         class Meta:
 		          model = TipoPersona

@@ -29,6 +29,19 @@ class Recursos (admin.ModelAdmin):
     class Meta:
         model = Recurso
 
-admin.site.register(Tipo_Recurso)
-admin.site.register(Marca)
+
+class  Marcas (admin.ModelAdmin):
+    actions = None
+
+    class Meta:
+        model = Marca
+
+class  Tipo_Recursos (admin.ModelAdmin):
+    actions = None
+
+    class Meta:
+        model = Tipo_Recurso
+
+admin.site.register(Tipo_Recurso,Tipo_Recursos)
+admin.site.register(Marca,Marcas)
 admin.site.register(Recurso,Recursos)

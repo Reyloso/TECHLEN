@@ -159,7 +159,7 @@
 <script>
 $( document ).ready(function() {
     $('#addrecurso').hide();
-    LoadPrestamo();
+    LoadPrestamo()
     loadDetail()
     estadoPrestamo()
     $(function(){
@@ -339,7 +339,10 @@ function devol(){
   var texto = $("#textarea").val()
 
   var descripcion = {
-  "descripcion": texto
+  "descripcion": texto,
+  "Fecha":fecha,
+  "Hora": hora,
+  "UsuarioId":usuario
   }
 
   var detalleincidente = []
@@ -394,24 +397,21 @@ function devol(){
   estadoPrestamo()
 }
 
-
-
-
 function updateRow(estado){
     var estado = $(elemento).parent('tr').find("#estadoDetalle").text()
     $(this.elemento).parent('tr').find("#usuario").text()
     // $(elemento).parent('tr').find("#butonr").empty();
     // elemento = null
-    console.log(this.elemento)
-    console.log(estado)
+    // console.log(this.elemento)
+    // console.log(estado)
 }
 
 function LoadPrestamo(){
-  var datos = {}
   // datos del prestamo
   axios.get('/api/Prestamo/'+ prestamo)
     .then(function (response) {
-      var datos = response.data;
+      // console.log(datos)
+      var datos = response.data
       // console.log(datos)
       var f = new Date();
       var dia = f.getDate();
@@ -460,7 +460,6 @@ function LoadPrestamo(){
   });
 }
 
-
 function loadDetail(){
   $("#tabla").empty();
   axios.get('/api/Prestamo/'+ prestamo)
@@ -475,7 +474,7 @@ function loadDetail(){
         user =  datos.detailprestamo[key].Usuario_devolucion.get_full_name;
       }
       if(datos.detailprestamo[key].Estado !=="PRESTADO"){
-        console.log( datos.detailprestamo[key].Usuario_devolucion.get_full_name)
+        // console.log( datos.detailprestamo[key].Usuario_devolucion.get_full_name)
         var row = '<tr class="row1" >' +
           '<td class="field-Id_prestamo" id="iddetalle">' + datos.detailprestamo[key].Id_detalle+ "</td>"+
           '<td id="idrecurso">' + datos.detailprestamo[key].Recurso_detalle.Id_recurso + "</td>"+

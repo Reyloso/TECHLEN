@@ -32,13 +32,12 @@
 {% block content %}
 
         <div style="display: inline-block; margin-left: 10px">
-          <h3 style="font-size:17px;">{{ r.Nombres }} {{ r.Apellidos }}</h3>
+          <h4 style="font-size:17px;">{{ r.Nombres }} {{ r.Apellidos }}</h4>
           <p>
             <strong>N° TARJETA:</strong>  {{ r.Nro_Tarjeta }} <br/>
             <strong>DOCUMENTO:</strong> {{ r.Nro_Documento }} <br />
-            <strong>PROGRAMA O DEPENDENCIA: </strong> {{ r.Dependencia }} <br />
+            <strong>DEPENDENCIA: </strong> {{ r.Dependencia }} <br />
             <strong>TIPO PERSONA:</strong> {{ r.Tipo_Persona }}<br />
-
           </p>
         </div>
 
@@ -51,9 +50,7 @@
       <small>Emitido Por: {{user.get_full_name}}</small>
       </h3>
     <div class="card">
-  <div class="card-block">
 
-  </div>
 </div>
     <table class="table table-striped table-hover table-bordered">
       <strong><i class="fa fa-list-alt" aria-hidden="true"></i> Detalle & Consolidado Prestamos:</strong>
@@ -74,7 +71,6 @@
 
 <p>
   <strong><i class="fa fa-list-alt" aria-hidden="true"></i> Detalle & Consolidado Incidentes :</strong>
-
 </p>
 
     <table class="table table-striped table-hover table-bordered">
@@ -85,7 +81,6 @@
       <th>Fecha Incidente</th>
       <th>Tipo Incidente</th>
       <th>Estado</th>
-      <th>Descripción</th>
     </tr>
   </thead>
   <tbody id="detalleinci">
@@ -148,7 +143,6 @@
                          "<td>" + datos[key].detailprestamo[i].Incidentes[j].Fecha_Incidente + "</td>"+
                          "<td>" + datos[key].detailprestamo[i].Incidentes[j].Tipo_Incidente + "</td>"+
                         "<td>" + datos[key].detailprestamo[i].Incidentes[j].Estado + "</td>"+
-                        "<td>" + datos[key].detailprestamo[i].Incidentes[j].descripcion + "</td>"+
                          "</tr>";
                   $("#detalleinci").append(row);
                 }
@@ -167,7 +161,6 @@
 
         var total2 = '<tr class="table-info">'+
             "<td><strong>Total Incidentes: " + cantincidente +"</strong></td>"+
-            "<td> </td>"+
             "<td> </td>"+
             "<td> </td>"+
             "<td> </td>"+

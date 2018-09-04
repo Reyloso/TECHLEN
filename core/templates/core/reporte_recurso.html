@@ -91,17 +91,15 @@
       <th>Fecha Incidente</th>
       <th>Tipo Incidente</th>
       <th>Estado</th>
-      <th>Descripción</th>
     </tr>
   </thead>
   <tbody id="detalleinci">
-
 
   </tbody>
 </table>
 
   <div>
-    <a onclick="countRow()" style="color: white;"  class="btn btn-success"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> IMPRIMIR </a>
+    <a onclick="imprimir()" style="color: white;"  class="btn btn-success"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> IMPRIMIR </a>
     <a href="/admin/recursos/recurso/" class="btn btn-success"><i class="" aria-hidden="true"></i> ATRAS </a>
   </div>
 
@@ -114,6 +112,7 @@
       .then(function (response) {
         var datos = response.data;
         var cantincidente = 0;
+        var cantp=0;
         for (key in datos){
           axios.get('/api/Prestamo/' + datos[key].Prestamo)
             .then(function (response) {
@@ -126,6 +125,7 @@
                   }else{
                     incidente ="NO";
                   }
+                  cantp = cantp +1;
                   var row = '<tr class="row1" >' +
                     '<td class="field-Id_prestamo">' + prestamo.Id_prestamo+ "</td>"+
                     "<td>" + prestamo.Persona.Nombres + " " +prestamo.Persona.Apellidos +"</td>"+
@@ -141,39 +141,17 @@
             .catch(function (error) {
                   //console.log(error);
             });
+            // console.log(key)
+            // console.log(datos.length-1)
+            // if(key === datos.length-1){
+            //   console.log("Fin" + i)
+            // }
+            // var cuentaT = $('#detallep > tr').length ;
+
         }
-
-        for (key in datos){
-          if(datos[key].Incidentes.length !== 0){
-            cantincidente = cantincidente + 1;
-            // console.log(datos[key])
-            for(j in datos[key].Incidentes){
-              // console.log(datos[key].Incidentes[j].Id_Incidente)
-              var row = '<tr class="row1" >' +
-              '<td class="field-Id_prestamo">' + datos[key].Incidentes[j].Id_Incidente+ "</td>"+
-              "<td>" + datos[key].Recurso_detalle.nombre_recurso + "</td>"+
-              "<td>" + datos[key].Incidentes[j].Fecha_Incidente + "</td>"+
-              "<td>" + datos[key].Incidentes[j].Tipo_Incidente + "</td>"+
-              "<td>" + datos[key].Incidentes[j].Estado + "</td>"+
-               "<td>" + datos[key].Incidentes[j].descripcion + "</td>"+
-              "</tr>";
-              $("#detalleinci").append(row);
-            }
-          }
-        }
-        var total2 = '<tr class="table-info">'+
-            "<td><strong>Total Incidentes: " + cantincidente +"</strong></td>"+
-            "<td> </td>"+
-            "<td> </td>"+
-            "<td> </td>"+
-            "<td> </td>"+
-            "<td> </td>"+
-        "</tr>"
-        $("#detalleinci").append(total2);
-
-
+        var cant = datos.length
         var total = '<tr class="table-info">'+
-            "<td><strong>Total Prestamos: "+ cant + " </strong></td>"+
+            "<td><strong>Total Prestamos: " + cant +"</strong></td>"+
             "<td> </td>"+
             "<td> </td>"+
             "<td> </td>"+
@@ -182,12 +160,40 @@
         "</tr>"
         $("#detallep").after(total);
 
+        for (key in datos){
+          if(datos[key].Incidentes.length !== 0){
+            cantincidente = cantincidente + 1;
+            // console.log(datos[key])
+            for(j in datos[key].Incidentes){
+              // console.log(datos[key].Incidentes[j].Id_Incidente)
+              var row2 = '<tr class="row1" >' +
+              '<td class="field-Id_prestamo">' + datos[key].Incidentes[j].Id_Incidente+ "</td>"+
+              "<td>" + datos[key].Recurso_detalle.nombre_recurso + "</td>"+
+              "<td>" + datos[key].Incidentes[j].Fecha_Incidente + "</td>"+
+              "<td>" + datos[key].Incidentes[j].Tipo_Incidente + "</td>"+
+              "<td>" + datos[key].Incidentes[j].Estado + "</td>"+
+              "</tr>";
+              $("#detalleinci").append(row2);
+            }
+          }
+        }
+        var cuentaTr = $('#detalleinci >tr').length ;
+        var total2 = '<tr class="table-info">'+
+            "<td><strong>Total Incidentes: " + cuentaTr +"</strong></td>"+
+            "<td> </td>"+
+            "<td> </td>"+
+            "<td> </td>"+
+            "<td> </td>"+
+        "</tr>"
+        $("#detalleinci").append(total2);
+
       })
       .catch(function (error) {
         //console.log(error);
       });
 
   });
+
 
 
 
@@ -200,6 +206,7 @@
   function countRow(){
     var cant = $('#detallep tr').length
     console.log(cant)
+    return cant
   }
 
   </script>
