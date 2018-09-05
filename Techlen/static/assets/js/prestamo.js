@@ -2,6 +2,7 @@ $( document ).ready(function() {
   //$(".loader-box").hide();
   //$(".inputidestu").hide();
   $(".perfil").hide();
+  // $(".perfil").show();
   var cantidad = 0;
 });
    function buscar(ele,e) {
@@ -34,11 +35,11 @@ $( document ).ready(function() {
                             $("#cantincidentes").text(user[0].Incidentes.length)
 
                         }else{
-                          $("#mensaje").text("Esta Tarjeta Se Encuentra Inactiva...");
+                          $("#mensaje").text("TARJETA INACTIVA...");
                         }
                   })
                   .catch(function (error) {
-                      $("#mensaje").text("Persona No Encontrada Reintentar");
+                      $("#mensaje").text("TARJETA NO ENCONTRADA...");
                       // console.log(error);
                   });
                 ele.value = "";
@@ -48,7 +49,7 @@ $( document ).ready(function() {
               }
           })
           .catch(function (error) {
-              $("#mensaje").text("Persona No Encontrada Reintentar");
+              $("#mensaje").text("TARJETA NO ENCONTRADA...");
                 // console.log(error);
           });
       }
@@ -139,11 +140,11 @@ function Mensaje(t){
       axios.get('/api/recurso/' + codigo)
         .then(function (response) {
             var recurso = response.data;
-            console.log(recurso)
+            // console.log(recurso)
             axios.get('/api/Prestamo/?Estado_prestamo=EN+CURSO')
               .then(function (response) {
                 var prestamos = response.data
-                console.log(prestamos)
+                // console.log(prestamos)
                 var bandera=false
                 for(data in prestamos){
                   for(detalles in prestamos[data].detailprestamo){
@@ -164,6 +165,8 @@ function Mensaje(t){
                     '<div>'+
                     '<h6 class="my-0">'+recurso.nombre_recurso+'</h6>'+
                     '<small class="text-muted">'+ "ID: " + recurso.Id_recurso+'</small>'+
+                    '<br>'+
+                    '<small class="text-muted">'+ "Referencia: " + recurso.referencia+'</small>'+
                     '</div>'+
                     '<span class="text-muted borrar" data-eliminar="' + recurso.Id_recurso + '"><i class="fa fa-trash"></i></span>'+
                     '</li>'
@@ -186,7 +189,7 @@ function Mensaje(t){
                 }
               })
               .catch(function (error) {
-                console.log(error);
+                // console.log(error);
               });
            })
           .catch(function (error) {
