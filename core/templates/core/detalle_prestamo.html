@@ -303,6 +303,7 @@ function devol(){
       }).catch(function (error) {
           //console.log(error.response);
       });
+      estadoPrestamo()
     }else{
       dp={
         "Estado": "DEVUELTO",
@@ -331,6 +332,7 @@ function devol(){
         $(elemento).parent('tr').find("#usuario").text(userName)
         $(elemento).parent('tr').find("#butonr").empty()
       });
+      estadoPrestamo()
   }
 
   var date = new Date();
@@ -368,6 +370,7 @@ function devol(){
   }).catch(function (error) {
     // console.log(error);
   });
+  estadoPrestamo()
 }else{
     // si no existe la incidencia se le cambia el estado al detalle del prestamo
     var date = new Date();

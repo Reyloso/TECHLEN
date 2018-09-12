@@ -47,8 +47,8 @@
 <label  class="form-control"  aria-describedby="sizing-addon2" id="fechap">{{r.Fecha_Incidente}}</label>
 <span class="input-group-addon" id="sizing-addon2">TIPO INCIDENTE: </span>
 <label  class="form-control"  aria-describedby="sizing-addon2" id="usuariop">{{r.Tipo_Incidente}}</label>
-<span class="input-group-addon" id="sizing-addon2">ESTADO INCIDENTE: </span>
-<label  class="form-control"  aria-describedby="sizing-addon2" id="estadop">{{r.Estado}}</label>
+<span class="input-group-addon" id="estadoin">ESTADO INCIDENTE: </span>
+<label  class="form-control"  aria-describedby="sizing-addon2" id="estadop"></label>
 </div>
 <br>
 <strong><i class="fa fa-list-alt" aria-hidden="true"></i> Datos De La Persona</strong>
@@ -196,7 +196,8 @@
     axios.get('/api/Recurso/Incidente/'+ incidente)
       .then(function (response) {
         var datos = response.data
-        // console.log(datos)
+        $('#estadop').text(datos.Estado);
+        console.log(datos)
         for(i in datos.detailincidente){
           var row = '<tr class="row1" >' +
             '<td class="field-Id_prestamo" id="iddetalle">' + datos.detailincidente[i].id+ "</td>"+
@@ -281,13 +282,15 @@
           'Content-Type': 'application/json' }
       }).then(function (response) {
         // console.log(response.data);
-        $('#estadop').val("REVISADO");
+
         $('#revIncidente').modal('hide');
         $('#addrecurso').hide();
         $('#addetail').hide();
+        $('#estadop').text("REVISADO");
       }).catch(function (error) {
           // console.log(error.response);
       });
+
     }
 
     function addetail(){
