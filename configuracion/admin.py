@@ -21,6 +21,6 @@ class Programas (ImportExportModelAdmin):
     search_fields = ('nombre','cod')
     resource_class = ProgramasResource
     class Meta:
-		model = Programa
+        model = Programa
 
 admin.site.register(Programa,Programas),

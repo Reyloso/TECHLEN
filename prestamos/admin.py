@@ -51,7 +51,7 @@ class Prestamos (admin.ModelAdmin):
     raw_id_fields = ('Persona',)
 
     class Meta:
-		model = Prestamo
+        model = Prestamo
 
 class Incidentes (admin.ModelAdmin):
     actions = None

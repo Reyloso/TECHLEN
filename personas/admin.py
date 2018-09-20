@@ -48,11 +48,11 @@ class Persona (ImportExportModelAdmin):
         return False
 
     def change_view(self, *args, **kwargs):
-	 	self.fields = ('Nro_Documento','Estado_Tarjeta','Tipo_Persona','Dependencia','Codigo_Acceso')
-	 	return super(Persona, self).change_view(*args, **kwargs)
+        self.fields = ('Nro_Documento','Estado_Tarjeta','Tipo_Persona','Dependencia','Codigo_Acceso')
+        return super(Persona, self).change_view(*args, **kwargs)
 
     def reporte_prestamos(self, instance):
-		return "<a href='/admin/persona/Reporte/%s'> <i style='font-size:17px' class='fa fa-file-pdf-o' aria-hidden='true'></i>  </a>" % instance.Nro_Tarjeta
+        return "<a href='/admin/persona/Reporte/%s'> <i style='font-size:17px' class='fa fa-file-pdf-o' aria-hidden='true'></i>  </a>" % instance.Nro_Tarjeta
 
     reporte_prestamos.short_description = "Reporte Persona"
     reporte_prestamos.allow_tags = True
