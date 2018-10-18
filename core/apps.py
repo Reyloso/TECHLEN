@@ -28,7 +28,7 @@ class SuitConfig(DjangoSuitConfig):
         ParentItem('Recursos', children=[
             ChildItem(model='recursos.recurso'),
             ChildItem(model='recursos.marca'),
-            ChildItem(model='recursos.tipo_recurso'),
+            ChildItem(model='recursos.tiporecurso'),
 
         ]),
         ParentItem('Incidentes', children=[

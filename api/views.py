@@ -190,11 +190,11 @@ class DetallePrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DetallePrestamoSerializer
 
 class TipoRecursoList(generics.ListCreateAPIView):
-    queryset = Tipo_Recurso.objects.all()
+    queryset = TipoRecurso.objects.all()
     serializer_class = Tipo_RecursoSerializer
 
-class DetallePrestamoDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Tipo_Recurso.objects.all()
+class DetalleTipoRecursoDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = TipoRecurso.objects.all()
     serializer_class = Tipo_RecursoSerializer
 
 class MarcaList(generics.ListCreateAPIView):
