@@ -80,8 +80,8 @@ class Incidente(models.Model):
     Prestamo_detalle = models.ForeignKey(DetallePrestamo, null=True)
     Estado= models.CharField(max_length=30, choices=ESTADO)
 
-    def __unicode__(self):
-        return unicode(str(self.Id_Incidente))
+    def __str__(self):
+        return str(self.Id_Incidente)
 
 
 class DetalleIncidente(models.Model):

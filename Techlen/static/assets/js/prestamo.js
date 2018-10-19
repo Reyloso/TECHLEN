@@ -58,7 +58,7 @@ var dbRecursos = [];
 
 function guardarRecursoLocal(idRecurso){
   dbRecursos.push(idRecurso); // Guardar datos en el array definido globalmente
-  // console.log(dbRecursos);
+  console.log(dbRecursos);
 }
 
 function DRecursos (){
@@ -135,21 +135,23 @@ function Mensaje(t){
 
   function buscarp(ele,e) {
     var tabla="";
+    console.log("hola")
     if(e.keyCode === 13) {
       var codigo = ele.value;
+      console.log(codigo)
       axios.get('/api/recurso/' + codigo)
         .then(function (response) {
             var recurso = response.data;
-            // console.log(recurso)
+            console.log(recurso)
             axios.get('/api/Prestamo/?Estado_prestamo=EN+CURSO')
               .then(function (response) {
                 var prestamos = response.data
-                // console.log(prestamos)
+                console.log(prestamos)
                 var bandera=false
                 for(data in prestamos){
                   for(detalles in prestamos[data].detailprestamo){
                     //console.log(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso)
-                    if(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso == recurso.Id_recurso && prestamos[data].detailprestamo[detalles].Estado !== "DEVUELTO" ){
+                    if(prestamos[data].detailprestamo[detalles].Recurso_detalle.id == recurso.id && prestamos[data].detailprestamo[detalles].Estado !== "DEVUELTO" ){
                       //console.log(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso)
                       bandera=true
                       break;
@@ -159,16 +161,17 @@ function Mensaje(t){
                     break;
                   }
                 }
-                if(recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == false && bandera == false ){
-                  guardarRecursoLocal(recurso.Id_recurso);
+                console.log(bandera)
+                if(recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.id ) == false && bandera == false ){
+                  guardarRecursoLocal(recurso.id);
                   tabla+= '<li class="list-group-item d-flex justify-content-between lh-condensed">'+
                     '<div>'+
-                    '<h6 class="my-0">'+recurso.nombre_recurso+'</h6>'+
-                    '<small class="text-muted">'+ "ID: " + recurso.Id_recurso+'</small>'+
+                    '<h6 class="my-0"> ' +recurso.nombre_recurso+'</h6>'+
+                    '<small class="text-muted">'+ "ID: " + recurso.id+'</small>'+
                     '<br>'+
                     '<small class="text-muted">'+ "Referencia: " + recurso.referencia+'</small>'+
                     '</div>'+
-                    '<span class="text-muted borrar" data-eliminar="' + recurso.Id_recurso + '"><i class="fa fa-trash"></i></span>'+
+                    '<span class="text-muted borrar" data-eliminar="' + recurso.id + '"><i class="fa fa-trash"></i></span>'+
                     '</li>'
                   $("#listaRecursos").append(tabla);
                   $("#cantidad").text(dbRecursos.length);
@@ -178,7 +181,7 @@ function Mensaje(t){
                       eliminar[i].addEventListener("click", borrar, false);
                     }
                   }
-                }else if (recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == true){
+                }else if (recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.id ) == true){
                   Mensaje(6);
                 }else if(recurso.Estado_Recurso == "EN MANTENIMIENTO"){
                   Mensaje(8);

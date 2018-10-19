@@ -54,7 +54,7 @@ class Prestamos (admin.ModelAdmin):
         model = Prestamo
 
 class Incidentes (admin.ModelAdmin):
-    actions = None
+    # actions = None
 
     def change_view(self, *args, **kwargs):
         self.fields = ('descripcion',)
@@ -66,9 +66,12 @@ class Incidentes (admin.ModelAdmin):
     def Nombre_Completo(self, obj):
         return obj.Persona.Nombres + " " + obj.Persona.Apellidos
 
-    def Id_Recurso(self, obj):
+    # def Recurso_id(self, obj):
+    #     return obj.Recurso.id
 
-        return obj.Recurso.Id_recurso
+    # def Nombre_Recurso(self, obj):
+    #     return obj.Recurso.Nombre_Recurso
+
 
     def Reporte_Incidente(self, instance):
 
@@ -84,8 +87,8 @@ class Incidentes (admin.ModelAdmin):
     Revision_Incidente.allow_tags = True
     Revision_Incidente.is_column = True
 
-    list_display = ['usuario','Nombre_Completo','Id_Recurso','Recurso','Tipo_Incidente','Estado','Fecha_Incidente','Reporte_Incidente','Revision_Incidente']
-    search_fields = ('Estado','Tipo_Incidente','Persona__Nombres','Persona__Apellidos','Persona__Nro_Tarjeta','usuario__username','Recurso__Id_recurso')
+    list_display = ['usuario','Nombre_Completo','Tipo_Incidente','Estado','Fecha_Incidente','Reporte_Incidente','Revision_Incidente']
+    search_fields = ('Estado','Tipo_Incidente','Persona__Nombres','Persona__Apellidos','Persona__Nro_Tarjeta','usuario__username','Recurso__id')
     list_filter = ('Estado','Tipo_Incidente',)
     class Meta:
         model = Incidente

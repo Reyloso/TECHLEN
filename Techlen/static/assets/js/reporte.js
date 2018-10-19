@@ -15,7 +15,6 @@ $( document ).ready(function() {
   $('#select5').attr("disabled", true);
   $('#date2').attr("disabled", true);
   $('#gReport').attr("disabled", true);
-  $('#alert').hide()
   parameterReport();
 });
 //validar datepicker
@@ -491,10 +490,12 @@ function report(data){
   //tipo de reporte 1
   instanciarReporte(query)
   if(query.length == 0){
-    $('#alert').show();
+    alerta()
+    connsole.log("hola")
     $("#reporte").hide();
   }else if( (countRow()-1) == 0){
-      $('#alert').show();
+      alerta()
+      console.log("hola2")
       $("#reporte").hide();
   }else{
     $("#reporte").show();
@@ -504,6 +505,18 @@ function report(data){
 
 function closet(){
   $('#alert').hide();
+}
+
+function alerta(){
+  console.log("funcion")
+  var row = " <div class='alert alert-warning alert-dismissible show' id='alert' role='alert'>"+
+      "<strong>SIN RESULTADOS!</strong>...Esta consulta no arrojó resultados, compruebe los campos de filtro."+
+      "<button type='button' class='close' onclick='closet()' >"+
+        "<span >&times;</span>"+
+      "</button>"+
+    "</div>"
+    $("#msj").prepend(row)
+
 }
 
 function imprimir(){

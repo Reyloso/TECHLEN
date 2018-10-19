@@ -284,7 +284,7 @@ function devol(){
         'Content-Type': 'application/json' }
       }).then(function (response) {
           // si es exitoso se le cambia el estado al recurso para que no este disponible a otro prestamo mientras esta en revision
-        var recurso = response.data.Recurso_detalle.Id_recurso
+        var recurso = response.data.Recurso_detalle.id
         r={
           "Estado_Recurso": "EN MANTENIMIENTO",
         }
@@ -315,7 +315,7 @@ function devol(){
         'Content-Type': 'application/json' }
       }).then(function (response) {
         // si es exitoso se le cambia el estado al recurso para que no este disponible a otro prestamo mientras esta en revision
-        var recurso = response.data.Recurso_detalle.Id_recurso
+        var recurso = response.data.Recurso_detalle.id
         r={
           "Estado_Recurso": "EN MANTENIMIENTO",
         }
@@ -480,7 +480,7 @@ function loadDetail(){
         // console.log( datos.detailprestamo[key].Usuario_devolucion.get_full_name)
         var row = '<tr class="row1" >' +
           '<td class="field-Id_prestamo" id="iddetalle">' + datos.detailprestamo[key].Id_detalle+ "</td>"+
-          '<td id="idrecurso">' + datos.detailprestamo[key].Recurso_detalle.Id_recurso + "</td>"+
+          '<td id="idrecurso">' + datos.detailprestamo[key].Recurso_detalle.id + "</td>"+
           '<td id="nombRecurso" >'+ datos.detailprestamo[key].Recurso_detalle.nombre_recurso  + "</td>"+
           '<td id="estadoDetalle">' + datos.detailprestamo[key].Estado + "</td>"+
           '<td>'+ datos.detailprestamo[key].Usuario_devolucion.get_full_name + "</td>"+
@@ -490,11 +490,11 @@ function loadDetail(){
       }else{
         var row = '<tr class="row1" >' +
           '<td class="field-Id_prestamo" id="iddetalle">' + datos.detailprestamo[key].Id_detalle+ "</td>"+
-          '<td id="idrecurso">' + datos.detailprestamo[key].Recurso_detalle.Id_recurso + "</td>"+
+          '<td id="idrecurso">' + datos.detailprestamo[key].Recurso_detalle.id + "</td>"+
           '<td id="nombRecurso" >' + datos.detailprestamo[key].Recurso_detalle.nombre_recurso  + "</td>"+
           '<td id="estadoDetalle">' + datos.detailprestamo[key].Estado + "</td>"+
           '<td id="usuario"></td>'+
-          '<td class="update" id="butonr"> <i style="font-size:20px; display: flex;justify-content: center;" onclick="devolucion(this,' + datos.detailprestamo[key].Id_detalle+"," + datos.detailprestamo[key].Recurso_detalle.Id_recurso+ ')"  class="fa fa-arrow-left devolver" aria-hidden="true"></i></td>'+
+          '<td class="update" id="butonr"> <i style="font-size:20px; display: flex;justify-content: center;" onclick="devolucion(this,' + datos.detailprestamo[key].Id_detalle+"," + datos.detailprestamo[key].Recurso_detalle.id+ ')"  class="fa fa-arrow-left devolver" aria-hidden="true"></i></td>'+
            //'<td><button class="btn btn-warnig" onclick="modificar('+datos[key].Nombre+','+datos[key].Apellidos+','+datos[key].Edad+')">Modificar</button></td>'
           "</tr>";
         $("#tabla").append(row);
@@ -561,7 +561,7 @@ function addRe() {
               if(prestamos[data].Estado_prestamo !== "DEVUELTO"){
                 for(detalles in prestamos[data].detailprestamo){
                   //console.log(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso)
-                  if(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso == recurso.Id_recurso && prestamos[data].detailprestamo[detalles].Estado !== "DEVUELTO" ){
+                  if(prestamos[data].detailprestamo[detalles].Recurso_detalle.id == recurso.id && prestamos[data].detailprestamo[detalles].Estado !== "DEVUELTO" ){
                     //console.log(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso)
                     bandera=true
                     break;
@@ -572,7 +572,7 @@ function addRe() {
                 break;
               }
             }
-            if(recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == false && bandera == false ){
+            if(recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.id ) == false && bandera == false ){
               var date =  new Date();
               var fecha  = date.getFullYear() +"-"+ (date.getMonth()+1) + "-" + date.getDate();
               datos = {
@@ -587,21 +587,21 @@ function addRe() {
                 }).then(function (response) {
                   $('#modaladdrecurso').modal('hide')
                   dato = response.data
-                  // console.log(dato)
+                  console.log(dato)
                   var row = '<tr class="row1" >' +
                     '<td class="field-Id_prestamo" id="iddetalle">' + dato.Id_detalle+ "</td>"+
-                    '<td id="idrecurso">' + dato.Recurso_detalle.Id_recurso + "</td>"+
+                    '<td id="idrecurso">' + dato.Recurso_detalle.id + "</td>"+
                     '<td id="nombRecurso" >'+ dato.Recurso_detalle.nombre_recurso  + "</td>"+
                     '<td id="estadoDetalle">' + dato.Estado + "</td>"+
                     "<td> </td>"+
-                    '<td class="update" id="butonr"> <i style="font-size:20px; display: flex;justify-content: center;" onclick="devolucion(this,' + dato.Id_detalle+"," + dato.Recurso_detalle.Id_recurso+ ')"  class="fa fa-arrow-left devolver" aria-hidden="true"></i></td>'+
+                    '<td class="update" id="butonr"> <i style="font-size:20px; display: flex;justify-content: center;" onclick="devolucion(this,' + dato.Id_detalle+"," + dato.Recurso_detalle.id+ ')"  class="fa fa-arrow-left devolver" aria-hidden="true"></i></td>'+
                     "</tr>";
                   $("#tabla").append(row);
                   })
               .catch(function (error) {
                 // console.log(error);
               });
-            }else if (recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.Id_recurso ) == true){
+            }else if (recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.id ) == true){
               Mensaje(6);
             }else if(recurso.Estado_Recurso == "EN MANTENIMIENTO"){
               Mensaje(8);

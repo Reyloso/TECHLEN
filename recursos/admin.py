@@ -41,7 +41,7 @@ class Recursos (ImportExportModelAdmin):
 
     list_filter = ('Estado_Recurso','tipo_de_recurso','Marca')
     search_fields = ('Estado_Recurso','nombre_recurso','Numero_Serie','tipo_de_recurso__tipo_recurso','Marca__Marca','referencia')
-    list_display = ['Numero_Serie','tipo_de_recurso','Marca','nombre_recurso','referencia','Estado_Recurso','fecha_registro','codigo_barras','Reporte_Recurso']
+    list_display = ['id','Numero_Serie','tipo_de_recurso','Marca','nombre_recurso','referencia','Estado_Recurso','fecha_registro','codigo_barras','Reporte_Recurso']
     resource_class = RecursosResource
     class Meta:
         model = Recurso
