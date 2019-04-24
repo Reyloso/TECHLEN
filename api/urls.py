@@ -91,6 +91,7 @@ urlpatterns = [
     url(r'^api/programa/$', views.ProgramaList.as_view()),
     url(r'^api/programa/(?P<pk>\d+)/$', views.ProgramaDetail.as_view()),
     url(r'^api/recurso/$', views.RecursoList.as_view()),
+    url(r'^api/recurso/active/$', views.RecursoActiveList.as_view()),
     url(r'^api/recurso/(?P<pk>\d+)/$',views.RecursoDetail.as_view()),
     url(r'^api/Prestamo/Detalle/$', detallep_list),
     url(r'^api/Prestamo/Detalle/(?P<pk>\d+)/$', detallep_detail),

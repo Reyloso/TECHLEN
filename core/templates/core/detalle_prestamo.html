@@ -205,6 +205,7 @@ function devolucion(ele,id,recurso){
   $('#savebuton').attr("disabled", true);
   $('#tipo').hide();
   $('#selected2').hide();
+  
 }
 
 function addRecurso(){
@@ -213,6 +214,7 @@ function addRecurso(){
 
 function close(){
   $('#modaladdrecurso').modal('hide');
+
 }
 
 
@@ -304,6 +306,7 @@ function devol(){
           //console.log(error.response);
       });
       estadoPrestamo()
+      location.reload(true)
     }else{
       dp={
         "Estado": "DEVUELTO",
@@ -333,6 +336,9 @@ function devol(){
         $(elemento).parent('tr').find("#butonr").empty()
       });
       estadoPrestamo()
+      location.reload(true)
+
+      
   }
 
   var date = new Date();
@@ -371,6 +377,7 @@ function devol(){
     // console.log(error);
   });
   estadoPrestamo()
+  location.reload(true)
 }else{
     // si no existe la incidencia se le cambia el estado al detalle del prestamo
     var date = new Date();
@@ -395,9 +402,11 @@ function devol(){
     $('#exampleModalCenter').modal('hide');
     var val = $("#selected").val("0");
     var texto = $("#textarea").val("");
+    estadoPrestamo()
+    location.reload(true)
   }
 
-  estadoPrestamo()
+  
 }
 
 function updateRow(estado){
@@ -407,6 +416,9 @@ function updateRow(estado){
     // elemento = null
     // console.log(this.elemento)
     // console.log(estado)
+    estadoPrestamo()
+    
+
 }
 
 function LoadPrestamo(){
@@ -500,48 +512,15 @@ function loadDetail(){
         $("#tabla").append(row);
       }
     }
+    estadoPrestamo()
+    
   })
   .catch(function (error) {
     //console.log(error);
   });
 }
 
-function estadoPrestamo(){
-  axios.get('/api/Prestamo/'+ prestamo)
-    .then(function (response) {
-      var datos = response.data;
-      var bandera = false;
-      if(datos.Estado_prestamo !=="DEVUELTO"){
-        for (detalles in datos.detailprestamo){
-          if(datos.detailprestamo[detalles].Estado =="PRESTADO"){
-            bandera = true;
-            break;
-          }
-        }
-        if(bandera == true){
-          //console.log("faltan recursos por devolver")
-        }else{
-          //console.log("todos los recursos devueltos")
-          p={
-            "Estado_prestamo": "DEVUELTO",
-          }
-          axios.patch("/api/Prestamo/" + prestamo + "/", p, {
-              headers: {"X-CSRFToken": token,
-              'Content-Type': 'application/json' }
-          }).then(function (response) {
-            //console.log(responde.data)
-            $('#addrecurso').hide();
-            $("#estadop").text("DEVUELTO");
-            $("#estadop").css({'color':'#F00'})
-          }).catch(function (error) {
-          });
-        }
-      }
-    })
-  .catch(function (error) {
-      //console.log(error);
-  });
-}
+
 
 function addRe() {
   var tabla="";
@@ -664,6 +643,51 @@ function Mensaje(t){
   default:
   }
 }
+
+function estadoPrestamo(){
+  axios.get('/api/Prestamo/'+ prestamo)
+    .then(function (response) {
+      var datos = response.data;
+      var bandera = false;
+      if(datos.Estado_prestamo !=="DEVUELTO"){
+        for (detalles in datos.detailprestamo){
+          if(datos.detailprestamo[detalles].Estado =="PRESTADO"){
+            bandera = true;
+            break;
+          }
+        }
+        if(bandera == true){
+          //console.log("faltan recursos por devolver")
+        }else{
+          //console.log("todos los recursos devueltos")
+          var dateTime =  new Date();
+          var fecha  = dateTime.getFullYear() +"-"+ (dateTime.getMonth() + 1) + "-" + dateTime.getDate()
+          var hora = dateTime.getHours() + ":" + dateTime.getMinutes() + ":"+ dateTime.getSeconds();
+          p={
+            "Estado_prestamo": "DEVUELTO",
+            "Fecha_devolucion": fecha,
+            "Hora_devolucion": hora
+          }
+          axios.patch("/api/Prestamo/" + prestamo + "/", p, {
+              headers: {"X-CSRFToken": token,
+              'Content-Type': 'application/json' }
+          }).then(function (response) {
+            // console.log(response.data)
+            $('#addrecurso').hide();
+            $("#estadop").text("DEVUELTO");
+            $("#estadop").css({'color':'#F00'})
+          }).catch(function (error) {
+            console.log(error)
+          });
+        }
+      }
+    })
+  .catch(function (error) {
+      console.log(error);
+  });
+ 
+}
+
 </script>
 <style>
 body {

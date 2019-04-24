@@ -35,7 +35,7 @@
         <div style="display: inline-block; margin-left: 15px">
           <h3 style="font-size:25px;"> {{r.nombre_recurso}}</h3>
           <p>
-           <b>ID: </b>{{r.Id_recurso}} <br />
+           <b>ID: </b>{{r.id}} <br />
             <b>TIPO: </b> {{r.tipo_de_recurso}} <br />
             <b>MARCA: </b> {{r.Marca}} <br />
             <b>N° DE SERIE: </b> {% if r.Numero_Serie != none %} {{r.Numero_Serie}} {% else %} {% endif %}<br />
@@ -107,7 +107,7 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
   $( document ).ready(function() {
-      var recurso = "{{r.Id_recurso}}"
+      var recurso = "{{r.id}}"
     axios.get('/api/Prestamo/Detalle/?Recurso_detalle='+recurso)
       .then(function (response) {
         var datos = response.data;
@@ -118,7 +118,7 @@
             .then(function (response) {
               var prestamo = response.data;
               for(i in prestamo.detailprestamo){
-                if(prestamo.detailprestamo[i].Recurso_detalle.Id_recurso==recurso){
+                if(prestamo.detailprestamo[i].Recurso_detalle.id==recurso){
 
                   if(prestamo.detailprestamo[i].Incidentes.length !== 0 ){
                     incidente ="SI";

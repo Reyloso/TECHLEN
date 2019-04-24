@@ -7,7 +7,11 @@
      <link  rel="stylesheet" href="{% static '/assets/css/header.css' %}"/>
      <link rel="stylesheet" href="{% static '/assets/css/usuario.css' %}" media="screen" title="no title" charset="utf-8">
      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-
+     <link href="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.css" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+     <link href="style.css" rel="stylesheet">
+     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <style>
 
       .loader-box{
@@ -19,7 +23,7 @@
         border-top-width: 8px;
       }
       .img-loader{
-         height: 50px;
+         height: 80px;
       }
       .inputidestu{
         height: 33px;
@@ -34,155 +38,312 @@
         border-color: #035a7b;
       }
 
+      .vs-card--content {
+        position: relative
+      }
+
+      .vs-table--pagination {
+        position: absolute;
+        bottom: -4.5rem;
+      }
+
+      .vs-pagination--buttons i {
+            display: none;
+      }
+
+      .vs-pagination--ul {
+        background: transparent;
+      }
+
+      .vs-table--pagination .item-pagination {
+        background: #ccc;
+      }
+
+      .vs-table--search-input {
+        padding: 7px 55px;
+        width: 100vw;
+      }
+
+      .vs-table--header {
+        padding: .4rem 1rem;
+      }
+
+      .vs-table--pagination .vs-pagination--buttons {
+            display: none;
+      }
+
+      .img-loader{
+          animation-duration: 2s;
+          animation-name: slidein;
+          animation-iteration-count: infinite;
+        }
+
+        @keyframes slidein {
+        from {
+          margin-left: 70%;
+        }
+
+        to {
+          margin-left: 0%;
+        }
+      }
+
     </style>
 
+    <style lang="stylus">
+    .colors-example
+      .vs-input
+        margin 5px
+        margin-top 20px;
+    </style>
 {%endblock%}
 
 {% block content %}
-<div class="loader-box">
- <div class="lable" id="mensaje">PASE LA TARJETA POR EL LECTOR.. </div>
-  <br>
-  <br>
-  <br>
-  <div class="loader">
-    <div class="element-animation">
-      <img class="img-loader" src="{% static '/assets/images/id.png' %}" width="100" height="70";>
-    </div>
+<div id="app" style="display: flex;justify-content: center;">
+   <div v-show="inputform" class="centerx icons-example">
+     <div class="con-example-images" style="display: flex;justify-content: center;">
+     <img class="img-loader" src="{% static '/assets/images/id.png' %}" width="100" height="70">
   </div>
-</div>
-<div class="container inputidestu" style="height: 33px;" id="#inputidestu">
-  <input  id="idestu" autofocus type="text" placeholder="N° TARJETA" onkeydown="buscar(this,event)"/>
-</div>
+    <vs-input v-on:keyup.enter="change()" placeholder="Buscar Persona" :warning=false warning-text="Por FavorIngrese Un Numero De Tarjeta Valido" v-model="value" />
+  </div>
 
-<div class="container perfil">
-        <div class="col-4 col-md-6">
-          <div class="mensaje-alerta">
-          </div>
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-muted">CARRO DE PRESTAMO</span>
-            <span class="badge badge-secondary badge-pill" id="cantidad">0</span>
-          </h4>
-          <div class="card p-2">
-            <div class="input-group">
-              <input type="text" id="add" class="form-control" placeholder="Codigo De Recurso" onkeydown="buscarp(this,event)">
-              <div class="input-group-append">
+  <div class="centerx" style="width: 100%" v-show="inputform2">
+    <vs-row vs-justify="flex-start">
+        <vs-col type="flex" vs-justify="flex-end" vs-align="flex-end" vs-w="7" style="margin: 0 1rem ">
+          <vs-card class="cardx">
+            <vs-table multiple v-model="selected" pagination max-items="7" search :data="recursos">
+              <template slot="header">
+            <h5>Recursos Activos</h5>
+            </template>
+            <template slot="thead">
+            <vs-th style="width:15%"  sort-key="id">
+            ID
+            </vs-th>
+            <vs-th style="width:25%"  sort-key="nombre_recurso">
+            Nombre
+            </vs-th>
+            <vs-th style="width:25%"  >
+            Referencia
+            </vs-th>
+            <vs-th  style="width:25%" >
+            Estado
+            </vs-th>
+            </template>
 
-              </div>
+            <template slot-scope="{data}">
+            <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" >
+            <vs-td style="width:30%" :data="data[indextr].id" >
+            ${data[indextr].id}
+            </vs-td>
+            <vs-td style="width:25%" :data="data[indextr].nombre_recurso">
+            ${data[indextr].nombre_recurso}
+            </vs-td>
+            <vs-td style="width:25%" :data="data[indextr].referencia">
+            ${data[indextr].referencia}
+            </vs-td>
+            <vs-td style="width:25%"  :data="data[indextr].Estado_Recurso">
+            ${data[indextr].Estado_Recurso}
+            </vs-td>
+            </vs-tr>
+            </template>
+            </vs-table>
+
+          </vs-card>
+        </vs-col>
+        <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="4">
+          <vs-card class="cardx">
+            <div slot="header" style="display: flex;justify-content: center;">
+              <h3>  Informacion de usuario
+              </h3>
             </div>
-          </div>
-          <ul class="list-group mb-3" id="listaRecursos">
-          </ul>
-          <hr/>
-        </div>
-        <div class="col-6 col-md-6">
-           <hr/>
-          <h4 class="mb-3">DATOS USUARIO <i class="fa fa-list-alt" style="color: #035a7b!important;" aria-hidden="true"></i></h4>
-           <hr/>
-             <hr class="mb-4">
-            <div class="row">
-              <!-- <div class="col-md-6 mb-5">
-                <img class="card-img-top" src="{% static '/assets/images/foto.jpg' %}" alt="Card image cap">
-              </div> -->
-              <div class="col-md-6 mb-3">
-                <h6>Nombre & Apellidos</h6>
-                <label for="firstName" id="nombre"></label>
-              </div>
-              <div class="col-md-6 mb-3">
-                <h6>N° Tarjeta</h6>
-                <label for="firstName" value="" id="tarjeta"></label>
-              </div>
-              <div class="col-md-6 mb-3">
-                <h6>N° Documento</h6>
-                <label for="firstName" id="documento"></label>
-              </div>
-              <div class="col-md-6 mb-3">
-                <h6>Programa O Dependencia</h6>
-                <label for="firstName" id="programa"></label>
-              </div>
-              <div class="col-md-6 mb-3">
-                <h6>Cargo o Tipo</h6>
-                <label for="firstName" id="cargo"></label>
-              </div>
-              <div class="col-md-6 mb-3">
-                <h6>Incidentes</h6>
-                <label for="firstName" id="incidentes"></label>
-              </div>
-              <div class="col-md-6 mb-3">
-                <h6>Cantidad Incidentes</h6>
-                <label for="firstName" id="cantincidentes"></label>
-              </div>
+            <div slot="media">
+
             </div>
-            <hr class="mb-4">
-            <button class="btn btn-primary btn-lg btn-block" onclick="guardarPrestamo()">Guardar Prestamo</button>
-        </div>
-      </div>
-    </div>
+            <div>
+              <vs-list>
+                <vs-list-header title="Informacion Personal" color="success"></vs-list-header>
+                <vs-list-item title="Nombre Completo">${persona.nombre}
+                </vs-list-item>
+                <vs-list-item title="Nro Tarjeta">${persona.tarjeta}
+                </vs-list-item>
+                <vs-list-item title="Nro Documento">${persona.documento}
+                </vs-list-item>
+                <vs-list-header title="Informacion Academica" color="primary"></vs-list-header>
+                <vs-list-item title="Programa o Dependencia">${persona.dependencia}
+                </vs-list-item>
+                <vs-list-item title="Cargo"> ${persona.cargo}
+                </vs-list-item>
+                <vs-list-header title="Informacion Prestamos" color="danger"></vs-list-header>
+                <vs-list-item title="Incidentes"> NO
+                </vs-list-item>
+                <vs-list-item title="Cantidad Incidentes"> 0
+                </vs-list-item>
+                <div style="margin-top: .8rem">
+                  <vs-button v-on:click="cancel()" type="relief">Cancelar</vs-button>
+                  <vs-button v-on:click="saveloan()"  color="success" type="relief">Guardar</vs-button>
+                  </div>
+            </vs-list>
+            </div>
+          </vs-card>
+        </vs-col>
+      </vs-row>
+</div>
+</div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script type="text/javascript" src="{% static '/assets/js/prestamo.js' %}"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.umd.js"></script>
+<script type="text/javascript">
+  var app = new Vue({
+    el: '#app',
+    delimiters: ['${','}'],
+    data: {
+      token:"{{ csrf_token }}",
+      usuario:"{{user.id}}",
+      value:'',
+      inputform:true,
+      inputform2:false,
+      persona:{
+        id:"",
+        nombre:"",
+        tarjeta:"",
+        documento:"",
+        dependencia:"",
+        cargo:"",
+        incidentes:"",
+        cantIncidente:0,
+      },
+      selected:[],
+      recursos:[],
+      detalleprestamo:[]
+    },
+    methods: {
+      cancel(){
+        obj = this
+        obj.value = ''
+        obj.inputform = true
+        obj.inputform2 = false
+        console.clear()
+      },
+      regextarjeta(e){
+        var expReg = /^([0-9])*$/
+        if(expReg.test(e)){
+          return true
+        } else {
+          this.$vs.notify({title:'Atencion Numero De Tarjeta No Valido',text:'Este no es un numero de tarjeta valido',color:'warning'})
+          return false
+        }
+      },
+      loadresources(){
+        obj = this
+        axios.get('/api/recurso/active/' ).then(function (response) {
+           var data =  response.data
+           var resources = []
+           for (key in data){
+              obj.recursos.push({
+                id:data[key].id,
+                nombre_recurso:data[key].nombre_recurso,
+                referencia:data[key].referencia,
+                Estado_Recurso:data[key].Estado_Recurso
+              })
+           }
+        }).catch(function (error) {
+          obj.$vs.notify({title:'Error',text:'Ha ocurrido un erro cargando los recursos',color:'danger'})
+        })
+      },
+      change(){
+        obj = this
+        if(this.regextarjeta(this.value)){
+          var tarjeta = Number(this.value)
+          axios.get('/api/Prestamo/?Estado_prestamo=EN+CURSO&Persona__Nro_Tarjeta=' + tarjeta )
+          .then(function (response) {
+              prestamos =response.data
+              if(prestamos.length == 0){
+                axios.get('/api/Persona/?Nro_Tarjeta='+tarjeta)
+                  .then(function (response) {
+                        var user = response.data;
+                        if(user[0].Estado_Tarjeta == "ACTIVA"){
+                          obj.inputform = false
+                          obj.inputform2 = true
+                          obj.loadresources()
+                          obj.persona.id = user[0].id
+                          obj.persona.nombre = user[0].Nombres + " " +user[0].Apellidos
+                          obj.persona.tarjeta = user[0].Nro_Tarjeta
+                          obj.persona.documento = user[0].Nro_Documento
+                          obj.persona.dependencia = user[0].Dependencia.nombre.toUpperCase()
+                          obj.persona.cargo = user[0].Tipo_Persona.Tipo_persona
+                          if(user[0].Incidentes.length == 0){
+                                obj.persona.incidentes = "NO"
+                            }else{
+                              obj.persona.incidentes = "SI"
+                            }
+                            obj.persona.cantIncidente = user[0].Incidentes.length
+                        }else{
+                          obj.$vs.notify({title:'Atencion Tarjeta Inactiva',text:'Esta tarjeta se encuentra en estado inactivo..!',color:'danger'})
+                        }
+                  }).catch(function (error) {
+                    obj.$vs.notify({title:'Atencion Tarjeta No Registrada',text:'Esta tarjeta no esta registrada en el sistema',color:'danger'})
+                  })
+                  this.value=''
+                  console.clear()
+              }else{
+                window.location.replace("/admin/Prestamo/Detalle/"+prestamos[0].Id_prestamo)
+              }
+          })
+          .catch(function (error) {
+          });
+        }
+      },
+      getDateTime(){
+        var date =  new Date();
+        var fecha  = date.getFullYear() +"-"+ (date.getMonth() + 1) + "-" + date.getDate()
+        var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
+        var datetime = {
+          fecha:fecha,
+          hora:hora
+        }
+        return datetime
+      },
+      generarJSON(){
+        obj = this
+        datetime =obj.getDateTime()
+        var recursos = obj.selected
+        for (key in recursos) {
+          var recurso = recursos[key].id
+          var detalle = {
+            "Fecha_prestamo": datetime.fecha,
+          	"Estado": "PRESTADO",
+          	"recursoid": recurso
+          }
+          obj.detalleprestamo.push(detalle)
+        }
+        var datos = {
+            "Fecha_prestamo":datetime.fecha,
+            "Hora_prestamo":datetime.hora,
+            "PrestatarioId": obj.usuario,
+            "personaId" : obj.persona.id,
+            "Estado_prestamo": "EN CURSO",
+            "detalleprestamo": obj.detalleprestamo
+        }
+          return datos;
+        },
+      saveloan(){
+        obj = this
+        if(obj.selected.length!==0){
+          var data = obj.generarJSON()
+          axios.post("/api/Prestamo/", data, {headers: {"X-CSRFToken": obj.token}}).then(function (response) {
+                    window.location.replace("/admin/prestamos/prestamo/")
+          }).catch(function (error) {
+                    // console.log(error)
+          });
+        }else{
+          this.$vs.notify({title:'Atencion',text:'No ha seleccionado ningun recurso para prestar',color:'warning'})
+        }
 
-var usuario = "{{user.id}}"
-var detalleprestamo=[];
-function guardarPrestamo(){
-
-  var datos = generarJSON();
-  var token = "{{ csrf_token }}"
-  var recursos = DRecursos();
-  if(recursos.length == 0){
-    Mensaje(10);
-  }else{
-    axios.post("/api/Prestamo/", datos, {
-        headers: {"X-CSRFToken": token}
-    })
-      .then(function (response) {
-        window.location.replace("/admin/prestamos/prestamo/")
-      })
-      .catch(function (error) {
-        //console.log(error);
-      });
-    return Mensaje(1);
-  }
-}
-
-function generarJSON(){
-  // Seleccionamos los datos de los inputs de formulario
-  var date =  new Date();
-  var fecha  = date.getFullYear() +"-"+ (date.getMonth() + 1) + "-" + date.getDate()
-  //console.log(fecha)
-  var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
-  var recursos = DRecursos();
-  for (i in recursos) {
-    var recurso = recursos[i];
-    //console.log(recurso)
-    var usuario = "{{user.id}}"
-    var detalle = {
-      "Fecha_prestamo": fecha,
-  		"Estado": "PRESTADO",
-  		"DevolucionuserId": usuario,
-  		"recursoid": recurso
-  	}
-    detalleprestamo.push(detalle)
-    //console.log(detalleprestamo)
-  }
-  //console.log(detalleprestamo)
-
-  var personaid = $("#tarjeta").val();
-  var fecha  = date.getFullYear() +"-"+ (date.getMonth() + 1) + "-" + date.getDate()
-  var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
-  var usuario = "{{user.id}}"
-  var recursos = DRecursos();
-  var datos = {
-      "PrestatarioId": usuario,
-      "personaId" : personaid,
-      "Estado_prestamo": "EN CURSO",
-      "Fecha_prestamo": fecha,
-      "Hora_prestamo": hora,
-      "Fecha_devolucion": fecha,
-      "Hora_devolucion": hora,
-      "detalleprestamo": detalleprestamo
-  };
-  return datos;
-};
-</script>
+      }
+    },
+})
+   </script>
 {% endblock %}

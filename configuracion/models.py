@@ -10,5 +10,5 @@ class Programa(models.Model):
     class Meta:
         verbose_name_plural = "Dependencia"
 
-    def __unicode__(self):
-        return unicode(self.nombre)
+    def __str__(self):
+        return str(self.nombre)

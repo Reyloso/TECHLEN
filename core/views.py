@@ -25,7 +25,7 @@ def prestamo_prestar(request):
 
 @login_required
 def codigo_barras(request,Id_recurso):
-    r = get_object_or_404(Recurso,Id_recurso=Id_recurso)
+    r = get_object_or_404(Recurso,id=Id_recurso)
     context = admin.site.each_context(request)
     context.update({
         'r': r,
@@ -62,7 +62,7 @@ def prestamo_reporte(request,Id_prestamo):
 
 @login_required
 def recurso_reporte(request,Id_recurso):
-    r = get_object_or_404(Recurso,Id_recurso=Id_recurso)
+    r = get_object_or_404(Recurso,id=Id_recurso)
     context = admin.site.each_context(request)
     context.update({
         'r': r,

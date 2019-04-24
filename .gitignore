@@ -118,3 +118,7 @@ docs/_build/
 *.swp
 
 *.swo
+
+/recursos/migrations
+/prestamos/migrations
+/configuracion/migrations

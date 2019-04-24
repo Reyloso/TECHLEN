@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.db import models
 from django.utils.timezone import now
 from prestamos.models import *
+from django.utils import timezone
 
 class TipoRecurso(models.Model):
 
@@ -40,7 +40,7 @@ class Recurso(models.Model):
     Numero_Serie = models.CharField(max_length=100, null=True,blank=True)
     referencia = models.CharField(max_length=100)
     Estado_Recurso = models.CharField(max_length=40, choices=ESTADO,default="ACTIVO")
-    fecha_registro = models.DateField(default=now)
+    fecha_registro = models.DateField(default=timezone.now)
 
     def __str__(self):
         return str(self.nombre_recurso)

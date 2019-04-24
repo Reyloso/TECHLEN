@@ -20,10 +20,7 @@ class RecursosResource(resources.ModelResource):
         fields =  ('id','nombre_recurso','tipo_de_recurso','Marca','Numero_Serie','referencia','Estado_Recurso')
 
 class Recursos (ImportExportModelAdmin):
-
-    # def change_view(self, *args, **kwargs):
-    #     self.fields = ('nombre_recurso','referencia','Estado_Recurso')
-    #     return super(Recursos, self).change_view(*args, **kwargs)
+    actions = None
 
     def codigo_barras(self, instance):
         return "<a href='/admin/recursos/codigo_barras/%s'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-barcode' aria-hidden='true'></i>  </a>" % instance.id

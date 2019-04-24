@@ -162,6 +162,13 @@ class RecursoList(generics.ListCreateAPIView):
     queryset = Recurso.objects.all()
     serializer_class = RecursoSerializer
 
+#vistas de los recursos activos
+@action(methods=['post'], detail=True)
+class RecursoActiveList(generics.ListCreateAPIView):
+    permission_classes = (AllowAny,)
+    queryset = Recurso.objects.raw('SELECT r.id FROM recursos_recurso r WHERE NOT EXISTS(SELECT r.id FROM prestamos_detalleprestamo d WHERE r.id = d."Recurso_detalle_id"  AND r."Estado_Recurso" = %s AND d."Estado" = %s) ORDER BY r.id' %("'ACTIVO'", "'PRESTADO'") )
+    serializer_class = RecursoSerializer
+
 class RecursoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Recurso.objects.all()
     serializer_class = RecursoSerializer

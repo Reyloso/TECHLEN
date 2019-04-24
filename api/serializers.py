@@ -8,6 +8,7 @@ from prestamos.models import Prestamo, Incidente, DetallePrestamo, DetalleIncide
 from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 import django_filters.rest_framework as filters
+from datetime import datetime
 
 class TipoPersonaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -60,7 +61,7 @@ class IncidenteSerializer(serializers.ModelSerializer):
 
 class DetallePrestamoSerializer(serializers.ModelSerializer):
     Usuario_devolucion = UserSerializer(read_only=True)
-    DevolucionuserId = serializers.PrimaryKeyRelatedField(write_only=True, queryset=User.objects.all(), source='Usuario_devolucion')
+    DevolucionuserId = serializers.PrimaryKeyRelatedField(write_only=True, queryset=User.objects.all(), source='Usuario_devolucion', required=False, allow_null=True)
     Recurso_detalle = RecursoSerializer(read_only=True)
     recursoid = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Recurso.objects.all(), source='Recurso_detalle')
     Incidentes = IncidenteSerializer(many=True, read_only=True,source='incidente_set')

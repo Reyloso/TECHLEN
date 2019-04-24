@@ -100,11 +100,11 @@
   function imprimir(){
     window.print()
   }
-
-  axios.get('/api/Prestamo/?Persona='+persona)
+  console.log(persona)
+  axios.get('/api/Prestamo/?Persona__Nro_Tarjeta='+persona)
     .then(function (response) {
       var datos = response.data;
-      // console.log(datos)
+      console.log(datos)
       var contador = 0;
       var totalrecurso = 0;
       var cantincidente = 0;
