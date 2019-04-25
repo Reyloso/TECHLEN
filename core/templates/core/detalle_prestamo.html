@@ -3,699 +3,262 @@
 {% load i18n %}
 {% load static %}
 {% block extrastyle %}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-     <link  rel="stylesheet" href="{% static '/assets/css/header.css' %}"/>
-     <link rel="stylesheet" href="{% static '/assets/css/usuario.css' %}" media="screen" title="no title" charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-{%endblock%}
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+ <link  rel="stylesheet" href="{% static '/assets/css/header.css' %}"/>
+ <link rel="stylesheet" href="{% static '/assets/css/usuario.css' %}" media="screen" title="no title" charset="utf-8">
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+ <link href="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.css" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
+ <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+ <style>
+   .vs-card--header {
+     background-color: #39778e;
+    color: #fff;
+    border-radius: 5px;
+   }
+   .vs-table--header{
+     background-color: #39778e;
+    color: #fff;
+    margin-top: 0px;
+    height: 41px;
+    margin-left: 0px;
+    padding-left: 10px;
+    padding-right: 15px;
+    border-radius: 5px;
+   }
+   .vs-table--search-input, .vs-table--search i  {
+     color: chartreuse;
+   }
+ </style>
+{% endblock %}
 {% block content %}
-<div id="content" class="colM">
-  <div class="mensaje-alerta2">
-  </div>
-<div class="content-wrap">
+<div id="app" style="display: flex;justify-content: center;">
+  <div class="centerx" style="width: 100%" >
+    <vs-row vs-justify="flex-start">
+      <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="4">
+        <vs-card class="cardx">
+          <div slot="header" style="display: flex;justify-content: center;">
+            <h3>  Prestamo
+            </h3>
+          </div>
+          <div>
+            <vs-list>
+              <vs-list-header title="INFORMACIÓN PRESTAMO" color="success"></vs-list-header>
+              <vs-list-item title="Id Prestamo">${persona.nombre}
+              </vs-list-item>
+              <vs-list-item title="Usuario">${persona.tarjeta}
+              </vs-list-item>
+              <vs-list-item title="Estado Prestamo">${persona.documento}
+              </vs-list-item>
+              <vs-list-header title="Datos de la persona" color="primary"></vs-list-header>
+              <vs-list-item title="Nombre completo">${persona.dependencia}
+              </vs-list-item>
+              <vs-list-item title="Cargo"> ${persona.cargo}
+              </vs-list-item>
+              <vs-list-item title="Dependencia"> ${persona.cargo}
+              </vs-list-item>
+              <vs-list-item title="R. incidentes"> ${persona.cargo}
+              </vs-list-item>
+              <vs-list-item title="N° incidentes"> ${persona.cargo}
+              </vs-list-item>
+              <div style="margin-top: .8rem">
+                <vs-button v-on:click="cancel()" type="relief">Cancelar</vs-button>
+                <vs-button v-on:click="saveloan()"  color="success" type="relief">Guardar</vs-button>
+                </div>
+          </vs-list>
+          </div>
+        </vs-card>
+      </vs-col>
+        <vs-col type="flex" vs-justify="flex-end" vs-align="flex-end" vs-w="7" style="margin: 0 1rem ">
+          <vs-card class="cardx">
+            <vs-table multiple v-model="selected" pagination max-items="7" search :data="recursos">
+              <template slot="header">
+            <h5>Detalle de prestamo</h5>
+            </template>
+            <template slot="thead">
+            <vs-th style="width:15%"  sort-key="id">
+            ID Prestamo
+            </vs-th>
+            <vs-th style="width:25%"  sort-key="nombre_recurso">
+            Nombre
+            </vs-th>
+            <vs-th style="width:25%"  >
+            Referencia
+            </vs-th>
+            <vs-th  style="width:25%" >
+            Estado
+            </vs-th>
+            </template>
 
-<div class="card">
-    <div class="card-header" style="background: #035a7b;color:#fff;">
-        DETALLE PRESTAMO
-    </div>
-    <div class="card-block">
-<strong><i class="fa fa-list-alt" aria-hidden="true"></i> Datos Del Prestamo</strong>
-<div class="input-group">
-<span class="input-group-addon" id="sizing-addon2">ID PRESTAMO: </span>
-<label class="form-control"  aria-describedby="sizing-addon2" id="idp"> </label>
-<span class="input-group-addon" id="sizing-addon2">FECHA PRESTAMO: </span>
-<label  class="form-control"  aria-describedby="sizing-addon2" id="fechap"></label>
-<span class="input-group-addon" id="sizing-addon2">USUARIO: </span>
-<label  class="form-control"  aria-describedby="sizing-addon2" id="usuariop"></label>
-<span class="input-group-addon" id="sizing-addon2">ESTADO PRESTAMO: </span>
-<label  class="form-control"  aria-describedby="sizing-addon2" id="estadop"></label>
-</div>
-<br>
-<strong><i class="fa fa-list-alt" aria-hidden="true"></i> Datos De La Persona</strong>
-<div class="input-group">
-  <span class="input-group-addon" id="sizing-addon2">NOMBRE & APELLIDOS: </span>
-  <label class="form-control"  aria-describedby="sizing-addon2" id="nombpersonap"> </label>
-  <span class="input-group-addon" id="sizing-addon2">N° TARJETA: </span>
-  <label  class="form-control"  aria-describedby="sizing-addon2" id="tarpersonap"></label>
-  <span class="input-group-addon" id="sizing-addon2">DOCUMENTO: </span>
-  <label  class="form-control"  aria-describedby="sizing-addon2" id="nrodocumentop"></label>
-</div>
-<br>
-<div class="input-group">
-  <span class="input-group-addon" id="sizing-addon2">PROGRAMA ACADEMICO: </span>
-  <label class="form-control"  aria-describedby="sizing-addon2" id="propersonap"> </label>
-  <span class="input-group-addon" id="sizing-addon2">CARGO </span>
-  <label  class="form-control"  aria-describedby="sizing-addon2" id="cargopersonap"></label>
-  <span class="input-group-addon" id="sizing-addon2">R. INCIDENTES: </span>
-  <label  class="form-control"  aria-describedby="sizing-addon2" id="incidenteper"></label>
-  <span class="input-group-addon" id="sizing-addon2">CANTIDAD INCIDENTES: </span>
-  <label  class="form-control"  aria-describedby="sizing-addon2" id="cantincidentesp"></label>
-</div>
-  <br>
-  <br>
-<strong><i class="fa fa-list-alt" aria-hidden="true"></i> Recursos Del Prestamo</strong>
-<button style="display: flex;float: right; margin-bottom: 4px;" id="addrecurso" class="btn btn-primary" onclick="addRecurso()">Añadir Recurso</button>
-<br/>
-<table class="table table-striped table-hover ">
-<thead>
-<tr><th>Id detalle</th>
-  <th>Id recurso</th>
-  <th>Nombre recurso</th>
-  <th>Estado prestamo</th>
-  <th>Usuario devolucion</th>
-  <th>Regresar recurso</th>
-</tr>
-</thead>
-<tbody id="tabla">
+            <template slot-scope="{data}">
+            <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" >
+            <vs-td style="width:30%" :data="data[indextr].id" >
+            ${data[indextr].id}
+            </vs-td>
+            <vs-td style="width:25%" :data="data[indextr].nombre_recurso">
+            ${data[indextr].nombre_recurso}
+            </vs-td>
+            <vs-td style="width:25%" :data="data[indextr].referencia">
+            ${data[indextr].referencia}
+            </vs-td>
+            <vs-td style="width:25%"  :data="data[indextr].Estado_Recurso">
+            ${data[indextr].Estado_Recurso}
+            </vs-td>
+            </vs-tr>
+            </template>
+            </vs-table>
 
-</tbody>
-</table>
-    </div>
+          </vs-card>
+        </vs-col>
+      </vs-row>
 </div>
-</div> <!-- Close content-wrap -->
-    <br class="clear" />
-    <a href="/admin/prestamos/prestamo/" class="btn btn-success"><i class="" aria-hidden="true"></i> ATRAS </a>
 </div>
-<!-- END Content -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Regresar Recurso</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-            <label for="exampleFormControlFile1">¿El recurso registra alguna incidencia?</label>
-            <select class="form-control" id="selected"  onchange="select()">
-              <option value="0">--</option>
-              <option value="Si">Si</option>
-              <option value="No">No</option>
-            </select>
-            <br/>
-            <label id="tipo" for="exampleFormControlFile1">Tipo de incidencia.*</label>
-            <select class="form-control" id="selected2"  onchange="select2()">
-              <option value="0">--</option>
-              <option value="INCIDENTE TOTAL DEL RECURSO">INCIDENTE TOTAL DEL RECURSO</option>
-              <option value="INCIDENTE PARCIAL DEL RECURSO">INCIDENTE PARCIAL DEL RECURSO</option>
-              <option value="PERDIDA DEL RECURSO">PERDIDA DEL RECURSO</option>
-              <option value="OTRO">OTRO</option>
-            </select>
-            <br/>
-              <label for="exampleFormControlFile1" id="label">Escriba toda la informacion posible y detallada sobre la incidencia ocurrida.*</label>
-              <div class="input-group" id="incidencia">
-              <div class="input-group-prepend">
-                <span class="input-group-text" >Detalle incidencia</span>
-              </div>
-              <textarea class="form-control" aria-label="With textarea" id="textarea" onchange="save()"></textarea>
-            </div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="cerrar()">Cerrar</button>
-        <button type="button" class="btn btn-primary" id="savebuton" onclick="devol()">Guardar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="modaladdrecurso" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Añadir Recurso A Prestamo En Curso</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-            <label for="exampleFormControlFile1">Ingrese el ID del recurso</label>
-            <br/>
-              <input id="add" onkeydown="addRe()" class="form-control" type="text" placeholder="ID Recurso">
-            <br/>
-            <div class="mensaje-alerta">
-            </div>
-        </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary"  data-dismiss="modal" onclick="close()">Cerrar</button>
-      <!---  <button type="button" class="btn btn-primary" id="savebuton" onclick="">Guardar</button>-->
-      </div>
-    </div>
-  </div>
-</div>
-
-<style>
-.detalle {
-      background-color: #035a7b;
-}
-</style>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
-$( document ).ready(function() {
-    $('#addrecurso').hide();
-    LoadPrestamo()
-    loadDetail()
-    estadoPrestamo()
-    $(function(){
-  $('#textarea').on('input', function(){
-    var val = $('#textarea').val()
-    if(val ==""){
-        $('#savebuton').attr("disabled", true);
-    }else{
-        $('#savebuton').attr("disabled", false);
-    }
-  });
-});
-});
-
-  var pos = null;
-  var bandera = false;
-  var dbRecursos = [];
-  var idDetalle = "";
-  var prestamo = "{{ r.Id_prestamo }}"
-  var persona = "{{r.Persona.id}}"
-  var usuario = "{{user.id}}"
-  var token = "{{ csrf_token }}"
-  var filasMostrar = "";
-  var idRecurso="";
-  var elemento = "";
-  var userName ="{{user.get_full_name}}"
-
-  // cerrar modal
-function cerrar(){
-  $('#exampleModalCenter').modal('hide');
-  var val = $("#selected").val("0")
-  var val = $("#selected2").val("0")
-}
-  // abrir modal
-function devolucion(ele,id,recurso){
-  idDetalle = id
-  idRecurso= recurso
-  this.elemento = ele
-  // console.log(this.elemento)
-  $('#exampleModalCenter').modal('show');
-  $('#incidencia').hide();
-  $('#label').hide();
-  $('#savebuton').attr("disabled", true);
-  $('#tipo').hide();
-  $('#selected2').hide();
-  
-}
-
-function addRecurso(){
-  $('#modaladdrecurso').modal('show');
-}
-
-function close(){
-  $('#modaladdrecurso').modal('hide');
-
-}
-
-
-  //funcion para el select de el modal de la devolucion
-function select(){
-  var val = $("#selected").val();
-    if(val == "Si"){
-        $('#savebuton').attr("disabled", false);
-        $('#incidencia').show();
-        $('#textarea').attr("disabled", true);
-        $('#savebuton').attr("disabled", true);
-        $('#label').show();
-        $('#tipo').show();
-        $('#selected2').show();
-    }else if (val == "No"){
-      $('#savebuton').attr("disabled", false);
-      $('#incidencia').hide();
-      $('#label').hide();
-      $('#tipo').hide();
-      $('#selected2').hide();
-    }else {
-        $('#savebuton').attr("disabled", true);
-        $('#incidencia').hide();
-        $('#label').hide();
-    }
-  }
-
-function select2(){
-  var val = $("#selected2").val();
-  if(val !=="0"){
-      $('#textarea').attr("disabled", false);
-  }else{
-    $('#textarea').attr("disabled", true);
-    $('#savebuton').attr("disabled", true);
-  }
-}
-
-function save(){
-  $('#savebuton').attr("disabled", false);
-}
-
-
-var token = "{{ csrf_token }}"
-//funcion para devolver un recurso
-
-
-$(document).on('click', '.update', function (event) {
-  event.preventDefault();
-  elemento = this
-  // console.log(elemento)
-});
-
-function devol(){
-  idDetalle
-  var val = $("#selected").val();
-  if(val == "Si") {
-    // si existe la incidencia se le cambia el estado al detalle del prestamo
-    var date = new Date();
-    var fecha  = date.getFullYear() +"-"+ (date.getMonth()+1)+ "-" + date.getDate();
-    var tipo = $("#selected2").val();
-    if(tipo==="PERDIDA DEL RECURSO"){
-      dp={
-        "Estado": "PERDIDO",
-        "DevolucionuserId": usuario,
-        "Fecha_devolucion": fecha
-      }
-      axios.patch("/api/Prestamo/Detalle/" + idDetalle + "/", dp, {
-        headers: {"X-CSRFToken": token,
-        'Content-Type': 'application/json' }
-      }).then(function (response) {
-          // si es exitoso se le cambia el estado al recurso para que no este disponible a otro prestamo mientras esta en revision
-        var recurso = response.data.Recurso_detalle.id
-        r={
-          "Estado_Recurso": "EN MANTENIMIENTO",
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.umd.js"></script>
+<script type="text/javascript">
+  var app = new Vue({
+    el: '#app',
+    delimiters: ['${','}'],
+    data: {
+      token:"{{ csrf_token }}",
+      usuario:"{{user.id}}",
+      persona:{
+        id:"",
+        nombre:"",
+        tarjeta:"",
+        documento:"",
+        dependencia:"",
+        cargo:"",
+        incidentes:"",
+        cantIncidente:0,
+      },
+      selected:[],
+      recursos:[],
+      detalleprestamo:[]
+    },
+    methods: {
+      cancel(){
+          window.location.replace("/admin/prestamos/prestamo/")
+      },
+      regextarjeta(e){
+        var expReg = /^([0-9])*$/
+        if(expReg.test(e)){
+          return true
+        } else {
+          this.$vs.notify({title:'Atencion Numero De Tarjeta No Valido',text:'Este no es un numero de tarjeta valido',color:'warning'})
+          return false
         }
-        axios.patch("/api/recurso/" + recurso + "/", r, {
-          headers: {"X-CSRFToken": token,
-          'Content-Type': 'application/json' }
-          }).then(function (response) {
-              //console.log(response);
-          }).catch(function (error) {
-              //console.log(error.response);
-          });
-          var estado = "PERDIDO"
-          $(elemento).parent('tr').find("#estadoDetalle").text(estado)
-          $(elemento).parent('tr').find("#usuario").text(userName)
-          $(elemento).parent('tr').find("#butonr").empty()
-      }).catch(function (error) {
-          //console.log(error.response);
-      });
-      estadoPrestamo()
-      location.reload(true)
-    }else{
-      dp={
-        "Estado": "DEVUELTO",
-        "DevolucionuserId": usuario,
-        "Fecha_devolucion": fecha
-      }
-      axios.patch("/api/Prestamo/Detalle/" + idDetalle + "/", dp, {
-        headers: {"X-CSRFToken": token,
-        'Content-Type': 'application/json' }
-      }).then(function (response) {
-        // si es exitoso se le cambia el estado al recurso para que no este disponible a otro prestamo mientras esta en revision
-        var recurso = response.data.Recurso_detalle.id
-        r={
-          "Estado_Recurso": "EN MANTENIMIENTO",
-        }
-        axios.patch("/api/recurso/" + recurso + "/", r, {
-          headers: {"X-CSRFToken": token,
-          'Content-Type': 'application/json' }
-        }).then(function (response) {
-          //console.log(response);
+      },
+      loadresources(){
+        obj = this
+        axios.get('/api/recurso/active/' ).then(function (response) {
+           var data =  response.data
+           var resources = []
+           for (key in data){
+              obj.recursos.push({
+                id:data[key].id,
+                nombre_recurso:data[key].nombre_recurso,
+                referencia:data[key].referencia,
+                Estado_Recurso:data[key].Estado_Recurso
+              })
+           }
         }).catch(function (error) {
-          //console.log(error.response);
-        });
-        var estado = "DEVUELTO"
-        $(elemento).parent('tr').find("#estadoDetalle").text(estado)
-        $(elemento).parent('tr').find("#usuario").text(userName)
-        $(elemento).parent('tr').find("#butonr").empty()
-      });
-      estadoPrestamo()
-      location.reload(true)
-
-      
-  }
-
-  var date = new Date();
-  var fecha  = date.getFullYear() +"-"+ (date.getMonth()+1) + "-" + date.getDate();
-  var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
-  var texto = $("#textarea").val()
-
-  var descripcion = {
-  "descripcion": texto,
-  "Fecha":fecha,
-  "Hora": hora,
-  "UsuarioId":usuario
-  }
-
-  var detalleincidente = []
-  detalleincidente.push(descripcion)
-  var datos = {
-    "Fecha_Incidente": fecha,
-    "Estado": "EN REVISION",
-    "Recurso": idRecurso,
-    "Prestamo_detalle": idDetalle,
-    "Persona": persona,
-    "usuario": usuario,
-    "Tipo_Incidente":tipo,
-    "detalleincidente": detalleincidente
-  };
-    //console.log(datos)
-  axios.post("/api/Recurso/Incidente/", datos, {
-    headers: {"X-CSRFToken": token}
-  }).then(function (response) {
-    // console.log(response);
-    $('#exampleModalCenter').modal('hide');
-    var val = $("#selected").val("0");
-    var texto = $("#textarea").val("");
-  }).catch(function (error) {
-    // console.log(error);
-  });
-  estadoPrestamo()
-  location.reload(true)
-}else{
-    // si no existe la incidencia se le cambia el estado al detalle del prestamo
-    var date = new Date();
-    var fecha  = date.getFullYear() +"-"+ (date.getMonth()+1) + "-" + date.getDate();
-    dp={
-      "Estado": "DEVUELTO",
-      "Fecha_devolucion": fecha,
-      "DevolucionuserId": usuario
-    }
-    axios.patch("/api/Prestamo/Detalle/" + idDetalle + "/", dp, {
-        headers: {"X-CSRFToken": token,
-        'Content-Type': 'application/json' }
-    }).then(function (response) {
-    }).catch(function (error) {
-    });
-    //se reinician los campos y las variables para una nueva devolucion
-    var estado = "DEVUELTO"
-    $(elemento).parent('tr').find("#estadoDetalle").text(estado)
-    $(elemento).parent('tr').find("#usuario").text(userName)
-    $(elemento).parent('tr').find("#butonr").empty()
-
-    $('#exampleModalCenter').modal('hide');
-    var val = $("#selected").val("0");
-    var texto = $("#textarea").val("");
-    estadoPrestamo()
-    location.reload(true)
-  }
-
-  
-}
-
-function updateRow(estado){
-    var estado = $(elemento).parent('tr').find("#estadoDetalle").text()
-    $(this.elemento).parent('tr').find("#usuario").text()
-    // $(elemento).parent('tr').find("#butonr").empty();
-    // elemento = null
-    // console.log(this.elemento)
-    // console.log(estado)
-    estadoPrestamo()
-    
-
-}
-
-function LoadPrestamo(){
-  // datos del prestamo
-  axios.get('/api/Prestamo/'+ prestamo)
-    .then(function (response) {
-      // console.log(datos)
-      var datos = response.data
-      // console.log(datos)
-      var f = new Date();
-      var dia = f.getDate();
-      if(dia<10){
-        dia = "0"+dia;
-      }
-      fecha = f.getFullYear() + "-" + "0"+(f.getMonth()+1) + "-" +(dia)
-      // console.log(fecha)
-      if(datos.Fecha_prestamo==fecha && datos.Estado_prestamo !=="DEVUELTO"){
-        // console.log(" si es la misma fecha")
-        // console.log(fecha)
-        // console.log(datos.Fecha_prestamo)
-        $('#addrecurso').show();
-      }else{
-        // console.log("no es la misma fecha")
-        // console.log(fecha)
-        // console.log(datos.Fecha_prestamo)
-        $('#addrecurso').hide();
-      }
-      var nombre =  datos.Persona.Nombres + " " +datos.Persona.Apellidos
-      $("#idp").text(datos.Id_prestamo);
-      $("#fechap").text(datos.Fecha_prestamo);
-      $("#usuariop").text(datos.Usuario_Prestatario.get_full_name.toUpperCase());
-      $("#estadop").text(datos.Estado_prestamo.toUpperCase());
-      $("#nombpersonap").text(nombre.toUpperCase());
-      $("#tarpersonap").text(datos.Persona.Nro_Tarjeta);
-      $("#nrodocumentop").text(datos.Persona.Nro_Documento);
-      $("#propersonap").text(datos.Persona.Dependencia.nombre.toUpperCase());
-      $("#cargopersonap").text(datos.Persona.Tipo_Persona.Tipo_persona);
-      if(datos.Persona.Incidentes.length == 0){
-        $("#incidenteper").text("NO");
-      }else{
-        $("#incidenteper").text("SI");
-        $("#incidenteper").css({'color':'#F00'})
-        $("#cantincidentesp").css({'color':'#F00'})
-      }
-      $("#cantincidentesp").text(datos.Persona.Incidentes.length)
-      if(datos.Estado_prestamo=="EN CURSO"){
-        $("#estadop").css({'color':'#16ce00'})
-      }else{
-        $("#estadop").css({'color':'#F00'})
-      }
-    })
-  .catch(function (error) {
-    //console.log(error);
-  });
-}
-
-function loadDetail(){
-  $("#tabla").empty();
-  axios.get('/api/Prestamo/'+ prestamo)
-    .then(function (response) {
-    var datos = response.data;
-    for(var key in datos.detailprestamo){
-      //obtener el recurso y mostrar sus datos en la tabla
-      var user = "";
-      if(datos.detailprestamo[key].Usuario_devolucion.get_full_name==null){
-        user = " ";
-      }else{
-        user =  datos.detailprestamo[key].Usuario_devolucion.get_full_name;
-      }
-      if(datos.detailprestamo[key].Estado !=="PRESTADO"){
-        // console.log( datos.detailprestamo[key].Usuario_devolucion.get_full_name)
-        var row = '<tr class="row1" >' +
-          '<td class="field-Id_prestamo" id="iddetalle">' + datos.detailprestamo[key].Id_detalle+ "</td>"+
-          '<td id="idrecurso">' + datos.detailprestamo[key].Recurso_detalle.id + "</td>"+
-          '<td id="nombRecurso" >'+ datos.detailprestamo[key].Recurso_detalle.nombre_recurso  + "</td>"+
-          '<td id="estadoDetalle">' + datos.detailprestamo[key].Estado + "</td>"+
-          '<td>'+ datos.detailprestamo[key].Usuario_devolucion.get_full_name + "</td>"+
-          "<td></td>"+
-          "</tr>";
-        $("#tabla").append(row);
-      }else{
-        var row = '<tr class="row1" >' +
-          '<td class="field-Id_prestamo" id="iddetalle">' + datos.detailprestamo[key].Id_detalle+ "</td>"+
-          '<td id="idrecurso">' + datos.detailprestamo[key].Recurso_detalle.id + "</td>"+
-          '<td id="nombRecurso" >' + datos.detailprestamo[key].Recurso_detalle.nombre_recurso  + "</td>"+
-          '<td id="estadoDetalle">' + datos.detailprestamo[key].Estado + "</td>"+
-          '<td id="usuario"></td>'+
-          '<td class="update" id="butonr"> <i style="font-size:20px; display: flex;justify-content: center;" onclick="devolucion(this,' + datos.detailprestamo[key].Id_detalle+"," + datos.detailprestamo[key].Recurso_detalle.id+ ')"  class="fa fa-arrow-left devolver" aria-hidden="true"></i></td>'+
-           //'<td><button class="btn btn-warnig" onclick="modificar('+datos[key].Nombre+','+datos[key].Apellidos+','+datos[key].Edad+')">Modificar</button></td>'
-          "</tr>";
-        $("#tabla").append(row);
-      }
-    }
-    estadoPrestamo()
-    
-  })
-  .catch(function (error) {
-    //console.log(error);
-  });
-}
-
-
-
-function addRe() {
-  var tabla="";
-  var ele = $("#add").val()
-  if(event.key === 'Enter') {
-    $("#add").val("");
-    //console.log(ele.value);
-    var codigo = ele;
-    axios.get('/api/recurso/'+codigo)
-      .then(function (response) {
-        var recurso = response.data;
-        axios.get('/api/Prestamo/')
+          obj.$vs.notify({title:'Error',text:'Ha ocurrido un erro cargando los recursos',color:'danger'})
+        })
+      },
+      change(){
+        obj = this
+        if(this.regextarjeta(this.value)){
+          var tarjeta = Number(this.value)
+          axios.get('/api/Prestamo/?Estado_prestamo=EN+CURSO&Persona__Nro_Tarjeta=' + tarjeta )
           .then(function (response) {
-            var prestamos = response.data
-            var bandera=false
-            for(data in prestamos){
-              if(prestamos[data].Estado_prestamo !== "DEVUELTO"){
-                for(detalles in prestamos[data].detailprestamo){
-                  //console.log(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso)
-                  if(prestamos[data].detailprestamo[detalles].Recurso_detalle.id == recurso.id && prestamos[data].detailprestamo[detalles].Estado !== "DEVUELTO" ){
-                    //console.log(prestamos[data].detailprestamo[detalles].Recurso_detalle.Id_recurso)
-                    bandera=true
-                    break;
-                  }
-                }
-              }
-              if(bandera==true){
-                break;
-              }
-            }
-            if(recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.id ) == false && bandera == false ){
-              var date =  new Date();
-              var fecha  = date.getFullYear() +"-"+ (date.getMonth()+1) + "-" + date.getDate();
-              datos = {
-                "Prestamo": prestamo,
-                "Fecha_prestamo": fecha,
-              	"Estado": "PRESTADO",
-                "DevolucionuserId": usuario,
-                "recursoid": codigo
-              }
-              axios.post("/api/Prestamo/Detalle/", datos, {
-                headers: {"X-CSRFToken": token}
-                }).then(function (response) {
-                  $('#modaladdrecurso').modal('hide')
-                  dato = response.data
-                  console.log(dato)
-                  var row = '<tr class="row1" >' +
-                    '<td class="field-Id_prestamo" id="iddetalle">' + dato.Id_detalle+ "</td>"+
-                    '<td id="idrecurso">' + dato.Recurso_detalle.id + "</td>"+
-                    '<td id="nombRecurso" >'+ dato.Recurso_detalle.nombre_recurso  + "</td>"+
-                    '<td id="estadoDetalle">' + dato.Estado + "</td>"+
-                    "<td> </td>"+
-                    '<td class="update" id="butonr"> <i style="font-size:20px; display: flex;justify-content: center;" onclick="devolucion(this,' + dato.Id_detalle+"," + dato.Recurso_detalle.id+ ')"  class="fa fa-arrow-left devolver" aria-hidden="true"></i></td>'+
-                    "</tr>";
-                  $("#tabla").append(row);
+              prestamos =response.data
+              if(prestamos.length == 0){
+                axios.get('/api/Persona/?Nro_Tarjeta='+tarjeta)
+                  .then(function (response) {
+                        var user = response.data;
+                        if(user[0].Estado_Tarjeta == "ACTIVA"){
+                          obj.inputform = false
+                          obj.inputform2 = true
+                          obj.loadresources()
+                          obj.persona.id = user[0].id
+                          obj.persona.nombre = user[0].Nombres + " " +user[0].Apellidos
+                          obj.persona.tarjeta = user[0].Nro_Tarjeta
+                          obj.persona.documento = user[0].Nro_Documento
+                          obj.persona.dependencia = user[0].Dependencia.nombre.toUpperCase()
+                          obj.persona.cargo = user[0].Tipo_Persona.Tipo_persona
+                          if(user[0].Incidentes.length == 0){
+                                obj.persona.incidentes = "NO"
+                            }else{
+                              obj.persona.incidentes = "SI"
+                            }
+                            obj.persona.cantIncidente = user[0].Incidentes.length
+                        }else{
+                          obj.$vs.notify({title:'Atencion Tarjeta Inactiva',text:'Esta tarjeta se encuentra en estado inactivo..!',color:'danger'})
+                        }
+                  }).catch(function (error) {
+                    obj.$vs.notify({title:'Atencion Tarjeta No Registrada',text:'Esta tarjeta no esta registrada en el sistema',color:'danger'})
                   })
-              .catch(function (error) {
-                // console.log(error);
-              });
-            }else if (recurso.Estado_Recurso == "ACTIVO" && dbRecursos.includes( recurso.id ) == true){
-              Mensaje(6);
-            }else if(recurso.Estado_Recurso == "EN MANTENIMIENTO"){
-              Mensaje(8);
-            }else if(recurso.Estado_Recurso == "DADO DE BAJA POR DAÑO TOTAL"){
-              Mensaje(9);
-            }else{
-              Mensaje(3);
-            }
+                  this.value=''
+                  console.clear()
+              }else{
+                window.location.replace("/admin/Prestamo/Detalle/"+prestamos[0].Id_prestamo)
+              }
           })
-        .catch(function (error) {
-          ///console.log(error);
-        });
-    })
-    .catch(function (error) {
-        Mensaje(4);
-    });
-    ele.value = "";
-  }
-}
-
-function Mensaje(t){
-  switch (t) {
-  case 1: //
-    $(".mensaje-alerta").empty();
-    // console.log("prestamo guardado!!")
-    dbRecursos=[]
-    break;
-  case 2: //
-    $(".mensaje-alerta").empty();
-    $(".mensaje-alerta").append("<div class='alert alert-danger' role='alert'>No se agrego el Prestamo ERROR</div>");
-    break;
-  case 3: //
-    $(".mensaje-alerta").empty();
-    $(".mensaje-alerta").append("<div class='alert alert-danger' role='alert'>¡Este Recurso está en un prestamo actualmente!</div>");
-    break;
-  case 4: //
-    $(".mensaje-alerta").empty();
-    $(".mensaje-alerta").append("<div class='alert alert-danger' role='alert'>¡Este Recurso No Existe!</div>");
-    break;
-  case 5: //
-    $(".mensaje-alerta2").empty();
-    $(".mensaje-alerta2").append("<div class='alert alert-success' role='alert'>Recurso añadido correntamente...</div>");
-    break;
-  case 6: //
-    $(".mensaje-alerta").empty();
-    $(".mensaje-alerta").append("<div class='alert alert-danger' role='alert'>Este recurso ya se encuentra en la lista.</div>");
-    break;
-  case 7: //
-    $(".mensaje-alerta").empty();
-    $(".mensaje-alerta").append("<div class='alert alert-success' role='alert'>Recurso borrado de la lista</div>");
-    break;
-  case 8: //
-    $(".mensaje-alerta").empty();
-    $(".mensaje-alerta").append("<div class='alert alert-danger' role='alert'>Recurso está en revisión por incidente</div>");
-    break;
-  case 9: //
-    $(".mensaje-alerta").empty();
-    $(".mensaje-alerta").append("<div class='alert alert-danger' role='alert'>Recurso fue dado de baja por el administrador</div>");
-    break;
-  default:
-  }
-}
-
-function estadoPrestamo(){
-  axios.get('/api/Prestamo/'+ prestamo)
-    .then(function (response) {
-      var datos = response.data;
-      var bandera = false;
-      if(datos.Estado_prestamo !=="DEVUELTO"){
-        for (detalles in datos.detailprestamo){
-          if(datos.detailprestamo[detalles].Estado =="PRESTADO"){
-            bandera = true;
-            break;
-          }
-        }
-        if(bandera == true){
-          //console.log("faltan recursos por devolver")
-        }else{
-          //console.log("todos los recursos devueltos")
-          var dateTime =  new Date();
-          var fecha  = dateTime.getFullYear() +"-"+ (dateTime.getMonth() + 1) + "-" + dateTime.getDate()
-          var hora = dateTime.getHours() + ":" + dateTime.getMinutes() + ":"+ dateTime.getSeconds();
-          p={
-            "Estado_prestamo": "DEVUELTO",
-            "Fecha_devolucion": fecha,
-            "Hora_devolucion": hora
-          }
-          axios.patch("/api/Prestamo/" + prestamo + "/", p, {
-              headers: {"X-CSRFToken": token,
-              'Content-Type': 'application/json' }
-          }).then(function (response) {
-            // console.log(response.data)
-            $('#addrecurso').hide();
-            $("#estadop").text("DEVUELTO");
-            $("#estadop").css({'color':'#F00'})
-          }).catch(function (error) {
-            console.log(error)
+          .catch(function (error) {
           });
         }
+      },
+      getDateTime(){
+        var date =  new Date();
+        var fecha  = date.getFullYear() +"-"+ (date.getMonth() + 1) + "-" + date.getDate()
+        var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
+        var datetime = {
+          fecha:fecha,
+          hora:hora
+        }
+        return datetime
+      },
+      generarJSON(){
+        obj = this
+        datetime =obj.getDateTime()
+        var recursos = obj.selected
+        for (key in recursos) {
+          var recurso = recursos[key].id
+          var detalle = {
+            "Fecha_prestamo": datetime.fecha,
+          	"Estado": "PRESTADO",
+          	"recursoid": recurso
+          }
+          obj.detalleprestamo.push(detalle)
+        }
+        var datos = {
+            "Fecha_prestamo":datetime.fecha,
+            "Hora_prestamo":datetime.hora,
+            "PrestatarioId": obj.usuario,
+            "personaId" : obj.persona.id,
+            "Estado_prestamo": "EN CURSO",
+            "detalleprestamo": obj.detalleprestamo
+        }
+          return datos;
+        },
+      saveloan(){
+        obj = this
+        if(obj.selected.length!==0){
+          var data = obj.generarJSON()
+          axios.post("/api/Prestamo/", data, {headers: {"X-CSRFToken": obj.token}}).then(function (response) {
+                    window.location.replace("/admin/prestamos/prestamo/")
+          }).catch(function (error) {
+                    // console.log(error)
+          });
+        }else{
+          this.$vs.notify({title:'Atencion',text:'No ha seleccionado ningun recurso para prestar',color:'warning'})
+        }
       }
-    })
-  .catch(function (error) {
-      console.log(error);
-  });
- 
-}
-
-</script>
-<style>
-body {
-  background-color: #f1f1f1;
- }
-.card {
-  border: 0px solid rgba(0,0,0,.125);
-  box-shadow: -1 1px 0 0 #e4e4e4;
-}
-</style>
+    },
+})
+   </script>
 {% endblock %}

@@ -1,11 +1,10 @@
 #header {
-
-        background-color: #035A7B !important;
+        background-color: #225F51 !important;
 
         }
 
         #suit-nav{
-            background-color:#39778e !important;
+            background-color:#2E8671 !important;
         }
 
 
@@ -15,11 +14,11 @@
         }
 
         #suit-nav > ul > li > ul {
-             background-color:#39778e !important;
+             background-color:#225F51 !important;
 
         }
         #suit-nav > ul > li > ul > li > a {
-            border: 1px solid #39778e !important;
+            border: 1px solid #225F51 !important;
         }
 
         body.suit_layout_horizontal #suit-nav > ul > li.active a {
@@ -34,11 +33,11 @@
         }
 
         body.suit_layout_horizontal #suit-nav > ul > li:hover > a {
-            background-color: #035A7B !important;
+            background-color: #225F51 !important;
         }
 
         body.suit_layout_horizontal #suit-nav > ul > li > ul > li > a:hover{
-            background-color: #013346 !important;
+            background-color: #225F51 !important;
         }
 
         body.suit_layout_horizontal #suit-nav > ul > li:last-child > a {
@@ -69,15 +68,15 @@
           }
 
         .btn-info, #content-main > .object-tools > li > a:not([class*="btn-"]) {
-    color: #fff;
-    background-color: #17075D ;
-    border-color: #047477 ;
+      color: #fff;
+    background-color: #225f51;
+      border-color: #047477 ;
 }
 
         .btn-info:hover, #content-main > .object-tools > li > a:hover:not([class*="btn-"]) {
     color: #fff;
-    background-color: #17075D ;
-    border-color: #17075D ;
+    background-color: #2E8671;
+    border-color: #2E8671 ;
 }
 
         .breadcrumbs a {
@@ -89,11 +88,11 @@
   border-color: #12C454;
 }
 #result_list thead > tr th div.text span{
-  background-color: #035A7B;
+  background-color: #225f51;
 }
 #result_list thead > tr th{
-  background-color: #035A7B;
+  background-color: #225f51;
 }
 #changelist #changelist-filter h3{
-  background-color: #035A7B;
+  background-color: #225f51;
 }

@@ -10,7 +10,8 @@
         }
 
         body.login .submit-row input[type='submit'] {
-          background-color: #035A7B;
+          background-color: #225F51 !important;
+          color: white;
         }
 
         body.login .form-row input:not([type='hidden']):not(:focus){
@@ -18,17 +19,48 @@
         }
 
         .form-control:focus{
-          border-color: #035A7B;
+          border-color: #3AAD92;
         }
+
+        h3, .h3 {
+          color: black ;
+        }
+        body.login .form-row input:not([type='hidden']):not(:focus) {
+          border-color:#035A7B;
+          background: white;
+        }
+        body {
+          background-image: url("{% static '/assets/images/fondoucc.jpg' %}");
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: bottom;
+          background-blend-mode: color;
+          background-color: rgba(0, 0, 0, 0.73);
+      }
+      .login #container {
+        border-radius: 5px;
+      }
+      .footer > .container-fluid {
+        padding-top: 0px;
+        padding-bottom: 0px;
+      }
+
+      body.login .suit-login-graphic {
+        margin: 1rem auto .1rem;
+      }
 
     </style>
 {% endblock %}
 
 {% block branding %}
-    <div class="suit-login-graphic">
-        <img style="width: 100px"  class="logo-menu" src="{% static 'assets/images/logo.png'%}" alt="logo">
-    </div>
+<div class="">
+  <div class="suit-login-graphic">
+      <img style="width: 100px"  class="logo-menu" src="{% static 'assets/images/logo.png'%}" alt="logo">
+  </div>
+
+</div>
 
     <h3>Ingresar</h3>
+
 
 {% endblock %}

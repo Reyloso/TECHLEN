@@ -8,11 +8,18 @@
      <link rel="stylesheet" href="{% static '/assets/css/usuario.css' %}" media="screen" title="no title" charset="utf-8">
      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
      <link href="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.css" rel="stylesheet">
-     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-     <link href="style.css" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <style>
+      body.suit_layout_horizontal, body.login {
+          background-color: whitesmoke;
+      }
+      #content {
+        background-color: whitesmoke;
+      }
+      body.suit_layout_horizontal .breadcrumbs {
+      background-color: whitesmoke;
+    }
 
       .loader-box{
         display: block;
@@ -70,6 +77,25 @@
 
       .vs-table--pagination .vs-pagination--buttons {
             display: none;
+      }
+      .vs-card--header {
+        background-color: #225f51;
+        color: white;
+        border-radius: 5px;
+      }
+      .vs-table--search-input, .vs-table--search i  {
+        color: chartreuse;
+      }
+
+      .vs-table--header{
+        background-color: #225f51;
+       color: #fff;
+       margin-top: 0px;
+       height: 41px;
+       margin-left: 0px;
+       padding-left: 10px;
+       padding-right: 15px;
+       border-radius: 5px;
       }
 
       .img-loader{
@@ -147,7 +173,8 @@
             </vs-tr>
             </template>
             </vs-table>
-
+            <vs-list-item class="" title="Items Seleccionados" color="danger"> ${selected.length}
+            </vs-list-item>
           </vs-card>
         </vs-col>
         <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="4">
@@ -190,7 +217,6 @@
 </div>
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-<script type="text/javascript" src="{% static '/assets/js/prestamo.js' %}"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
@@ -217,7 +243,8 @@
       },
       selected:[],
       recursos:[],
-      detalleprestamo:[]
+      detalleprestamo:[],
+      cantidad:300
     },
     methods: {
       cancel(){
