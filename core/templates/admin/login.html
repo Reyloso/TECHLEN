@@ -30,11 +30,11 @@
           background: white;
         }
         body {
+          /* -moz-appearance-mix-blend-mode: none; */
           background-image: url("{% static '/assets/images/fondoucc.jpg' %}");
           background-size: cover;
           background-repeat: no-repeat;
           background-position: bottom;
-          background-blend-mode: color;
           background-color: rgba(0, 0, 0, 0.73);
       }
       .login #container {
@@ -61,6 +61,13 @@
 </div>
 
     <h3>Ingresar</h3>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      if (navigator.userAgent.search("Chrome") >= 0) {
+         $('body').css('background-blend-mode', 'color');
+       }
+    </script>
 
 
 {% endblock %}

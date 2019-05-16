@@ -166,7 +166,7 @@ class RecursoList(generics.ListCreateAPIView):
 @action(methods=['post'], detail=True)
 class RecursoActiveList(generics.ListCreateAPIView):
     permission_classes = (AllowAny,)
-    queryset = Recurso.objects.raw('SELECT r.id FROM recursos_recurso r WHERE NOT EXISTS(SELECT r.id FROM prestamos_detalleprestamo d WHERE r.id = d."Recurso_detalle_id"  AND r."Estado_Recurso" = %s AND d."Estado" = %s) ORDER BY r.id' %("'ACTIVO'", "'PRESTADO'") )
+    queryset = Recurso.objects.raw('SELECT r.id FROM recursos_recurso r WHERE NOT EXISTS(SELECT r.id FROM prestamos_detalleprestamo d WHERE r.id = d."Recurso_detalle_id" AND d."Estado" = %s)  AND r."Estado_Recurso" = %s ORDER BY r.id' %( "'PRESTADO'","'ACTIVO'") )
     serializer_class = RecursoSerializer
 
 class RecursoDetail(generics.RetrieveUpdateDestroyAPIView):

@@ -109,7 +109,7 @@ class UserAdmins(PermissionFilterMixin, UserAdmin):
                 )
             else:
                 return (
-                    (None, {'fields': ('password')}),
+                    (None, {'fields': ('username', 'password')}),
                     (('Información Personal'), {'fields': ('first_name', 'last_name', 'email')}),
                 )
         else:

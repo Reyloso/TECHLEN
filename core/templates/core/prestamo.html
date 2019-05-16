@@ -5,7 +5,6 @@
 {% block extrastyle %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
      <link  rel="stylesheet" href="{% static '/assets/css/header.css' %}"/>
-     <link rel="stylesheet" href="{% static '/assets/css/usuario.css' %}" media="screen" title="no title" charset="utf-8">
      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
      <link href="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.css" rel="stylesheet">
      <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
@@ -84,12 +83,12 @@
         border-radius: 5px;
       }
       .vs-table--search-input, .vs-table--search i  {
-        color: chartreuse;
+        color:#225f51 ;
       }
 
       .vs-table--header{
-        background-color: #225f51;
-       color: #fff;
+      background-color: #ffffff;
+       color: #black;
        margin-top: 0px;
        height: 41px;
        margin-left: 0px;
@@ -113,6 +112,9 @@
           margin-left: 0%;
         }
       }
+      .vs-pagination-primary .effect, .vs-pagination-primary .vs-pagination--buttons:hover {
+        background: #225f51 !important;
+    }
 
     </style>
 
@@ -188,26 +190,26 @@
             </div>
             <div>
               <vs-list>
-                <vs-list-header title="Informacion Personal" color="success"></vs-list-header>
+                <vs-list-header title="Informacion Personal" color="#225f51"></vs-list-header>
                 <vs-list-item title="Nombre Completo">${persona.nombre}
                 </vs-list-item>
                 <vs-list-item title="Nro Tarjeta">${persona.tarjeta}
                 </vs-list-item>
                 <vs-list-item title="Nro Documento">${persona.documento}
                 </vs-list-item>
-                <vs-list-header title="Informacion Academica" color="primary"></vs-list-header>
+                <vs-list-header title="Informacion Academica" color="#225f51"></vs-list-header>
                 <vs-list-item title="Programa o Dependencia">${persona.dependencia}
                 </vs-list-item>
                 <vs-list-item title="Cargo"> ${persona.cargo}
                 </vs-list-item>
-                <vs-list-header title="Informacion Prestamos" color="danger"></vs-list-header>
-                <vs-list-item title="Incidentes"> NO
+                <vs-list-header title="Informacion Prestamos" color="#225f51"></vs-list-header>
+                <vs-list-item title="Incidentes"> ${persona.incidentes}
                 </vs-list-item>
-                <vs-list-item title="Cantidad Incidentes"> 0
+                <vs-list-item title="Cantidad Incidentes">${persona.cantIncidente}
                 </vs-list-item>
                 <div style="margin-top: .8rem">
-                  <vs-button v-on:click="cancel()" type="relief">Cancelar</vs-button>
-                  <vs-button v-on:click="saveloan()"  color="success" type="relief">Guardar</vs-button>
+                  <vs-button v-on:click="cancel()" color="success" type="border">Cancelar</vs-button>
+                  <vs-button v-on:click="saveloan()"  color="success" type="filled">Guardar Prestamo</vs-button>
                   </div>
             </vs-list>
             </div>
@@ -239,12 +241,12 @@
         dependencia:"",
         cargo:"",
         incidentes:"",
-        cantIncidente:0,
+        cantIncidente:"",
       },
       selected:[],
       recursos:[],
       detalleprestamo:[],
-      cantidad:300
+      cantidad:0
     },
     methods: {
       cancel(){
@@ -259,7 +261,7 @@
         if(expReg.test(e)){
           return true
         } else {
-          this.$vs.notify({title:'Atencion Numero De Tarjeta No Valido',text:'Este no es un numero de tarjeta valido',color:'warning'})
+          this.$vs.notify({title:'Tarjeta Invalida',text:'Este no es un numero de tarjeta valido',color:'warning'})
           return false
         }
       },
@@ -277,7 +279,7 @@
               })
            }
         }).catch(function (error) {
-          obj.$vs.notify({title:'Error',text:'Ha ocurrido un erro cargando los recursos',color:'danger'})
+          obj.$vs.notify({title:'Error',text:'Ha ocurrido un erro cargando los recursos',color:'success'})
         })
       },
       change(){
@@ -301,12 +303,14 @@
                           obj.persona.documento = user[0].Nro_Documento
                           obj.persona.dependencia = user[0].Dependencia.nombre.toUpperCase()
                           obj.persona.cargo = user[0].Tipo_Persona.Tipo_persona
-                          if(user[0].Incidentes.length == 0){
-                                obj.persona.incidentes = "NO"
-                            }else{
-                              obj.persona.incidentes = "SI"
-                            }
-                            obj.persona.cantIncidente = user[0].Incidentes.length
+                          obj.persona.cantIncidente = user[0].Incidentes.length
+                          console.log(user[0].Incidentes.length)
+                          if(user[0].Incidentes.length > 0){
+                                obj.persona.incidentes = "SI"
+                          }else{
+                              obj.persona.incidentes = "NO"
+                          }
+
                         }else{
                           obj.$vs.notify({title:'Atencion Tarjeta Inactiva',text:'Esta tarjeta se encuentra en estado inactivo..!',color:'danger'})
                         }

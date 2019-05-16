@@ -20,7 +20,7 @@ class SuitConfig(DjangoSuitConfig):
         ParentItem('Prestamos', children=[
             ChildItem(model='prestamos.prestamo'),
             ChildItem('Prestar ', url='/admin/Prestamo/Prestar/'),
-            ChildItem(model='prestamos.detalleprestamo'),
+            #ChildItem(model='prestamos.detalleprestamo'),
         ]),
         ParentItem('Personas', children=[
             ChildItem(model='personas.personas'),
@@ -38,14 +38,14 @@ class SuitConfig(DjangoSuitConfig):
         ParentItem('Reportes', children=[
             ChildItem('Reporte ', url='/admin/Reporte/'),
         ]),
-        ParentItem('Gestion de usuarios', children=[
-            ChildItem(model='auth.user'),
-            ChildItem(model='auth.group')
-        ]),
         ParentItem('Configuracion', children=[
             ChildItem(model='configuracion.programa'),
             ChildItem(model='personas.codigoacceso'),
             ChildItem(model='personas.tipopersona'),
+        ]),
+        ParentItem('Gestion de usuarios', children=[
+            ChildItem(model='auth.user'),
+            ChildItem(model='auth.group')
         ]),
 
     )

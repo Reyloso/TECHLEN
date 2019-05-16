@@ -5,20 +5,22 @@
 {% block extrastyle %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
  <link  rel="stylesheet" href="{% static '/assets/css/header.css' %}"/>
- <link rel="stylesheet" href="{% static '/assets/css/usuario.css' %}" media="screen" title="no title" charset="utf-8">
  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
  <link href="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.css" rel="stylesheet">
  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
  <style>
+   #content {
+     background-color: whitesmoke;
+   }
    .vs-card--header {
-     background-color: #39778e;
+     background-color: #225F51;
     color: #fff;
     border-radius: 5px;
    }
    .vs-table--header{
-     background-color: #39778e;
-    color: #fff;
+     background-color: #fff;
+    color: #000;
     margin-top: 0px;
     height: 41px;
     margin-left: 0px;
@@ -27,7 +29,11 @@
     border-radius: 5px;
    }
    .vs-table--search-input, .vs-table--search i  {
-     color: chartreuse;
+     color: #000;
+   }
+   .con-select {
+     width: 100%;
+     padding: 0 4px;
    }
  </style>
 {% endblock %}
@@ -38,32 +44,36 @@
       <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="4">
         <vs-card class="cardx">
           <div slot="header" style="display: flex;justify-content: center;">
-            <h3>  Prestamo
+            <h3>  Informacion De Prestamo
             </h3>
           </div>
           <div>
             <vs-list>
-              <vs-list-header title="INFORMACIÓN PRESTAMO" color="success"></vs-list-header>
-              <vs-list-item title="Id Prestamo">${persona.nombre}
+              <vs-list-header title="Información Prestamo" color="#225f51"></vs-list-header>
+              <vs-list-item title="ID Prestamo">${prestamo.id}
               </vs-list-item>
-              <vs-list-item title="Usuario">${persona.tarjeta}
+              <vs-list-item title="Usuario">${prestamo.usuario}
               </vs-list-item>
-              <vs-list-item title="Estado Prestamo">${persona.documento}
+              <vs-list-item title="Fecha & Hora ">${prestamo.FechaHora}
               </vs-list-item>
-              <vs-list-header title="Datos de la persona" color="primary"></vs-list-header>
-              <vs-list-item title="Nombre completo">${persona.dependencia}
+              <vs-list-item title="Estado" > <vs-button :color="colorestatus" type="filled" > ${prestamo.estado}</vs-button>
               </vs-list-item>
-              <vs-list-item title="Cargo"> ${persona.cargo}
+              <vs-list-header title="Datos de la persona" color="#225f51"></vs-list-header>
+              <vs-list-item title="Nombre completo">${prestamo.nombre}
               </vs-list-item>
-              <vs-list-item title="Dependencia"> ${persona.cargo}
+              <vs-list-item title="Nro Documento"> ${prestamo.documento}
               </vs-list-item>
-              <vs-list-item title="R. incidentes"> ${persona.cargo}
+              <vs-list-item title="Nro Tarjeta"> ${prestamo.tarjeta}
               </vs-list-item>
-              <vs-list-item title="N° incidentes"> ${persona.cargo}
+              <vs-list-item title="Cargo"> ${prestamo.cargo}
+              </vs-list-item>
+              <vs-list-item title="Dependencia"> ${prestamo.dependencia}
+              </vs-list-item>
+              <vs-list-item title="R. incidentes"> ${prestamo.incidentes}
+              </vs-list-item>
+              <vs-list-item title="N° incidentes"> ${prestamo.cantIncidente}
               </vs-list-item>
               <div style="margin-top: .8rem">
-                <vs-button v-on:click="cancel()" type="relief">Cancelar</vs-button>
-                <vs-button v-on:click="saveloan()"  color="success" type="relief">Guardar</vs-button>
                 </div>
           </vs-list>
           </div>
@@ -71,47 +81,91 @@
       </vs-col>
         <vs-col type="flex" vs-justify="flex-end" vs-align="flex-end" vs-w="7" style="margin: 0 1rem ">
           <vs-card class="cardx">
-            <vs-table multiple v-model="selected" pagination max-items="7" search :data="recursos">
+            <vs-table multiple v-model="selected" pagination max-items="6" search :data="recursos">
               <template slot="header">
             <h5>Detalle de prestamo</h5>
             </template>
-            <template slot="thead">
-            <vs-th style="width:15%"  sort-key="id">
-            ID Prestamo
-            </vs-th>
+            <template slot="thead" >
             <vs-th style="width:25%"  sort-key="nombre_recurso">
             Nombre
             </vs-th>
-            <vs-th style="width:25%"  >
-            Referencia
+            <vs-th style="width:20%"  >
+            Usuario Devolucion
             </vs-th>
-            <vs-th  style="width:25%" >
+            <vs-th  style="width:20%" >
+            Fecha De Devolucion
+            </vs-th>
+            <vs-th  style="width:20%" >
             Estado
             </vs-th>
             </template>
-
             <template slot-scope="{data}">
             <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" >
-            <vs-td style="width:30%" :data="data[indextr].id" >
-            ${data[indextr].id}
-            </vs-td>
-            <vs-td style="width:25%" :data="data[indextr].nombre_recurso">
+            <vs-td  :data="data[indextr].nombre_recurso" >
             ${data[indextr].nombre_recurso}
             </vs-td>
-            <vs-td style="width:25%" :data="data[indextr].referencia">
-            ${data[indextr].referencia}
+            <vs-td  :data="data[indextr].referencia">
+            ${data[indextr].usuario}
             </vs-td>
-            <vs-td style="width:25%"  :data="data[indextr].Estado_Recurso">
-            ${data[indextr].Estado_Recurso}
+            <!-- <vs-td style="width:20%"  :data="data[indextr].Estado_Recurso">
+            ${data[indextr].estado}
+            </vs-td> -->
+            <vs-td  :data="data[indextr].Estado_Recurso">
+            ${data[indextr].fechaDevolucion} ${data[indextr].fechaDevolucion}
+            </vs-td>
+            <vs-td  :data="data[indextr].Estado_Recurso">
+            ${data[indextr].estado}
             </vs-td>
             </vs-tr>
             </template>
             </vs-table>
-
+            <vs-button v-if="prestamo.estado =='EN CURSO' && selected.length == 1" v-on:click="retunresources()"  color="success" type="filled">Devolver Recurso</vs-button>
+            <vs-button v-if="prestamo.estado =='EN CURSO' && selected.length > 1 && selected.length < recursos.length" v-on:click="retunresources()"  color="success" type="filled">Devolver Recursos</vs-button>
+            <vs-button v-if="prestamo.estado =='EN CURSO' && selected.length == recursos.length " v-on:click="retunresources()"  color="success" type="filled">Cerrar Prestamo</vs-button>
+            <vs-button  v-show="addRecurso" v-on:click="addResource()"   color="primary" type="filled">Añadir Recurso</vs-button>
           </vs-card>
         </vs-col>
       </vs-row>
 </div>
+<template lang="html">
+  <div class="centerx">
+    <vs-popup   title="ATENCION!" :active.sync="modal.popupActivo">
+      <h5><strong>${modal.mensaje}</strong></h5>
+      <div style="margin-top: .8rem">
+        <vs-button v-on:click="modal.popupActivo = false" color="success" type="border">Cancelar</vs-button>
+        <vs-button v-on:click="loanreturn()"  color="success" type="filled">Aceptar</vs-button>
+        </div>
+  </div>
+</template>
+
+<template lang="html">
+  <div class="centerx">
+    <vs-popup  title="Regresar Recurso" :active.sync="modal2.active">
+        <div class="centerx" >
+            <vs-row type="flex" style="justify-content: center">
+               <vs-col vs-type="flex"  vs-w="6">
+                 <vs-select  class="selectExample" label="Incidente" v-model="incident.select1" icon="arrow_downward">
+                 <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="item,index in incident.options" />
+                 </vs-select>
+                </vs-col>
+                <vs-col v-if="incident.select1 ==2"  vs-type="flex" vs-w="6">
+                  <vs-select  class="selectExample" label="Tipo Incidente" v-model="incident.select2" icon="arrow_downward">
+                    <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="item,index in incident.options2" />
+                  </vs-select>
+                </vs-col>
+                 <vs-col v-if="incident.select2 !==0 && incident.select1 !==1" vs-type="flex" vs-w="12" style="margin: 11px 0 0 0;">
+                   <div style="width:100%">
+                     <vs-textarea  width="300px" label="Escriba un detalle del incidente con minimo 8 caracteres" v-model="incident.textarea" />
+                   </div>
+                  </vs-col>
+            </vs-row>
+        </div>
+      <div style="margin-top: .8rem">
+        <vs-button v-on:click="modal2.active = false" color="success" type="border">Cancelar</vs-button>
+        <vs-button v-if="incident.select1 !==2 && incident.select1 !==0 || incident.textarea.length >8" v-on:click="loanreturn()" color="success" type="filled">Aceptar</vs-button>
+        </div>
+  </div>
+</template>
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -125,10 +179,13 @@
     data: {
       token:"{{ csrf_token }}",
       usuario:"{{user.id}}",
-      persona:{
-        id:"",
+      personaid:"{{r.Persona.id}}",
+      prestamo:{
+        id:"{{ r.Id_prestamo }}",
+        usuario:"",
+        FechaHora:"{{r.Fecha_prestamo}} -{{r.Hora_prestamo}} ",
+        estado:"",
         nombre:"",
-        tarjeta:"",
         documento:"",
         dependencia:"",
         cargo:"",
@@ -136,12 +193,308 @@
         cantIncidente:0,
       },
       selected:[],
+      selected1:"",
+      rselectedid:"",
       recursos:[],
-      detalleprestamo:[]
+      detalleprestamo:[],
+      btn1:false,
+      btn2:false,
+      btn3:true,
+      modal:{
+        popupActivo:false,
+        mensaje:"",
+        title:""
+      },
+      modal2:{
+        active:false,
+        mensaje:"",
+        title:""
+      },
+      incident:{
+        textarea:"",
+        select1:0,
+        select2:0,
+        status:false,
+        options:[{text: 'NO', value: 1},{text: 'SI', value: 2},],
+        options2:[{text: 'INCIDENTE TOTAL DEL RECURSO', value: 1}
+        ,{text: 'INCIDENTE PARCIAL DEL RECURSO', value: 2},
+        {text: 'PERDIDA DEL RECURSO', value: 3},
+        {text: 'OTRO', value: 4},],
+      },
+      colorestatus:'success',
+      addRecurso:false
+    },
+    mounted(){
+      this.loadresourcesDetail()
+      this.loadloan()
+      this.changeStatusloan()
     },
     methods: {
-      cancel(){
-          window.location.replace("/admin/prestamos/prestamo/")
+      getDateTime(){
+        var date =  new Date();
+        var fecha  = date.getFullYear() +"-"+ (date.getMonth() + 1) + "-" + date.getDate()
+        var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
+        var datetime = {
+          fecha:fecha,
+          hora:hora
+        }
+        return datetime
+      },
+      changeStatusloan(){
+        obj = this
+        var date = obj.getDateTime()
+        if(obj.prestamo.estado == "EN CURSO"){
+          axios.get('/api/Prestamo/'+ obj.prestamo.id)
+            .then(function (response) {
+              var datos = response.data
+              var bandera = false
+              for(key in datos.detailprestamo){
+                if(datos.detailprestamo[key].Estado == "PRESTADO"){
+                  bandera = true
+                  break;
+                }
+              }
+              if(bandera !== true){
+                p={
+                    "Estado_prestamo": "DEVUELTO",
+                    "Fecha_devolucion":date.fecha,
+                    "Hora_devolucion": date.hora
+                  }
+                axios.patch("/api/Prestamo/" + obj.prestamo.id + "/", p, {headers: {"X-CSRFToken": obj.token,'Content-Type': 'application/json' }}).then(function (response) {
+                var datos = response.data
+                obj.prestamo.estado = datos.Estado_prestamo
+                obj.colorestatus = 'success'
+                this.$vs.notify({title:'Completado',text:"Prestamo cerrado correctamente",color:'success'})
+                }).catch(function (error) {
+                  this.$vs.notify({title:'Atencion',text:'Error al cerrar el prestamo',color:'warning'})
+                });
+              }
+            })
+          .catch(function (error) {
+            this.$vs.notify({title:'Atencion',text:'Error en la conexion',color:'warning'})
+          });
+        }
+      },
+      retunresources(){
+        obj = this
+        if(obj.selected.length == 0 || obj.selected.length == obj.recursos.length){
+          obj.modal.popupActivo = true
+          obj.modal.mensaje = "Esta acción regresará todos los recursos de la lista y cerrará el prestamo, ¿desea continuar?"
+          obj.modal.title = "ATENCION!"
+        }else if(obj.selected.length> 1 && obj.selected.length < obj.recursos.length){
+          console.log("regresar varios")
+          obj.modal.popupActivo = true
+          obj.modal.mensaje = "Esta acción regresará unicamente los recursos seleccionados, ¿desea continuar?"
+          obj.modal.title = "ATENCION!"
+        }else{
+          console.log("regresar uno")
+          obj.modal2.active = true
+          obj.modal2.title = "REGRESAR RECURSO"
+        }
+      },
+      loanreturn(){
+        obj = this
+        obj.modal.popupActivo = false
+        var date  = obj.getDateTime()
+        if(obj.selected.length == obj.recursos.length){
+          for(key in obj.selected){
+            dp={
+              "Estado": "DEVUELTO",
+              "Fecha_devolucion": date.fecha,
+              "Devolucionuserid": obj.usuario
+            }
+            axios.patch("/api/Prestamo/Detalle/" + obj.selected[key].id + "/", dp, {
+                headers: {"X-CSRFToken": obj.token,
+                'Content-Type': 'application/json' }
+            }).then(function (response) {
+              // console.log(response.data)
+            }).catch(function (error) {
+              // console.log(error)
+            });
+          }
+          this.$vs.notify({title:'Completado',text:"Recursos regresados correctamente",color:'success'})
+          this.changeStatusloan()
+          this.loadresourcesDetail()
+        }else if(obj.selected.length> 1 && obj.selected.length < obj.recursos.length){
+          for(key in obj.selected){
+            dp={
+              "Estado": "DEVUELTO",
+              "Fecha_devolucion": date.fecha,
+              "DevolucionuserId": obj.usuario
+            }
+            axios.patch("/api/Prestamo/Detalle/" + obj.selected[key].id + "/", dp, {
+                headers: {"X-CSRFToken": obj.token,
+                'Content-Type': 'application/json' }
+            }).then(function (response) {
+              // console.log(response.data)
+            }).catch(function (error) {
+              // console.log(error)
+            });
+          }
+          this.$vs.notify({title:'Completado',text:"Recursos regresados correctamente",color:'success'})
+          this.changeStatusloan()
+          this.loadresourcesDetail()
+        }else{
+          if(obj.incident.select1 == 1){
+            for(key in obj.selected){
+              dp={
+                "Estado": "DEVUELTO",
+                "Fecha_devolucion": date.fecha,
+                "DevolucionuserId": obj.usuario
+              }
+              axios.patch("/api/Prestamo/Detalle/" + obj.selected[key].id + "/", dp, {
+                  headers: {"X-CSRFToken": obj.token,
+                  'Content-Type': 'application/json' }
+              }).then(function (response) {
+                // console.log(response.data)
+              }).catch(function (error) {
+                // console.log(error)
+              });
+            }
+            obj.modal2.active = false
+            this.$vs.notify({title:'Completado',text:"Recurso regresados correctamente",color:'success'})
+            this.changeStatusloan()
+            this.loadresourcesDetail()
+            obj.incident.select1 = 0
+          }else{
+            obj = this
+            for(key in obj.selected){
+              this.selected1 = obj.selected[key].id
+              if(obj.incident.select2 == 3){
+                estado = "PERDIDO"
+              }else{
+                estado = "DEVUELTO"
+              }
+              dp={
+                "Estado": estado,
+                "DevolucionuserId": obj.usuario,
+                "Fecha_devolucion": date.fecha
+              }
+              axios.patch("/api/Prestamo/Detalle/" + obj.selected[key].id + "/", dp, {headers: {"X-CSRFToken": obj.token,'Content-Type': 'application/json' }
+              }).then(function (response) {
+                obj.rselectedid = response.data.Recurso_detalle.id
+              r={
+                "Estado_Recurso": "EN MANTENIMIENTO",
+              }
+              axios.patch("/api/recurso/" + obj.rselectedid + "/", r, {headers: {"X-CSRFToken": obj.token,'Content-Type': 'application/json' }
+              }).then(function (response) {
+                console.log(response.data)
+              }).catch(function (error) {
+                console.log(error)
+              })
+            }).catch(function (error) {
+            })
+            var tipo = ""
+            if(obj.incident.select2==1){
+              tipo = "INCIDENTE TOTAL DEL RECURSO"
+            }else if(obj.incident.select2==2){
+              tipo = "INCIDENTE PARCIAL DEL RECURSO"
+            }else if (obj.incident.select2==3){
+              tipo = "PERDIDA DEL RECURSO"
+            }else{
+              tipo = "OTRO"
+            }
+            var descripcion = {
+              "descripcion": obj.incident.textarea,
+              "Fecha":date.fecha,
+              "Hora": date.hora,
+              "UsuarioId":obj.usuario
+            }
+            var detalleincidente = []
+            detalleincidente.push(descripcion)
+            console.log("id detalle twwo "+ this.selected1)
+            var datos = {
+              "Fecha_Incidente": date.fecha,
+              "Estado": "EN REVISION",
+              "Recurso": obj.rselectedid,
+              "Prestamo_detalle": this.selected1,
+              "Persona": obj.personaid,
+              "usuario": obj.usuario,
+              "Tipo_Incidente":tipo,
+              "detalleincidente": detalleincidente
+            }
+            axios.post("/api/Recurso/Incidente/", datos, {headers: {"X-CSRFToken": obj.token}})
+            .then(function (response) {
+              console.log(response.data)
+              obj.incident.select1 = 0
+              obj.incident.select2 = 0
+              obj.incident.textarea = ""
+              obj.$vs.notify({title:'Completado',text:"Incidente registrado con exito",color:'success'})
+            }).catch(function (error) {
+              console.log(error)
+            })
+            obj.rselectedid = ""
+            obj.$vs.notify({title:'Completado',text:"Recurso regresado correctamente",color:'success'})
+            }
+          }
+        }
+        obj.modal2.active = false
+        obj.changeStatusloan()
+        obj.loadresourcesDetail()
+        this.selected = []
+      },
+      loadresourcesDetail(){
+        obj=this
+        axios.get('/api/Prestamo/'+ obj.prestamo.id)
+          .then(function (response) {
+            var datos = response.data
+            obj.recursos = []
+            for(key in datos.detailprestamo){
+              usuariodevol = ""
+              if(datos.detailprestamo[key].Usuario_devolucion ==null){
+                usuariodevol = ""
+              }else {
+                usuariodevol=  datos.detailprestamo[key].Usuario_devolucion.get_full_name
+              }
+              obj.recursos.push({
+                id: datos.detailprestamo[key].Id_detalle,
+                nombre_recurso:datos.detailprestamo[key].Recurso_detalle.id+" - "+ datos.detailprestamo[key].Recurso_detalle.nombre_recurso,
+                estado:datos.detailprestamo[key].Estado,
+                usuario: usuariodevol,
+                fechaDevolucion:datos.detailprestamo[key].Fecha_devolucion
+              })
+            }
+          })
+        .catch(function (error) {
+          // this.$vs.notify({title:'Atencion',text:'Eror en los datos',color:'warning'})
+        });
+      },
+      loadloan(){
+        obj=this
+        var f = new Date();
+        var dia = f.getDate();
+        axios.get('/api/Prestamo/'+ obj.prestamo.id)
+          .then(function (response) {
+            var datos = response.data
+            obj.prestamo.usuario = datos.Usuario_Prestatario.get_full_name
+            obj.prestamo.nombre = datos.Persona.Nombres  + " " + datos.Persona.Apellidos
+            obj.prestamo.documento = datos.Persona.Nro_Documento
+            obj.prestamo.tarjeta = datos.Persona.Nro_Tarjeta
+            obj.prestamo.cargo = datos.Persona.Tipo_Persona.Tipo_persona
+            obj.prestamo.dependencia = datos.Persona.Dependencia.nombre
+            obj.prestamo.cantIncidente = datos.Persona.Incidentes.length
+            obj.prestamo.estado = datos.Estado_prestamo
+            if(datos.Persona.Incidentes.length > 0){
+                  obj.prestamo.incidentes = "SI"
+            }else{
+                obj.prestamo.incidentes = "NO"
+            }
+            if(dia<10){
+              dia = "0"+dia;
+            }
+            fecha = f.getFullYear() + "-" + "0"+(f.getMonth()+1) + "-" +(dia)
+            if(datos.Fecha_prestamo==fecha && datos.Estado_prestamo !=="DEVUELTO"){
+            }else{
+            }
+            if(datos.Estado_prestamo=="EN CURSO"){
+              obj.colorestatus = 'danger'
+            }else{
+              obj.colorestatus = 'success'
+            }
+          })
+        .catch(function (error) {
+          // this.$vs.notify({title:'Atencion',text:'Eror en los datos',color:'warning'})
+        });
       },
       regextarjeta(e){
         var expReg = /^([0-9])*$/
@@ -212,16 +565,6 @@
           });
         }
       },
-      getDateTime(){
-        var date =  new Date();
-        var fecha  = date.getFullYear() +"-"+ (date.getMonth() + 1) + "-" + date.getDate()
-        var hora = date.getHours() + ":" + date.getMinutes() + ":"+ date.getSeconds();
-        var datetime = {
-          fecha:fecha,
-          hora:hora
-        }
-        return datetime
-      },
       generarJSON(){
         obj = this
         datetime =obj.getDateTime()
@@ -252,11 +595,13 @@
           axios.post("/api/Prestamo/", data, {headers: {"X-CSRFToken": obj.token}}).then(function (response) {
                     window.location.replace("/admin/prestamos/prestamo/")
           }).catch(function (error) {
-                    // console.log(error)
           });
         }else{
           this.$vs.notify({title:'Atencion',text:'No ha seleccionado ningun recurso para prestar',color:'warning'})
         }
+      },
+      addResource(){
+
       }
     },
 })

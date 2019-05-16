@@ -82,7 +82,7 @@ class Incidentes (admin.ModelAdmin):
 
     def Revision_Incidente(self, instance):
 
-        return "<a href='/admin/Incidente/Revision/%s'> <i style='font-size:20px; display: flex;justify-content: center;' class='fa fa-check-square-o' aria-hidden='true'></i>  </a>" % instance.Id_Incidente
+        return "<a href='/admin/Incidente/Revision/%s'> <i style='font-size:20px; display: flex;justify-content: center;' class='fas fa-chevron-circle-left' aria-hidden='true'></i>  </a>" % instance.Id_Incidente
     Revision_Incidente.short_description = "Revision Incidente"
     Revision_Incidente.allow_tags = True
     Revision_Incidente.is_column = True

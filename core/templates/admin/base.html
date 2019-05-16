@@ -4,6 +4,7 @@
 {% block stylesheet %}{% static "suit/css/suit.css" %}{% endblock %}
 
 {% block extrastyle %}
+
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
     <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
     <link rel="apple-touch-icon" sizes="57x57" href="{% static '/assets/images/apple-icon-57x57.png' %}">
@@ -24,13 +25,15 @@
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="msapplication-TileImage" content="{% static '/assets/images/ms-icon-144x144.png' %}">
 <meta name="theme-color" content="#ffffff">
-    <link  href="{% static '/assets/css/header.css' %}"
+
+<link  href="{% static '/assets/css/header.css' %}"
+
 
 {% endblock %}
 
 {% block bodyclass %}{{ block.super|suit_body_class:request }}{% endblock %}
 
-{% block title %}TECHLEN Admin{% endblock %}
+{% block title %}TECHLEN | Admin{% endblock %}
 
 {% block branding %}
     <h1 id="site-name">
